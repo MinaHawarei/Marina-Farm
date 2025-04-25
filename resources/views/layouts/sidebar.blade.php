@@ -11,14 +11,14 @@
          </div>
         </a>
 
-        <!-- قسم الأبقار مع القائمة المنسدلة -->
+        <!-- قسم الجاموس مع القائمة المنسدلة -->
         <div x-data="{ isOpen: {{ request()->routeIs('buffalo.*') ? 'true' : 'false' }} }" class="relative">
             <!-- زر القسم الرئيسي -->
             <button @click="isOpen = !isOpen"
-                    class="flex justify-between items-center w-full px-6 py-3 font-bold border-r-4 transition duration-200
-                        {{ request()->routeIs('buffalo.*') ? 'bg-gray-100 text-blue-800 border-blue-500' : 'text-gray-600 hover:bg-gray-50' }}">
+            class="flex justify-between items-center w-full px-6 py-3 font-bold border-r-4 transition duration-200
+                {{ request()->routeIs('suppliers.*') ? 'bg-gray-100 text-blue-800 border-blue-500' : 'text-white hover:text-blue-800' }}">
                 <div class="flex items-center">
-                    <i class="fas fa-cow ml-2"></i> <!-- تغيير الأيقونة -->
+                    <i class="fas fa-cow ml-2"></i>
                     <span class="mr-2">الجاموس</span>
                 </div>
                 <div class="flex items-center">
@@ -33,9 +33,9 @@
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="pr-6" style="background-color: #040629;"
             >
-                <a href="{{ route('buffalo') }}"
+                <a href="{{ route('buffalo.index') }}"
                 class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
-                style="{{ request()->routeIs('buffalo') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                style="{{ request()->routeIs('buffalo.index') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
                 <div class="flex items-center">
                     <i class="fas fa-tachometer-alt ml-2"></i>
                     <span class="mr-2">الرئيسية</span>
@@ -92,18 +92,88 @@
                 </a>
             </div>
         </div>
+        <!-- قسم الابقار مع القائمة المنسدلة -->
+        <div x-data="{ isOpen: {{ request()->routeIs('cow.*') ? 'true' : 'false' }} }" class="relative">
+            <!-- زر القسم الرئيسي -->
+            <button @click="isOpen = !isOpen"
+            class="flex justify-between items-center w-full px-6 py-3 font-bold border-r-4 transition duration-200
+                {{ request()->routeIs('suppliers.*') ? 'bg-gray-100 text-blue-800 border-blue-500' : 'text-white hover:text-blue-800' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-cow ml-2"></i>
+                    <span class="mr-2">الابقار</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center mr-2">
+                        {{ $cowCount ?? 0 }}
+                    </span>
+                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
+                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
+                </div>
+            </button>
 
-        <!-- suppliers -->
-        <a href="{{ route('suppliers') }}"
-        class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
-        style="{{ request()->routeIs('suppliers') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
-         <div class="flex items-center">
-             <i class="fas fa-tachometer-alt ml-2"></i>
-             <span class="mr-2">البقر</span>
-         </div>
-         <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-            20
-         </span>
-        </a>
+            <!-- القائمة المنسدلة -->
+            <div x-show="isOpen" x-collapse class="pr-6" style="background-color: #040629;"
+            >
+                <a href="{{ route('cow.index') }}"
+                class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                style="{{ request()->routeIs('cow.index') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-tachometer-alt ml-2"></i>
+                    <span class="mr-2">الرئيسية</span>
+                </div>
+                <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {{ $cowCount ?? 0 }}
+                </span>
+                </a>
+                <a href="{{ route('cow.pregnant') }}"
+                class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                style="{{ request()->routeIs('cow.pregnant') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-tachometer-alt ml-2"></i>
+                    <span class="mr-2">عشار</span>
+                </div>
+                <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {{ $pregnantCow ?? 0 }}
+                </span>
+                </a>
+                <a href="{{ route('cow.dairy') }}"
+                class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                style="{{ request()->routeIs('cow.dairy') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-tachometer-alt ml-2"></i>
+                    <span class="mr-2">حلوب</span>
+                </div>
+                <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {{ $dairyCow ?? 0 }}
+                </span>
+                </a>
+                <a href="{{ route('cow.fattening') }}"
+                class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                style="{{ request()->routeIs('cow.fattening') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-tachometer-alt ml-2"></i>
+                    <span class="mr-2">تسمين</span>
+                </div>
+                <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {{ $fatteningCow ?? 0 }}
+
+                </span>
+                </a>
+                <a href="{{ route('cow.calf') }}"
+                class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                style="{{ request()->routeIs('cow.calf') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-tachometer-alt ml-2"></i>
+                    <span class="mr-2">الابطاش</span>
+                </div>
+                <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {{ $calfCow ?? 0 }}
+
+                </span>
+                </a>
+            </div>
+        </div>
+
+
     </nav>
 </div>

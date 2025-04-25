@@ -16,6 +16,8 @@ class AnimalController extends Controller
     {
         //
     }
+
+
     public function buffaloCalf()
     {
         $animals = Animal::where('type', 'Buffalo')->where('status', 'calf')->get();
@@ -36,6 +38,32 @@ class AnimalController extends Controller
         $animals = Animal::where('type', 'Buffalo')->where('status', 'fattening')->get();
         return view('buffalo-fattening', compact('animals'));
     }
+
+
+    public function cowCalf()
+    {
+        $animals = Animal::where('type', 'Cow')->where('status', 'calf')->get();
+        return view('cow.calf', compact('animals'));
+    }
+    public function cowPregnant()
+    {
+        $animals = Animal::where('type', 'Cow')->where('status', 'pregnant')->get();
+        return view('cow.pregnant', compact('animals'));
+    }
+    public function cowDairy()
+    {
+        $animals = Animal::where('type', 'Cow')->where('status', 'dairy')->get();
+        return view('cow.dairy', compact('animals'));
+    }
+    public function cowFattening()
+    {
+        $animals = Animal::where('type', 'Cow')->where('status', 'fattening')->get();
+        return view('cow.fattening', compact('animals'));
+    }
+
+
+
+
     public function getHealthRecords($animalId)
     {
         // جلب التقارير الصحية المرتبطة بالحيوان
@@ -81,8 +109,7 @@ class AnimalController extends Controller
              'created_by' => auth()->id()
          ]));
 
-         return redirect()->route('buffalo')->with('success', 'تم إضافة الحيوان بنجاح!');
-     }
+         return redirect()->back()->with('success', 'تم إضافة الحيوان بنجاح!');     }
 
     /**
      * Display the specified resource.

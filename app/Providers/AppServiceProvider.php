@@ -49,6 +49,26 @@ class AppServiceProvider extends ServiceProvider
             $buffaloPen7 = Animal::where('type', 'Buffalo')->where('pen_id', 'جفاف')->count();
 
 
+            // عدد الابقار
+            $cowCount = Animal::where('type', 'Cow')->count();
+            //  الابقار الحوامل
+            $pregnantCow = Animal::where('type', 'Cow')->where('status', 'pregnant')->count();
+            // أطفال  الابقار
+            $calfCow = Animal::where('type', 'Cow')->where('status', 'calf')->count();
+            //  الابقار للتسمين
+            $fatteningCow = Animal::where('type', 'Cow')->where('status', 'fattening')->count();
+            //  الابقار الحلوب
+            $dairyCow = Animal::where('type', 'Cow')->where('status', 'dairy')->count();
+
+              //الحظائر
+            //حظيرة 1 رضاعة
+            $cowPen1 = Animal::where('type', 'Cow')->where('pen_id', 'رضاعة')->count();
+            $cowPen2 = Animal::where('type', 'Cow')->where('pen_id', 'فطام')->count();
+            $cowPen3 = Animal::where('type', 'Cow')->where('pen_id', 'تحت التلقيح')->count();
+            $cowPen4 = Animal::where('type', 'Cow')->where('pen_id', 'عشار')->count();
+            $cowPen5 = Animal::where('type', 'Cow')->where('pen_id', 'انتظار ولادة')->count();
+            $cowPen6 = Animal::where('type', 'Cow')->where('pen_id', 'حلاب')->count();
+            $cowPen7 = Animal::where('type', 'Cow')->where('pen_id', 'جفاف')->count();
 
 
 
@@ -59,6 +79,7 @@ class AppServiceProvider extends ServiceProvider
                 'calfBuffaloCount' => $calfBuffalo,
                 'fatteningBuffaloCount' => $fatteningBuffalo,
                 'dairyBuffaloCount' => $dairyBuffalo,
+
                 'buffaloPen1' => $buffaloPen1,
                 'buffaloPen2' => $buffaloPen2,
                 'buffaloPen3' => $buffaloPen3,
@@ -66,6 +87,19 @@ class AppServiceProvider extends ServiceProvider
                 'buffaloPen5' => $buffaloPen5,
                 'buffaloPen6' => $buffaloPen6,
                 'buffaloPen7' => $buffaloPen7,
+
+                'cowCount'=> $cowCount,
+                'pregnantCow' => $pregnantCow,
+                'calfCow' => $calfCow,
+                'fatteningCow' => $fatteningCow,
+                'dairyCow' => $dairyCow,
+                'cowPen1' => $cowPen1,
+                'cowPen2' => $cowPen2,
+                'cowPen3' => $cowPen3,
+                'cowPen4' => $cowPen4,
+                'cowPen5' => $cowPen5,
+                'cowPen6' => $cowPen6,
+                'cowPen7' => $cowPen7,
             ]);
         });
     }

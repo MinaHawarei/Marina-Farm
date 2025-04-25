@@ -16,8 +16,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('suppliers');
 
 
-    Route::get('/buffalo', function () {return view('buffalo');})->name('buffalo');
-    Route::get('/buffalo-fattening', function () {return view('buffalo-fattening');})->name('buffalo.fattening');
+    Route::get('/buffalo', function () {return view('buffalo');})->name('buffalo.index');
+    Route::get('/cow', function () {return view('cow.index');})->name('cow.index');
 
 
 });
@@ -41,6 +41,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/buffalo-pregnant', [AnimalController::class, 'buffaloPregnant'])->name('buffalo.pregnant');
     Route::get('/buffalo-dairy', [AnimalController::class, 'buffaloDairy'])->name('buffalo.dairy');
     Route::get('/buffalo-fattening', [AnimalController::class, 'buffaloFattening'])->name('buffalo.fattening');
+
+    Route::get('/cow-calf', [AnimalController::class, 'cowCalf'])->name('cow.calf');
+    Route::get('/cow-pregnant', [AnimalController::class, 'cowPregnant'])->name('cow.pregnant');
+    Route::get('/cow-dairy', [AnimalController::class, 'cowDairy'])->name('cow.dairy');
+    Route::get('/cow-fattening', [AnimalController::class, 'cowFattening'])->name('cow.fattening');
 
 });
 

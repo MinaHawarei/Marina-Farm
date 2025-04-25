@@ -2,6 +2,10 @@
 <div id="edit-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
     <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
         <h3 class="text-xl font-semibold text-gray-800 mb-6"> تحديث البيانات </h3>
+        @if(isset($animal))
+
+
+
         <form action="{{ route('animals.update', $animal->id) }}" method="POST">
             @csrf
             @method('PUT') <!-- لازم تبقى PATCH أو PUT مش POST -->
@@ -110,5 +114,7 @@
                     <button type="button" onclick="closeForm('edit-form')" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">إلغاء</button>
             </div>
         </form>
+        @else
+        @endif
     </div>
 </div>
