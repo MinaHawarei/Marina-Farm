@@ -12,11 +12,11 @@
         </a>
 
         <!-- قسم الأبقار مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('suppliers.*') ? 'true' : 'false' }} }" class="relative">
+        <div x-data="{ isOpen: {{ request()->routeIs('buffalo.*') ? 'true' : 'false' }} }" class="relative">
             <!-- زر القسم الرئيسي -->
             <button @click="isOpen = !isOpen"
                     class="flex justify-between items-center w-full px-6 py-3 font-bold border-r-4 transition duration-200
-                        {{ request()->routeIs('suppliers.*') ? 'bg-gray-100 text-blue-800 border-blue-500' : 'text-gray-600 hover:bg-gray-50' }}">
+                        {{ request()->routeIs('buffalo.*') ? 'bg-gray-100 text-blue-800 border-blue-500' : 'text-gray-600 hover:bg-gray-50' }}">
                 <div class="flex items-center">
                     <i class="fas fa-cow ml-2"></i> <!-- تغيير الأيقونة -->
                     <span class="mr-2">الجاموس</span>
