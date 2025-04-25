@@ -29,7 +29,21 @@ class DailyProductionController extends Controller
      */
     public function store(Storedaily_productionRequest $request)
     {
-        //
+        $validatedData = $request->validate([
+            'buffaloMilk' => 'required|numeric|min:0',
+            'cowMilk' => 'required|numeric|min:0',
+            'eggs' => 'required|numeric|min:0',
+            'dates' => 'required|numeric|min:0',
+            'production_date' => 'required|date',
+            'notes' => 'nullable|string',
+        ]);
+
+        // إنشاء السجل الجديد مع إضافة created_by
+        daily_production::create(array_merge($validatedData, [
+            'created_by' => auth()->id()
+        ]));
+
+        return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!');
     }
 
     /**

@@ -11,7 +11,7 @@ class Storedaily_productionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class Storedaily_productionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'buffaloMilk' => 'required',
+            'cowMilk' => 'required',
+            'eggs' => 'required',
+            'dates' => 'required',
+            'production_date' => 'required',
+            'created_by' => 'nullable|exists:users,id',
         ];
     }
 }

@@ -1,69 +1,247 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('إدارة الحيوانات') }}
         </h2>
     </x-slot>
-        <div class="flex-1 overflow-y-auto p-8">
 
-            <!-- Email Statistics Card -->
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="text-xl font-semibold mb-4">Email Statistics</h3>
-                <p class="text-gray-500 mb-4">Last Campaign Performance</p>
-                <div class="flex justify-between">
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-blue-600">11%</div>
-                        <div class="text-gray-500">Open Rate</div>
-                    </div>
-                    <!-- باقي النسب -->
+    <div class="py-6 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
+        {{-- رسائل التنبيه --}}
+        @if(session('success'))
+            <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
+                <div class="flex justify-between items-center">
+                    <p>{{ session('success') }}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-green-700">&times;</button>
                 </div>
             </div>
+        @endif
 
-            <!-- Users Behavior Card -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-semibold mb-4">Users Behavior</h3>
-                    <p class="text-gray-500 mb-4">24 Hours performance</p>
-                    <ul class="space-y-2">
-                        <li class="flex justify-between">
-                            <span>9:00AM</span>
-                            <span class="font-semibold">120 visits</span>
-                        </li>
-                        <!-- باقي الأوقات -->
+        @if($errors->any())
+            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+                <div class="flex justify-between items-center">
+                    <ul class="list-disc pl-5 space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
                     </ul>
-                </div>
-
-                <!-- Open & Bounce Card -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-semibold mb-4">Open & Bounce & Unsubscribe</h3>
-                    <p class="text-gray-500">Campaign sent 2 days ago</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-700">&times;</button>
                 </div>
             </div>
+        @endif
 
-            <!-- 2017 Sales Card -->
-            <div class="bg-white rounded-lg shadow-md p-6 mt-8">
-                <h3 class="text-xl font-semibold mb-4">2017 Sales</h3>
-                <p class="text-gray-500 mb-4">All products including Taxes</p>
-                <div class="flex items-end h-64 mt-4">
-                    <div class="flex-1 flex flex-col items-center">
-                        <div class="bg-blue-500 w-full rounded-t" style="height: 30%;"></div>
-                        <span class="mt-2 text-sm">Jan</span>
-                    </div>
-                    <!-- باقي الأشهر -->
-                </div>
-            </div>
+        {{-- زر الإضافة --}}
+        <div class="mb-6 flex flex-wrap gap-3 items-center">
+            <button onclick="toggleForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                إضافة حيوان جديد
+            </button>
 
-            <!-- Tasks Card -->
-            <div class="bg-white rounded-lg shadow-md p-6 mt-8">
-                <h3 class="text-xl font-semibold mb-4">Tasks</h3>
-                <p class="text-gray-500 mb-4">Backend development</p>
-                <ul class="space-y-4">
-                    <li class="flex items-start">
-                        <input type="checkbox" class="mt-1 mr-2">
-                        <span>Sign contract for "What are conference organizers afraid of?"</span>
-                    </li>
-                    <!-- باقي المهام -->
-                </ul>
-            </div>
+            <button onclick="dailyProdectionForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                إضافة الانتاج اليومي
+            </button>
+
+            <button onclick="dailyProdectionForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                خصم الاكل اليومي
+            </button>
+
+            <button onclick="dailyProdectionForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                تسجيل مصروف
+            </button>
+
+            <button onclick="dailyProdectionForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                تسجيل ايراد
+            </button>
         </div>
+
+
+        <!-- تمثيل بياني مرن -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <!-- مخطط حالة القطعان -->
+            <div class="bg-white p-6 rounded-lg shadow overflow-hidden">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 text-center tracking-wide">حالة قطعان الابقار</h3>
+                <div class="relative w-full aspect-square">
+                    <canvas id="buffaloStatusChart" class="w-full h-full"></canvas>
+                </div>
+            </div>
+
+            <!-- مخطط توزيع الحظائر -->
+            <div class="bg-white p-6 rounded-lg shadow overflow-hidden">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 text-center tracking-wide">توزيع الابقار على الحظائر</h3>
+                <div class="relative w-full aspect-square">
+                    <canvas id="buffaloPensChart" class="w-full h-full"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- مودال إضافة الحيوان --}}
+    @include('components.animal-form', [
+        'modalId' => 'add-form',
+        'title' => 'إضافة حيوان جديد',
+        'formAction' => route('animals.store'),
+        'isVisible' => false,
+        'method' => 'POST',
+        'animal' => null,
+        'buttonText' => 'إضافة'
+    ])
+    {{-- مودال إضافة الحيوان --}}
+    @include('components.daily-prodection-form', [
+        'modalId' => 'daily-prodection-form',
+        'title' => 'اضافة الانتاج اليومي',
+        'formAction' => route('animals.store'),
+        'isVisible' => false,
+        'method' => 'POST',
+        'animal' => null,
+        'buttonText' => 'إضافة'
+    ])
+
+    <script>
+        function toggleForm() {
+            const modal = document.getElementById('add-form');
+            modal.classList.toggle('hidden');
+        }
+        function dailyProdectionForm() {
+            const modal2 = document.getElementById('daily-prodection-form');
+            modal2.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function (e) {
+            const modals = [
+                { el: document.getElementById('add-form'), toggle: toggleForm },
+                { el: document.getElementById('daily-prodection-form'), toggle: dailyProdectionForm }
+            ];
+
+            modals.forEach(modal => {
+                const form = modal.el.querySelector('form');
+                const clickedInside = form.contains(e.target) || e.target.closest('button[onclick="' + modal.toggle.name + '()"]');
+
+                if (!modal.el.classList.contains('hidden') && !clickedInside) {
+                    modal.toggle(); // يقفلها بس لو كانت مفتوحة وتم الضغط خارجها
+                }
+            });
+        });
+
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === "Escape") {
+                const modals = [
+                    { el: document.getElementById('add-form'), toggle: toggleForm },
+                    { el: document.getElementById('daily-prodection-form'), toggle: dailyProdectionForm }
+                ];
+
+                modals.forEach(modal => {
+                    if (!modal.el.classList.contains('hidden')) {
+                        modal.toggle(); // يقفلها بس لو كانت مفتوحة
+                    }
+                });
+            }
+        });
+
+        // بيانات حالة الجاموس
+        const statusData = {
+            labels: ['حلوب', 'عشار', 'تسمين', 'بطش'],
+            datasets: [{
+                data: [
+                    {{ $dairyCow ?? 0 }},
+                    {{ $pregnantCow ?? 0 }},
+                    {{ $fatteningCow ?? 0 }},
+                    {{ $calfCow ?? 0 }}
+                ],
+                backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#6366F1'],
+                borderWidth: 1
+            }]
+        };
+
+        // بيانات توزيع الحظائر
+        const pensData = {
+            labels: ['رضاعة', 'فطام', 'تحت التلقيح', 'عشار', 'حلاب', 'انتظار ولادة', 'جفاف'],
+            datasets: [{
+                data: [
+                    {{ $cowPen1 ?? 0 }},
+                    {{ $cowPen2 ?? 0 }},
+                    {{ $cowPen3 ?? 0 }},
+                    {{ $cowPen4 ?? 0 }},
+                    {{ $cowPen5 ?? 0 }},
+                    {{ $cowPen6 ?? 0 }},
+                    {{ $cowPen7 ?? 0 }}
+                ],
+                backgroundColor: ['#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#64748B', '#10B981', '#EF4444'],
+                borderWidth: 1
+            }]
+        };
+
+        // إعدادات مشتركة للرسم البياني
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            aspectRatio: 1, // مربع
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    rtl: true,
+                    labels: {
+                        usePointStyle: true,
+                        font: {
+                            family: 'Tajawal, sans-serif',
+                            size: 14
+                        },
+                        padding: 20
+                    }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: (value, context) => {
+                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        const percentage = ((value / total) * 100);
+                        if(value != 0){
+                          return value;
+                        }else{
+                            return '';
+                        }
+                    },
+                    anchor: 'csnter',
+                    align: 'csnter', // لتثبيت النصوص أقرب للحواف
+                    offset: 0,  // مسافة إضافية للموضع
+                    clamp: true
+                }
+
+            }
+        };
+
+        // رسم مخطط حالة الجاموس
+        new Chart(document.getElementById('buffaloStatusChart'), {
+            type: 'pie',
+            data: statusData,
+            options: commonOptions,
+            plugins: [ChartDataLabels]
+        });
+
+        // رسم مخطط توزيع الحظائر
+        new Chart(document.getElementById('buffaloPensChart'), {
+            type: 'pie',
+            data: pensData,
+            options: commonOptions,
+            plugins: [ChartDataLabels]
+        });
+
+    </script>
 </x-app-layout>

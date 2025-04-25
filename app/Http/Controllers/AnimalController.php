@@ -109,7 +109,8 @@ class AnimalController extends Controller
              'created_by' => auth()->id()
          ]));
 
-         return redirect()->back()->with('success', 'تم إضافة الحيوان بنجاح!');     }
+         return redirect()->back()->with('success', 'تم إضافة الحيوان بنجاح!');
+        }
 
     /**
      * Display the specified resource.

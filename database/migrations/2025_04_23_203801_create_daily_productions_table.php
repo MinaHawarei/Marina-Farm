@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('daily_productions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('animal_id');
-            $table->foreign('animal_id')->references('id')->on('animals');
-            $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->float('quantity');
+            $table->float('buffaloMilk');
+            $table->float('cowMilk');
+            $table->float('eggs');
+            $table->float('dates');
             $table->date('production_date');
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('created_by');
