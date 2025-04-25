@@ -29,7 +29,6 @@ class AnimalPolicy
      */
     public function create(User $user): bool
     {
-        dd('hi');
         return false;
     }
 
@@ -38,7 +37,7 @@ class AnimalPolicy
      */
     public function update(User $user, Animal $animals): bool
     {
-        return false;
+        return true;
     }
 
     /**

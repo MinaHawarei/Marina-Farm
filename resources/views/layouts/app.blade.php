@@ -12,8 +12,9 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 <body class="bg-gray-100 font-sans">
     @include('layouts.navigation')

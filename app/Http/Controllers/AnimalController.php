@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Animal;
+use App\Models\health_record;
 use App\Http\Requests\StoreAnimalRequest;
 use App\Http\Requests\UpdateAnimalsRequest;
 
@@ -15,6 +16,35 @@ class AnimalController extends Controller
     {
         //
     }
+    public function buffaloCalf()
+    {
+        $animals = Animal::where('type', 'Buffalo')->where('status', 'calf')->get();
+        return view('buffalo-calf', compact('animals'));
+    }
+    public function buffaloPregnant()
+    {
+        $animals = Animal::where('type', 'Buffalo')->where('status', 'pregnant')->get();
+        return view('buffalo-pregnant', compact('animals'));
+    }
+    public function buffaloDairy()
+    {
+        $animals = Animal::where('type', 'Buffalo')->where('status', 'dairy')->get();
+        return view('buffalo-dairy', compact('animals'));
+    }
+    public function buffaloFattening()
+    {
+        $animals = Animal::where('type', 'Buffalo')->where('status', 'fattening')->get();
+        return view('buffalo-fattening', compact('animals'));
+    }
+    public function getHealthRecords($animalId)
+    {
+        // جلب التقارير الصحية المرتبطة بالحيوان
+        $healthRecords = health_record::where('animal_id', $animalId)->get();
+
+        // إرجاع البيانات كـ JSON
+        return response()->json($healthRecords);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -57,26 +87,46 @@ class AnimalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Animal $animals)
+    public function show(Animal $animal)
     {
-        //
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Animal $animals)
+    public function edit( Animal $animal)
     {
-        //
+        return response()->json($animal);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAnimalsRequest $request, Animal $animals)
+    public function update(UpdateAnimalsRequest $request, Animal $animal)
     {
-        //
+
+        //dd($request->validated());
+        //dd($request->all());{
+        try {
+            $data = $request->except(['_token', '_method', 'created_at', 'updated_at']);
+
+            $animal->update($data);
+
+            return redirect()->back()->with([
+                'success' => 'تم تحديث البيانات بنجاح',
+                'updated_data' => $data
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'error' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()
+            ]);
+        }
+
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -85,4 +135,6 @@ class AnimalController extends Controller
     {
         //
     }
+
+
 }

@@ -11,7 +11,7 @@ class UpdateAnimalsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,19 @@ class UpdateAnimalsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            //'animal_code' => 'required|string|unique:animals,animal_code,' . $this->route('animal')->id,
+            //'type' => 'required|string|max:255',
+            //'breed' => 'nullable|string|max:255',
+            //'gender' => 'required|string|in:male,female',
+            //'origin' => 'required|string|max:255',
+            //'arrival_date' => 'required|date',
+            //'created_by' => 'required|exists:users,id',
+            'insemination_type' => 'required|string|max:255',
+            'age' => 'required|integer|min:0',
+            'status' => 'required|string|max:255',
+            'pen_id' => 'required|string|max:255',
+            'weight' => 'required|numeric|min:0',
+            'health_status' => 'nullable|string|max:255',
         ];
     }
 }

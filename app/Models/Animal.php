@@ -24,6 +24,8 @@ class Animal extends Model
         'pen_id',
         'insemination_type',
         'created_by',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'created_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     // العلاقة مع المستخدم (user)
