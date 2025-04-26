@@ -75,6 +75,13 @@ class ProductsSeeder extends Seeder
                 'storage_location' => 'Sale Point',
                 'created_by' => $userId,
             ],
+             [
+                'product_name' => 'clover',
+                'category' => 'clover',
+                'unit' => 0,
+                'storage_location' => 'Sale Point',
+                'created_by' => $userId,
+            ],
          ];
 
          foreach ($products as $product) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\daily_production;
+use App\Models\Transaction;
 use App\Http\Requests\Storedaily_productionRequest;
 use App\Http\Requests\Updatedaily_productionRequest;
 
@@ -29,11 +30,19 @@ class DailyProductionController extends Controller
      */
     public function store(Storedaily_productionRequest $request)
     {
+
+        $exists = daily_production::where('production_date', $request->production_date)->exists();
+        if ($exists) {
+            return redirect()->back()->withErrors(['production_date' => 'لقد تم اضافة يومية الانتاج من قبل !!'])->withInput();
+        }
+
+
         $validatedData = $request->validate([
             'buffaloMilk' => 'required|numeric|min:0',
             'cowMilk' => 'required|numeric|min:0',
             'eggs' => 'required|numeric|min:0',
             'dates' => 'required|numeric|min:0',
+            'clover' => 'required|numeric|min:0',
             'production_date' => 'required|date',
             'notes' => 'nullable|string',
         ]);
@@ -42,8 +51,32 @@ class DailyProductionController extends Controller
         daily_production::create(array_merge($validatedData, [
             'created_by' => auth()->id()
         ]));
+        // تعريف الأصناف ومعرفاتهم (حسب الـ products عندك)
+    $products = [
+        1 => 'buffaloMilk', // اللبن جاموس
+        2 => 'cowMilk',     // اللبن ابقار
+        3 => 'eggs',        // البيض
+        9 => 'dates',       // البلح
+        11 => 'clover',       // البرسيم
+    ];
 
-        return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!');
+    foreach ($products as $productId => $fieldName) {
+        if ($validatedData[$fieldName] > 0) {
+            Transaction::create([
+                'type' => 'production', // نوع الحركة: انتاج
+                'product_id' => $productId,
+                'quantity' => $validatedData[$fieldName],
+                'amount' => null, // لأنه انتاج، مش بيع أو مصاريف
+                'description' => 'إنتاج يومي بتاريخ ' . $validatedData['production_date'],
+                'date' => $validatedData['production_date'],
+                'created_by' => auth()->id(),
+            ]);
+        }
+    }
+
+        //return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!');
+        return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!')
+    ?: redirect()->back()->with('error', 'حدث خطأ أثناء إضافة يومية الإنتاج!');
     }
 
     /**

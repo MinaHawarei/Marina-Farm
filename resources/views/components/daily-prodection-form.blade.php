@@ -33,6 +33,10 @@
                         <input type="number" name="dates" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
                     <div>
+                        <label class="block text-gray-700 mb-1">برسيم (كجم) <span class="text-red-500">*</span></label>
+                        <input type="number" name="clover" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
                         <label class="block text-gray-700 mb-1">ملاحظات<span class="text-red-500">*</span></label>
                         <input type="text" name="notes" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>

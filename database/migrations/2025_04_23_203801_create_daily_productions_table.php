@@ -17,7 +17,8 @@ return new class extends Migration
             $table->float('cowMilk');
             $table->float('eggs');
             $table->float('dates');
-            $table->date('production_date');
+            $table->float('clover');
+            $table->date('production_date')->unique();
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users');
