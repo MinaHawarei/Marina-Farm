@@ -52,32 +52,32 @@ class DailyProductionController extends Controller
             'created_by' => auth()->id()
         ]));
         // تعريف الأصناف ومعرفاتهم (حسب الـ products عندك)
-    $products = [
-        1 => 'buffaloMilk', // اللبن جاموس
-        2 => 'cowMilk',     // اللبن ابقار
-        3 => 'eggs',        // البيض
-        9 => 'dates',       // البلح
-        11 => 'clover',       // البرسيم
-    ];
+        $products = [
+            1 => 'buffaloMilk', // اللبن جاموس
+            2 => 'cowMilk',     // اللبن ابقار
+            3 => 'eggs',        // البيض
+            9 => 'dates',       // البلح
+            11 => 'clover',       // البرسيم
+        ];
 
-    foreach ($products as $productId => $fieldName) {
-        if ($validatedData[$fieldName] > 0) {
-            Transaction::create([
-                'type' => 'production', // نوع الحركة: انتاج
-                'product_id' => $productId,
-                'quantity' => $validatedData[$fieldName],
-                'amount' => null, // لأنه انتاج، مش بيع أو مصاريف
-                'description' => 'إنتاج يومي بتاريخ ' . $validatedData['production_date'],
-                'date' => $validatedData['production_date'],
-                'created_by' => auth()->id(),
-            ]);
+        foreach ($products as $productId => $fieldName) {
+            if ($validatedData[$fieldName] > 0) {
+                Transaction::create([
+                    'type' => 'production', // نوع الحركة: انتاج
+                    'product_id' => $productId,
+                    'quantity' => $validatedData[$fieldName],
+                    'amount' => null, // لأنه انتاج، مش بيع أو مصاريف
+                    'description' => 'إنتاج يومي بتاريخ ' . $validatedData['production_date'],
+                    'date' => $validatedData['production_date'],
+                    'created_by' => auth()->id(),
+                ]);
+            }
         }
-    }
 
-        //return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!');
-        return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!')
-    ?: redirect()->back()->with('error', 'حدث خطأ أثناء إضافة يومية الإنتاج!');
-    }
+            //return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!');
+            return redirect()->back()->with('success', 'تم إضافة يومية الانتاج بنجاح!')
+        ?: redirect()->back()->with('error', 'حدث خطأ أثناء إضافة يومية الإنتاج!');
+        }
 
     /**
      * Display the specified resource.

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\DailyProductionController;
+use App\Http\Controllers\DailyConsumptionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -39,6 +40,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', [DailyProductionController::class, 'store'])->name('dailyProdection.store');
         Route::get('/{animal}/edit', [DailyProductionController::class, 'edit'])->name('dailyProdection.edit');
         Route::put('/{animal}', [DailyProductionController::class, 'update'])->name('dailyProdection.update');
+    });
+    //daily Expense
+     Route::prefix('DailyConsumption')->group(function() {
+        Route::post('/', [DailyConsumptionController::class, 'store'])->name('DailyConsumption.store');
+        Route::get('/{animal}/edit', [DailyConsumptionController::class, 'edit'])->name('DailyConsumption.edit');
+        Route::put('/{animal}', [DailyConsumptionController::class, 'update'])->name('DailyConsumption.update');
     });
 
 

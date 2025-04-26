@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             // نوع العملية (بيع - انتاج - مصروف - إيراد - مرتبات - غيره)
-            $table->enum('type', ['production', 'sale', 'expense', 'income', 'salary']);
+            $table->enum('type', ['production', 'sale', 'expense', 'income', 'salary', 'consumptions' , 'other']);
 
             // المنتج المرتبط بالعملية (ممكن يبقى نل لو العملية مش مرتبطة بمنتج زي مصروف مثلاً)
             $table->unsignedBigInteger('product_id')->nullable();

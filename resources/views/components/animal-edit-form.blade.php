@@ -12,7 +12,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{-- العمود الأول --}}
-                <div class="space-y-3">
+                <div class="space-y-10">
                     <div>
                         <label class="block text-gray-700 mb-1">كود الحيوان <span class="text-red-500">*</span></label>
                         <input type="text" name="animal_code" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 {{-- العمود الثاني --}}
-                <div class="space-y-3">
+                <div class="space-y-10">
                     <div>
                         <label class="block text-gray-700 mb-1">الحالة الصحية</label>
                         <select name="health_status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
