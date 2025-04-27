@@ -11,7 +11,7 @@ class StoreexpenseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,18 @@ class StoreexpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'category' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'quantity' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:0',
+            'paid' => 'required|numeric|min:0',
+            'remaining' => 'required|numeric|min:0',
+            'date' => 'required|date',
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'description' => 'nullable|string',
         ];
+
     }
+
+
 }

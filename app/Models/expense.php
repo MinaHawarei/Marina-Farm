@@ -9,4 +9,17 @@ class expense extends Model
 {
     /** @use HasFactory<\Database\Factories\ExpenseFactory> */
     use HasFactory;
+    protected $fillable = [
+        'category',
+        'type',
+        'quantity',
+        'amount',
+        'paid',
+        'remaining',
+        'date',
+        'supplier_id',
+        'description',
+        'created_by',
+    ];
+
 }
