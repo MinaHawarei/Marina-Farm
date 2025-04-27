@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('paid');
             $table->float('remaining');
             $table->date('date');
+            $table->string('supplier_name');
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->text('description')->nullable();

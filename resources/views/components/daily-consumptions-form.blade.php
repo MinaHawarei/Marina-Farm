@@ -3,7 +3,6 @@
     <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
         <h3 class="text-xl font-semibold text-gray-800 mb-6">{{ $title }}</h3>
         <form action="{{ route('DailyConsumption.store') }}" method="POST">
-            dailyExpenseForm
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{-- العمود الأول --}}

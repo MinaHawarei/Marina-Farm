@@ -17,6 +17,7 @@ class expense extends Model
         'paid',
         'remaining',
         'date',
+        'supplier_name',
         'supplier_id',
         'description',
         'created_by',

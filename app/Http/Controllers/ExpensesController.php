@@ -41,6 +41,7 @@ class ExpensesController extends Controller
             'paid' => 'required|numeric|min:0',
             'remaining' => 'required|numeric|min:0',
             'date' => 'required|date',
+            'supplier_name' => 'required|string|max:255',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'description' => 'nullable|string',
         ]);
@@ -70,8 +71,8 @@ class ExpensesController extends Controller
         ]);
 
 
-        return redirect()->back()->with('success', 'تم إضافةالاستهلاك اليومي بنجاح!')
-        ?: redirect()->back()->with('error', 'حدث خطأ أثناء إضافةالاستهلاك اليومي!');
+        return redirect()->back()->with('success', 'تم إضافةالمصروفات بنجاح!')
+        ?: redirect()->back()->with('error', 'حدث خطأ أثناء إضافةالمصروفات!');
 
     }
 
