@@ -5,6 +5,7 @@ use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\DailyProductionController;
 use App\Http\Controllers\DailyConsumptionController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\DailySaleController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -39,20 +40,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //daily Prodection
      Route::prefix('dailyProdection')->group(function() {
         Route::post('/', [DailyProductionController::class, 'store'])->name('dailyProdection.store');
-        Route::get('/{animal}/edit', [DailyProductionController::class, 'edit'])->name('dailyProdection.edit');
-        Route::put('/{animal}', [DailyProductionController::class, 'update'])->name('dailyProdection.update');
+        Route::get('/{id}/edit', [DailyProductionController::class, 'edit'])->name('dailyProdection.edit');
+        Route::put('/{id}', [DailyProductionController::class, 'update'])->name('dailyProdection.update');
     });
     //daily Consumption
      Route::prefix('DailyConsumption')->group(function() {
         Route::post('/', [DailyConsumptionController::class, 'store'])->name('DailyConsumption.store');
-        Route::get('/{animal}/edit', [DailyConsumptionController::class, 'edit'])->name('DailyConsumption.edit');
-        Route::put('/{animal}', [DailyConsumptionController::class, 'update'])->name('DailyConsumption.update');
+        Route::get('/{id}/edit', [DailyConsumptionController::class, 'edit'])->name('DailyConsumption.edit');
+        Route::put('/{id}', [DailyConsumptionController::class, 'update'])->name('DailyConsumption.update');
     });
     //Expenses
      Route::prefix('Expenses')->group(function() {
         Route::post('/', [ExpensesController::class, 'store'])->name('expense.store');
-        Route::get('/{animal}/edit', [ExpensesController::class, 'edit'])->name('expense.edit');
-        Route::put('/{animal}', [ExpensesController::class, 'update'])->name('expense.update');
+        Route::get('/{id}/edit', [ExpensesController::class, 'edit'])->name('expense.edit');
+        Route::put('/{id}', [ExpensesController::class, 'update'])->name('expense.update');
+    });
+    //income
+     Route::prefix('income')->group(function() {
+        Route::post('/', [DailySaleController::class, 'store'])->name('income.store');
+        Route::get('/{id}/edit', [DailySaleController::class, 'edit'])->name('income.edit');
+        Route::put('/{id}', [DailySaleController::class, 'update'])->name('income.update');
     });
 
 

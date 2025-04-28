@@ -59,7 +59,7 @@
                 تسجيل مصروف
             </button>
 
-            <button onclick="dailyExpenseForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+            <button onclick="incomeForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
@@ -129,6 +129,16 @@
         'animal' => null,
         'buttonText' => 'إضافة'
     ])
+    {{-- موديل اضافة الاستهلاك اليومي --}}
+    @include('components.income-form', [
+        'modalId' => 'income-form',
+        'title' => 'اضافة ايراد',
+        'formAction' => route('income.store'),
+        'isVisible' => false,
+        'method' => 'POST',
+        'animal' => null,
+        'buttonText' => 'إضافة'
+    ])
 
     <script>
         function toggleForm() {
@@ -147,13 +157,18 @@
             const modal4 = document.getElementById('expense-form');
             modal4.classList.toggle('hidden');
         }
+        function incomeForm() {
+            const modal5 = document.getElementById('income-form');
+            modal5.classList.toggle('hidden');
+        }
 
         document.addEventListener('click', function (e) {
             const modals = [
                 { el: document.getElementById('add-form'), toggle: toggleForm },
                 { el: document.getElementById('daily-prodection-form'), toggle: dailyProdectionForm },
                 { el: document.getElementById('daily-consumptions-form'), toggle: dailyConsumptionsForm },
-                { el: document.getElementById('expense-form'), toggle: dailyExpenseForm }
+                { el: document.getElementById('expense-form'), toggle: dailyExpenseForm },
+                { el: document.getElementById('income-form'), toggle: incomeForm }
             ];
 
             modals.forEach(modal => {
@@ -173,7 +188,9 @@
                     { el: document.getElementById('add-form'), toggle: toggleForm },
                     { el: document.getElementById('daily-prodection-form'), toggle: dailyProdectionForm },
                     { el: document.getElementById('daily-consumptions-form'), toggle: dailyConsumptionsForm },
-                    { el: document.getElementById('expense-form'), toggle: dailyExpenseForm }
+                    { el: document.getElementById('expense-form'), toggle: dailyExpenseForm },
+                    { el: document.getElementById('income-form'), toggle: incomeForm }
+
                     ];
 
                 modals.forEach(modal => {
