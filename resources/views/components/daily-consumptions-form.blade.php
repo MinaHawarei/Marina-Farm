@@ -11,15 +11,22 @@
                         <label class="block text-gray-700 mb-1">تبن (كجم)<span class="text-red-500">*</span></label>
                         <input type="number" name="hay" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">ذرة (كجم)<span class="text-red-500">*</span></label>
+                        <input type="number" name="corn" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
 
                     <div>
-                        <label class="block text-gray-700 mb-1">علف (كجم)<span class="text-red-500">*</span></label>
-                        <input type="number" name="feed" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        <label class="block text-gray-700 mb-1">ردة (كجم)<span class="text-red-500">*</span></label>
+                        <input type="number" name="bran" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
                     <div>
-                        <label class="block text-gray-700 mb-1">برسيم (كجم)<span class="text-red-500">*</span></label>
-                        <input type="number" name="clover" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        <label class="block text-gray-700 mb-1">سيلاج (كجم)<span class="text-red-500">*</span></label>
+                        <input type="number" name="silage" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
+
+
+
                     <div>
                         <label class="block text-gray-700 mb-1">التاريخ<span class="text-red-500">*</span></label>
                         <input type="date" name="consumptions_date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
@@ -28,12 +35,24 @@
                 {{-- العمود الثاني --}}
                 <div class="space-y-3">
                     <div>
+                        <label class="block text-gray-700 mb-1">صويا (كجم)<span class="text-red-500">*</span></label>
+                        <input type="number" name="soybean" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">قشر صويا (كجم)<span class="text-red-500">*</span></label>
+                        <input type="number" name="soybean_hulls" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">برسيم (كجم)<span class="text-red-500">*</span></label>
+                        <input type="number" name="clover" min="0" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <div>
                         <label class="block text-gray-700 mb-1">بنزين (لتر) <span class="text-red-500">*</span></label>
                         <input type="number" name="gasoline" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-1"> سولار (لتر) <span class="text-red-500">*</span></label>
-                        <input type="number" name="gas" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        <input type="number" name="solar" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-1">ملاحظات<span class="text-red-500">*</span></label>

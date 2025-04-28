@@ -23,10 +23,14 @@ class StoreDailyConsumptionRequest extends FormRequest
     {
         return [
             'hay' => 'required',
-            'feed' => 'required',
             'clover' => 'required',
+            'corn' => 'required',
+            'soybean' => 'required',
+            'soybean_hulls' => 'required',
+            'bran' => 'required',
+            'silage' => 'required',
             'gasoline' => 'required',
-            'gas' => 'required',
+            'solar' => 'required',
             'consumptions_date' => 'required',
             'created_by' => 'nullable|exists:users,id',
         ];

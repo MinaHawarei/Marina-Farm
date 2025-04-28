@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('daily_consumptions', function (Blueprint $table) {
             $table->id();
             $table->float('hay');
-            $table->float('feed');
             $table->float('clover');
+            $table->float('corn');
+            $table->float('soybean');
+            $table->float('soybean_hulls');
+            $table->float('bran');
+            $table->float('silage');
             $table->float('gasoline');
-            $table->float('gas');
+            $table->float('solar');
             $table->date('consumptions_date')->unique();
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('created_by');

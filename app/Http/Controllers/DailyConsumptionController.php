@@ -38,10 +38,14 @@ class DailyConsumptionController extends Controller
 
         $validatedData = $request->validate([
             'hay' => 'required|numeric|min:0',
-            'feed' => 'required|numeric|min:0',
             'clover' => 'required|numeric|min:0',
+            'corn' => 'required|numeric|min:0',
+            'soybean' => 'required|numeric|min:0',
+            'soybean_hulls' => 'required|numeric|min:0',
+            'bran' => 'required|numeric|min:0',
+            'silage' => 'required|numeric|min:0',
             'gasoline' => 'required|numeric|min:0',
-            'gas' => 'required|numeric|min:0',
+            'solar' => 'required|numeric|min:0',
             'consumptions_date' => 'required|date',
             'notes' => 'nullable|string',
         ]);
@@ -52,12 +56,17 @@ class DailyConsumptionController extends Controller
         ]));
         // تعريف الأصناف ومعرفاتهم (حسب الـ products عندك)
         $products = [
-            16 => 'hay', // اللبن جاموس
-            17 => 'feed',     // اللبن ابقار
-            18 => 'gasoline',        // البيض
-            19 => 'gas',       // البلح
-            11 => 'clover',       // البرسيم
+            10 => 'hay', // التبن
+            11 => 'corn',     // الذرة
+            12 => 'gasoline',        // البنزين
+            13 => 'solar',       // سولار
+            9 => 'clover',       // البرسيم
+            14 => 'soybean',       // فول الصويا
+            15 => 'soybean_hulls',       // قشر فول الصويا
+            16 => 'bran',       // ردة
+            17 => 'silage',       // سيلاج
         ];
+
 
         foreach ($products as $productId => $fieldName) {
             if ($validatedData[$fieldName] > 0) {
