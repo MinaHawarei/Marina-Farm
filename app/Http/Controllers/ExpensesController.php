@@ -37,6 +37,7 @@ class ExpensesController extends Controller
             'category' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'quantity' => 'required|numeric|min:0',
+            'unit_price' => 'required|numeric|min:0',
             'amount' => 'required|numeric|min:0',
             'paid' => 'required|numeric|min:0',
             'remaining' => 'required|numeric|min:0',

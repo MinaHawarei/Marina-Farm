@@ -9,4 +9,19 @@ class daily_sale extends Model
 {
     /** @use HasFactory<\Database\Factories\DailySaleFactory> */
     use HasFactory;
+    protected $fillable = [
+        'production_id',
+        'category',
+        'type',
+        'quantity',
+        'amount',
+        'unit_price',
+        'paid',
+        'remaining',
+        'date',
+        'buyer_name',
+        'buyer_id',
+        'description',
+        'created_by',
+    ];
 }

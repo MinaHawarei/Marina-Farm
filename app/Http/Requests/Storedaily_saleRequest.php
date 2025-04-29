@@ -11,7 +11,7 @@ class Storedaily_saleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class Storedaily_saleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'category' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'quantity' => 'required|numeric|min:0',
+            'unit_price' => 'required|numeric|min:0',
+            'amount' => 'required|numeric|min:0',
+            'paid' => 'required|numeric|min:0',
+            'remaining' => 'required|numeric|min:0',
+            'date' => 'required|date',
+            'buyer_name' => 'required|string|max:255',
+            'buyer_id' => 'nullable|exists:suppliers,id',
+            'description' => 'nullable|string',
         ];
     }
 }

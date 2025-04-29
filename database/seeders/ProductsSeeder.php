@@ -143,6 +143,41 @@ class ProductsSeeder extends Seeder
                 'storage_location' => 'Farm',
                 'created_by' => $userId,
             ],
+            [
+                'product_name' => 'ghee',
+                'category' => 'ghee',
+                'unit' => 0,
+                'storage_location' => 'Farm',
+                'created_by' => $userId,
+            ],
+            [
+                'product_name' => 'ghee',
+                'category' => 'ghee',
+                'unit' => 0,
+                'storage_location' => 'Sale Point',
+                'created_by' => $userId,
+            ],
+            [
+                'product_name' => 'Cheese',
+                'category' => 'Cheese',
+                'unit' => 0,
+                'storage_location' => 'Farm',
+                'created_by' => $userId,
+            ],
+            [
+                'product_name' => 'Cheese',
+                'category' => 'Cheese',
+                'unit' => 0,
+                'storage_location' => 'Sale Point',
+                'created_by' => $userId,
+            ],
+            [
+                'product_name' => 'fertilizer',
+                'category' => 'fertilizer',
+                'unit' => 0,
+                'storage_location' => 'Farm',
+                'created_by' => $userId,
+            ],
          ];
 
          foreach ($products as $product) {

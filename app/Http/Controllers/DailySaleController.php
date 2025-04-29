@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\daily_sale;
+use App\Models\product;
 use App\Models\Transaction;
 use App\Http\Requests\Storedaily_saleRequest;
 use App\Http\Requests\Updatedaily_saleRequest;
@@ -30,20 +31,30 @@ class DailySaleController extends Controller
      */
     public function store(Storedaily_saleRequest $request)
     {
-
+        $product_id = 0;
         // التحقق من صحة البيانات
         $validatedData = $request->validate([
-            'category' => 'required|string|max:255',
+           'category' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'quantity' => 'required|numeric|min:0',
+            'unit_price' => 'required|numeric|min:0',
             'amount' => 'required|numeric|min:0',
             'paid' => 'required|numeric|min:0',
             'remaining' => 'required|numeric|min:0',
             'date' => 'required|date',
-            'supplier_name' => 'required|string|max:255',
-            'supplier_id' => 'nullable|exists:suppliers,id',
+            'buyer_name' => 'required|string|max:255',
+            'buyer_id' => 'nullable|exists:suppliers,id',
             'description' => 'nullable|string',
         ]);
+        $product = product::where('product_name', $validatedData['type'])->first();
+        $product_id = $product->id;
+        $transactionType = 'sale';
+        if (!$product) {
+            $product_id = 0;
+            $transactionType = 'income';
+        }
+
+
 
 
 
@@ -54,14 +65,16 @@ class DailySaleController extends Controller
 
         // إنشاء السجل الجديد مع إضافة created_by
         $expense = daily_sale::create(array_merge($validatedData, [
+            'production_id' => $product_id,
             'created_by' => auth()->id()
+
         ]));
 
 
 
         Transaction::create([
-            'type' => 'expense', // نوع العملية مصروف
-            'product_id' => null, // المصروف غير مرتبط بمنتج
+            'type' => $transactionType, // نوع العملية مصروف
+            'product_id' => $product_id, // المصروف غير مرتبط بمنتج
             'quantity' => $expense->quantity, // المصروف ليس له كمية مرتبطة
             'amount' => $expense->amount, // القيمة المالية للمصروف
             'description' => $expense->description, // وصف العملية
@@ -70,8 +83,8 @@ class DailySaleController extends Controller
         ]);
 
 
-        return redirect()->back()->with('success', 'تم إضافةالمصروفات بنجاح!')
-        ?: redirect()->back()->with('error', 'حدث خطأ أثناء إضافةالمصروفات!');
+        return redirect()->back()->with('success', 'تم اضافة الايراد بنجاح!')
+        ?: redirect()->back()->with('error', 'حدث خطأ أثناء اضافة الايراد!');
 
 
 

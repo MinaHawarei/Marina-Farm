@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('category');
             $table->string('type');
             $table->float('quantity');
+            $table->float('unit_price');
             $table->float('amount');
             $table->float('paid');
             $table->float('remaining');

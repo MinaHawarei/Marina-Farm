@@ -15,16 +15,26 @@ return new class extends Migration
             $table->id(); // مفتاح أساسي
             $table->unsignedBigInteger('production_id'); // مرجع لإنتاج يومي
             $table->foreign('production_id')->references('id')->on('daily_productions');
-            $table->float('quantity_sold'); // الكمية المباعة
+
+            $table->string('category');
+            $table->string('type');
+            $table->float('quantity');
             $table->float('unit_price'); // سعر الوحدة
-            $table->float('total_price'); // السعر الإجمالي
-            $table->date('sale_date'); // تاريخ البيع
+            $table->float('amount');
+            $table->float('paid');
+            $table->float('remaining');
+            $table->date('date');
             $table->string('sales_point')->nullable(); // منفذ البيع
+            $table->string('buyer_name');
+            $table->unsignedBigInteger('buyer_id')->nullable();
+            $table->foreign('buyer_id')->references('id')->on('buyers');
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('created_by'); // مرجع للمستخدم الذي أضاف البيع
             $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps(); // created_at و updated_at
 
         });
+
     }
 
     /**

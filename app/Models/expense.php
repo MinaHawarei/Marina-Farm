@@ -13,6 +13,7 @@ class expense extends Model
         'category',
         'type',
         'quantity',
+        'unit_price',
         'amount',
         'paid',
         'remaining',

@@ -51,7 +51,7 @@
 
                     <div>
                         <label class="block text-gray-700 mb-1">اسم العميل<span class="text-red-500">*</span></label>
-                        <input type="text" name="supplier_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <input type="text" name="buyer_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                 </div>
 
@@ -61,7 +61,10 @@
                         <label class="block text-gray-700 mb-1">الكمية<span class="text-red-500">*</span></label>
                         <input type="number" name="quantity" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
-
+                    <div>
+                        <label class="block text-gray-700 mb-1">سعر الوحدة<span class="text-red-500">*</span></label>
+                        <input type="number" name="unit_price" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                    </div>
                     <div>
                         <label class="block text-gray-700 mb-1">القيمة<span class="text-red-500">*</span></label>
                         <input type="number" name="amount" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
@@ -79,7 +82,7 @@
 
                     <div>
                         <label class="block text-gray-700 mb-1">الرقم التعريفي للعميل<span class="text-red-500">*</span></label>
-                        <input type="number" name="supplier_id" min="1" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <input type="number" name="buyer_id" min="1" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                 </div>
             </div>
@@ -101,9 +104,14 @@
 
     const income_subCategoriesData = {
         "Product Sales": [
-            { value: "Milk Sales", text: "بيع الحليب" },
-            { value: "Cheese Sales", text: "بيع الجبن" },
-            { value: "Other Products", text: "منتجات أخرى" }
+            { value: "Buffalo Milk", text: "لبن جاموس" },
+            { value: "Cow Milk", text: "لبن بقري" },
+            { value: "eggs", text: "بيض" },
+            { value: "ghee", text: "سمن" },
+            { value: "Cheese", text: "جبن" },
+            { value: "dates", text: "بلح" },
+            { value: "clover", text: "برسيم" },
+            { value: "fertilizer", text: "سماد حيواني" },
         ],
         "Animal Sales": [
             { value: "Buffalo Sales", text: "بيع الجاموس" },
