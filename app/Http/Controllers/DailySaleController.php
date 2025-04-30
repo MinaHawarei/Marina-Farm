@@ -65,7 +65,7 @@ class DailySaleController extends Controller
 
         // إنشاء السجل الجديد مع إضافة created_by
         $expense = daily_sale::create(array_merge($validatedData, [
-            'production_id' => $product_id,
+            'product_id' => $product_id,
             'created_by' => auth()->id()
 
         ]));

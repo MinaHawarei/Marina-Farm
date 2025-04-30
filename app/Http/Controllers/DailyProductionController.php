@@ -6,15 +6,31 @@ use App\Models\daily_production;
 use App\Models\Transaction;
 use App\Http\Requests\Storedaily_productionRequest;
 use App\Http\Requests\Updatedaily_productionRequest;
+use Illuminate\Http\Request;
+
 
 class DailyProductionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function production(Request $request)
+    {
+        $query = daily_production::query();
+
+        // تحقق إذا تم إرسال تاريخ معين
+        if ($request->has('date') && $request->date) {
+            $query->whereDate('production_date', $request->date);
+        }
+
+        $daily_production = $query->orderBy('production_date', 'desc')->get();
+
+        return view('daily.prodection', compact('daily_production'));
+    }
     public function index()
     {
-        //
+        $daily_production = daily_production::all();
+        return view('daily.prodection');
     }
 
     /**
@@ -92,15 +108,30 @@ class DailyProductionController extends Controller
      */
     public function edit(daily_production $daily_production)
     {
-        //
+        return response()->json($daily_production);
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Updatedaily_productionRequest $request, daily_production $daily_production)
     {
-        //
+        try {
+            $data = $request->except(['_token', '_method', 'created_at', 'updated_at']);
+
+            $daily_production->update($data);
+
+            return redirect()->back()->with([
+                'success' => 'تم تحديث البيانات بنجاح',
+                'updated_data' => $data
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'error' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -108,6 +139,7 @@ class DailyProductionController extends Controller
      */
     public function destroy(daily_production $daily_production)
     {
-        //
+        $daily_production->delete();
+        return redirect()->route('daily.index')->with('success', 'تم حذف السجل بنجاح.');
     }
 }

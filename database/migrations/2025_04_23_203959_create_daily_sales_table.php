@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('daily_sales', function (Blueprint $table) {
             $table->id(); // مفتاح أساسي
-            $table->unsignedBigInteger('production_id'); // مرجع لإنتاج يومي
-            $table->foreign('production_id')->references('id')->on('daily_productions');
-
+            $table->unsignedBigInteger('product_id')->nullable();; // مرجع لإنتاج يومي
+            $table->foreign('product_id')->references('id')->on('products');
             $table->string('category');
             $table->string('type');
             $table->float('quantity');

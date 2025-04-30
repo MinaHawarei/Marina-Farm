@@ -14,7 +14,9 @@ class DailyConsumptionController extends Controller
      */
     public function index()
     {
-        //
+        $DailyConsumption = DailyConsumption::all();
+        return view('daily.Consumption', compact('DailyConsumption'));
+
     }
 
     /**

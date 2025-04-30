@@ -40,8 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //daily Prodection
      Route::prefix('dailyProdection')->group(function() {
         Route::post('/', [DailyProductionController::class, 'store'])->name('dailyProdection.store');
-        Route::get('/{id}/edit', [DailyProductionController::class, 'edit'])->name('dailyProdection.edit');
-        Route::put('/{id}', [DailyProductionController::class, 'update'])->name('dailyProdection.update');
+        //Route::get('/{id}/edit', [DailyProductionController::class, 'edit'])->name('dailyProdection.edit');
+        //Route::put('/{id}', [DailyProductionController::class, 'update'])->name('dailyProdection.update');
     });
     //daily Consumption
      Route::prefix('DailyConsumption')->group(function() {
@@ -61,7 +61,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [DailySaleController::class, 'edit'])->name('income.edit');
         Route::put('/{id}', [DailySaleController::class, 'update'])->name('income.update');
     });
+        // daily
+        Route::prefix('daily')->group(function() {
+            Route::get('/', function () {return view('daily.index');})->name('daily.index');
+            Route::get('/production', [DailyProductionController::class, 'production'])->name('daily.production');
+            Route::get('/consumption', [DailyConsumptionController::class, 'index'])->name('daily.consumption');
 
+            Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
+            Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
+            Route::delete('/production/{daily_production}', [DailyProductionController::class, 'destroy'])->name('daily-production.destroy');
+        });
 
 
     Route::get('/buffalo-calf', [AnimalController::class, 'buffaloCalf'])->name('buffalo.calf');

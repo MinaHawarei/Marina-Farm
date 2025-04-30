@@ -174,6 +174,56 @@
             </div>
         </div>
 
+        <!-- قسم اليومية مع القائمة المنسدلة -->
+        <div x-data="{ isOpen: {{ request()->routeIs('daily.*') ? 'true' : 'false' }} }" class="relative">
+            <!-- زر القسم الرئيسي -->
+            <button @click="isOpen = !isOpen"
+            class="flex justify-between items-center w-full px-6 py-3 font-bold border-r-4 transition duration-200
+                {{ request()->routeIs('suppliers.*') ? 'bg-gray-100 text-blue-800 border-blue-500' : 'text-white hover:text-blue-800' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-cow ml-2"></i>
+                    <span class="mr-2">اليومية</span>
+                </div>
+                <div class="flex items-center">
+                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
+                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
+                </div>
+            </button>
+
+            <!-- القائمة المنسدلة -->
+            <div x-show="isOpen" x-collapse class="pr-6" style="background-color: #040629;"
+            >
+                <a href="{{ route('daily.index') }}"
+                    class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                    style="{{ request()->routeIs('cow.index') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                    <div class="flex items-center">
+                        <i class="fas fa-tachometer-alt ml-2"></i>
+                        <span class="mr-2">الرئيسية</span>
+                    </div>
+
+                </a>
+                    <a href="{{ route('daily.production') }}"
+                    class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                    style="{{ request()->routeIs('daily.production') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                    <div class="flex items-center">
+                        <i class="fas fa-tachometer-alt ml-2"></i>
+                        <span class="mr-2">الانتاج اليومي</span>
+                    </div>
+
+                </a>
+                <a href="{{ route('daily.consumption') }}"
+                    class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                    style="{{ request()->routeIs('daily.consumption') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                    <div class="flex items-center">
+                        <i class="fas fa-tachometer-alt ml-2"></i>
+                        <span class="mr-2">الاستهلاك اليومي</span>
+                    </div>
+
+                </a>
+
+            </div>
+        </div>
+
 
     </nav>
 </div>
