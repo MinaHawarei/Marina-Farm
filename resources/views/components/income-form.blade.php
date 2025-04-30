@@ -92,7 +92,7 @@
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
                     إضافة
                 </button>
-                <button type="button" onclick="dailyExpenseForm()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                <button type="button" onclick="incomeForm()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
                     إلغاء
                 </button>
             </div>

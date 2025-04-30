@@ -6,17 +6,30 @@ use App\Models\DailyConsumption;
 use App\Models\Transaction;
 use App\Http\Requests\StoreDailyConsumptionRequest;
 use App\Http\Requests\UpdateDailyConsumptionRequest;
+use Illuminate\Http\Request;
+
 
 class DailyConsumptionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function consumption(Request $request)
+    {
+        $query = DailyConsumption::query();
+
+        // تحقق إذا تم إرسال تاريخ معين
+        if ($request->has('date') && $request->date) {
+            $query->whereDate('consumptions_date', $request->date);
+        }
+
+        $daily_consumption = $query->orderBy('consumptions_date', 'desc')->get();
+
+        return view('daily.consumption', compact('daily_consumption'));
+    }
     public function index()
     {
-        $DailyConsumption = DailyConsumption::all();
-        return view('daily.Consumption', compact('DailyConsumption'));
-
+        //
     }
 
     /**
@@ -102,7 +115,8 @@ class DailyConsumptionController extends Controller
      */
     public function edit(DailyConsumption $dailyConsumption)
     {
-        //
+        return response()->json($dailyConsumption);
+
     }
 
     /**
@@ -110,7 +124,21 @@ class DailyConsumptionController extends Controller
      */
     public function update(UpdateDailyConsumptionRequest $request, DailyConsumption $dailyConsumption)
     {
-        //
+        try {
+            $data = $request->except(['_token', '_method', 'created_at', 'updated_at']);
+
+            $dailyConsumption->update($data);
+
+            return redirect()->back()->with([
+                'success' => 'تم تحديث البيانات بنجاح',
+                'updated_data' => $data
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'error' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -118,6 +146,8 @@ class DailyConsumptionController extends Controller
      */
     public function destroy(DailyConsumption $dailyConsumption)
     {
-        //
+        $dailyConsumption->delete();
+        return redirect()->back()->with('success', 'تم حذف السجل بنجاح.');
+
     }
 }

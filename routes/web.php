@@ -65,11 +65,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('daily')->group(function() {
             Route::get('/', function () {return view('daily.index');})->name('daily.index');
             Route::get('/production', [DailyProductionController::class, 'production'])->name('daily.production');
-            Route::get('/consumption', [DailyConsumptionController::class, 'index'])->name('daily.consumption');
+            Route::get('/consumption', [DailyConsumptionController::class, 'consumption'])->name('daily.consumption');
 
             Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
             Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
             Route::delete('/production/{daily_production}', [DailyProductionController::class, 'destroy'])->name('daily-production.destroy');
+            Route::get('/consumption/{daily_consumption}/edit', [DailyConsumptionController::class, 'edit'])->name('daily-consumption.edit');
+            Route::put('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'update'])->name('daily-consumption.update');
+            Route::delete('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'destroy'])->name('daily-consumption.destroy');
         });
 
 

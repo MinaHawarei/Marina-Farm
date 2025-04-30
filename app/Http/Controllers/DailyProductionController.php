@@ -140,6 +140,6 @@ class DailyProductionController extends Controller
     public function destroy(daily_production $daily_production)
     {
         $daily_production->delete();
-        return redirect()->route('daily.index')->with('success', 'تم حذف السجل بنجاح.');
+        return redirect()->back()->with('success', 'تم حذف السجل بنجاح.');
     }
 }

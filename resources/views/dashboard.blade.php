@@ -168,7 +168,7 @@
                 { el: document.getElementById('daily-prodection-form'), toggle: dailyProdectionForm },
                 { el: document.getElementById('daily-consumptions-form'), toggle: dailyConsumptionsForm },
                 { el: document.getElementById('expense-form'), toggle: dailyExpenseForm },
-                { el: document.getElementById('income-form'), toggle: incomeForm }
+                { el: document.getElementById('income-form'), toggle: incomeForm },
             ];
 
             modals.forEach(modal => {
@@ -189,7 +189,7 @@
                     { el: document.getElementById('daily-prodection-form'), toggle: dailyProdectionForm },
                     { el: document.getElementById('daily-consumptions-form'), toggle: dailyConsumptionsForm },
                     { el: document.getElementById('expense-form'), toggle: dailyExpenseForm },
-                    { el: document.getElementById('income-form'), toggle: incomeForm }
+                    { el: document.getElementById('income-form'), toggle: incomeForm },
 
                     ];
 
