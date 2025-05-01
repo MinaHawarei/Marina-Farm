@@ -60,7 +60,7 @@
                 style="{{ request()->routeIs('buffalo.dairy') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
                 <div class="flex items-center">
                     <i class="fas fa-tachometer-alt ml-2"></i>
-                    <span class="mr-2">حلوب</span>
+                    <span class="mr-2">حلاب</span>
                 </div>
                 <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                     {{ $dairyBuffaloCount ?? 0 }}
@@ -83,7 +83,7 @@
                 style="{{ request()->routeIs('buffalo.calf') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
                 <div class="flex items-center">
                     <i class="fas fa-tachometer-alt ml-2"></i>
-                    <span class="mr-2">الابطاش</span>
+                    <span class="mr-2">مواليد</span>
                 </div>
                 <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                     {{ $calfBuffaloCount ?? 0 }}
@@ -141,7 +141,7 @@
                 style="{{ request()->routeIs('cow.dairy') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
                 <div class="flex items-center">
                     <i class="fas fa-tachometer-alt ml-2"></i>
-                    <span class="mr-2">حلوب</span>
+                    <span class="mr-2">حلاب</span>
                 </div>
                 <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                     {{ $dairyCow ?? 0 }}
@@ -164,7 +164,7 @@
                 style="{{ request()->routeIs('cow.calf') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
                 <div class="flex items-center">
                     <i class="fas fa-tachometer-alt ml-2"></i>
-                    <span class="mr-2">الابطاش</span>
+                    <span class="mr-2">مواليد</span>
                 </div>
                 <span class="bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                     {{ $calfCow ?? 0 }}

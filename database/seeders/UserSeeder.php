@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Mina Hawarei',
+            'username' => 'MinaHawarei',
             'email' => 'mina.hawarei@gmail.com',
             'password' => Hash::make('123456789'), // استخدم Hash لتشفير كلمة المرور
             'role' => 'admin', // إذا كان لديك حقل "role" في جدول المستخدمين

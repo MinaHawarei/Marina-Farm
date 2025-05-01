@@ -30,8 +30,8 @@
                         <label class="block text-gray-700 mb-1">السلالة</label>
                         <select name="breed" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
                             <option value="">اختر السلالة</option>
-                            <option value="Natural">طبيعي</option>
-                            <option value="Artificial">صناعي</option>
+                            <option value="طبيعي">طبيعي</option>
+                            <option value="صناعي">صناعي</option>
                         </select>
                     </div>
                     <div>
@@ -72,8 +72,8 @@
                         <label class="block text-gray-700 mb-1">الجنس <span class="text-red-500">*</span></label>
                         <select name="gender" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
                             <option value="">اختر الجنس</option>
-                            <option value="Male">ذكر</option>
-                            <option value="Female">أنثى</option>
+                            <option value="ذكر">ذكر</option>
+                            <option value="انثي">أنثى</option>
                         </select>
                     </div>
                     <div>
@@ -88,10 +88,11 @@
                         <label class="block text-gray-700 mb-1">الحالة <span class="text-red-500">*</span></label>
                         <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
                             <option value="">اختر الحالة</option>
-                            <option value="dairy">حلوب</option>
-                            <option value="calf">بطش</option>
+                            <option value="dairy">حلاب</option>
+                            <option value="calf">مواليد</option>
                             <option value="fattening">تسمين</option>
                             <option value="pregnant">عشار</option>
+                            <option value="bull">طور</option>
                             <option value="Paid">مباع</option>
                             <option value="Death">وفاة</option>
                         </select>
