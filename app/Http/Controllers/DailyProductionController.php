@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\daily_production;
 use App\Models\Transaction;
+use App\Models\DailyConsumption;
 use App\Http\Requests\Storedaily_productionRequest;
 use App\Http\Requests\Updatedaily_productionRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 
 class DailyProductionController extends Controller
@@ -29,8 +32,16 @@ class DailyProductionController extends Controller
     }
     public function index()
     {
-        $daily_production = daily_production::all();
-        return view('daily.prodection');
+        $dailyProduction = DB::table('daily_productions')
+        ->orderBy('production_date')
+        ->get(['production_date', 'buffaloMilk', 'cowMilk', 'eggs', 'dates', 'clover']);
+
+        $dailyConsumption = DB::table('daily_consumptions')
+        ->orderBy('consumptions_date')
+        ->get(['consumptions_date', 'hay', 'corn', 'clover', 'soybean', 'soybean_hulls', 'bran', 'silage', 'gasoline', 'solar']);
+
+
+        return view('daily.index', compact('dailyProduction', 'dailyConsumption'));
     }
 
     /**

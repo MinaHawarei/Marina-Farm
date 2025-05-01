@@ -63,7 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
         // daily
         Route::prefix('daily')->group(function() {
-            Route::get('/', function () {return view('daily.index');})->name('daily.index');
+            //Route::get('/', function () {return view('daily.index');})->name('daily.index');
+            Route::get('/', [DailyProductionController::class, 'index'])->name('daily.index');
             Route::get('/production', [DailyProductionController::class, 'production'])->name('daily.production');
             Route::get('/consumption', [DailyConsumptionController::class, 'consumption'])->name('daily.consumption');
 
