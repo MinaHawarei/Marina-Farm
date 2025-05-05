@@ -101,17 +101,35 @@ class DailySaleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit(daily_sale $daily_sale)
     {
-        //
+        return response()->json($daily_sale);
+
     }
+
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Updatedaily_saleRequest $request, daily_sale $daily_sale)
     {
-        //
+        try {
+            $data = $request->except(['_token', '_method', 'created_at', 'updated_at']);
+
+            $daily_sale->update($data);
+
+            return redirect()->back()->with([
+                'success' => 'تم تحديث البيانات بنجاح',
+                'updated_data' => $data
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'error' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -119,6 +137,8 @@ class DailySaleController extends Controller
      */
     public function destroy(daily_sale $daily_sale)
     {
-        //
+        $daily_sale->delete();
+        return redirect()->back()->with('success', 'تم حذف السجل بنجاح.');
+
     }
 }

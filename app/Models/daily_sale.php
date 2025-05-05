@@ -9,6 +9,8 @@ class daily_sale extends Model
 {
     /** @use HasFactory<\Database\Factories\DailySaleFactory> */
     use HasFactory;
+    protected $table = 'daily_sales';
+
     protected $fillable = [
         'production_id',
         'category',
@@ -22,6 +24,10 @@ class daily_sale extends Model
         'buyer_name',
         'buyer_id',
         'description',
-        'created_by',
+        'created_by'
     ];
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

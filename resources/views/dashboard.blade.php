@@ -68,25 +68,7 @@
         </div>
 
 
-        <!-- تمثيل بياني مرن -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-            <!-- مخطط حالة القطعان -->
-            <div class="bg-white p-6 rounded-lg shadow overflow-hidden">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 text-center tracking-wide">حالة قطعان الابقار</h3>
-                <div class="relative w-full aspect-square">
-                    <canvas id="buffaloStatusChart" class="w-full h-full"></canvas>
-                </div>
-            </div>
 
-            <!-- مخطط توزيع الحظائر -->
-            <div class="bg-white p-6 rounded-lg shadow overflow-hidden">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 text-center tracking-wide">توزيع الابقار على الحظائر</h3>
-                <div class="relative w-full aspect-square">
-                    <canvas id="buffaloPensChart" class="w-full h-full"></canvas>
-                </div>
-            </div>
-
-        </div>
     </div>
 
     {{-- مودال إضافة الحيوان --}}

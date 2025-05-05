@@ -6,6 +6,7 @@ use App\Http\Controllers\DailyProductionController;
 use App\Http\Controllers\DailyConsumptionController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\DailySaleController;
+use App\Http\Controllers\TreasuryController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,23 +59,37 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //income
      Route::prefix('income')->group(function() {
         Route::post('/', [DailySaleController::class, 'store'])->name('income.store');
-        Route::get('/{id}/edit', [DailySaleController::class, 'edit'])->name('income.edit');
-        Route::put('/{id}', [DailySaleController::class, 'update'])->name('income.update');
-    });
-        // daily
-        Route::prefix('daily')->group(function() {
-            //Route::get('/', function () {return view('daily.index');})->name('daily.index');
-            Route::get('/', [DailyProductionController::class, 'index'])->name('daily.index');
-            Route::get('/production', [DailyProductionController::class, 'production'])->name('daily.production');
-            Route::get('/consumption', [DailyConsumptionController::class, 'consumption'])->name('daily.consumption');
+        Route::get('/{daily_sale}/edit', [DailySaleController::class, 'edit'])->name('income.edit');
+        Route::put('/{daily_sale}', [DailySaleController::class, 'update'])->name('income.update');
+        Route::delete('/{daily_sale}/destroy', [DailySaleController::class, 'destroy'])->name('income.destroy');
 
-            Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
-            Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
-            Route::delete('/production/{daily_production}', [DailyProductionController::class, 'destroy'])->name('daily-production.destroy');
-            Route::get('/consumption/{daily_consumption}/edit', [DailyConsumptionController::class, 'edit'])->name('daily-consumption.edit');
-            Route::put('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'update'])->name('daily-consumption.update');
-            Route::delete('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'destroy'])->name('daily-consumption.destroy');
-        });
+    });
+    // daily
+    Route::prefix('daily')->group(function() {
+        Route::get('/', [DailyProductionController::class, 'index'])->name('daily.index');
+        Route::get('/production', [DailyProductionController::class, 'production'])->name('daily.production');
+        Route::get('/consumption', [DailyConsumptionController::class, 'consumption'])->name('daily.consumption');
+
+        Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
+        Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
+        Route::delete('/production/{daily_production}', [DailyProductionController::class, 'destroy'])->name('daily-production.destroy');
+        Route::get('/consumption/{daily_consumption}/edit', [DailyConsumptionController::class, 'edit'])->name('daily-consumption.edit');
+        Route::put('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'update'])->name('daily-consumption.update');
+        Route::delete('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'destroy'])->name('daily-consumption.destroy');
+    });
+    // treasury
+    Route::prefix('treasury')->group(function() {
+        Route::get('/', [TreasuryController::class, 'index'])->name('treasury.index');
+        Route::get('/income', [TreasuryController::class, 'income'])->name('treasury.income');
+        Route::get('/expense', [TreasuryController::class, 'expense'])->name('treasury.expense');
+
+        Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
+        Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
+        Route::delete('/production/{daily_production}', [DailyProductionController::class, 'destroy'])->name('daily-production.destroy');
+        Route::get('/consumption/{daily_consumption}/edit', [DailyConsumptionController::class, 'edit'])->name('daily-consumption.edit');
+        Route::put('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'update'])->name('daily-consumption.update');
+        Route::delete('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'destroy'])->name('daily-consumption.destroy');
+    });
 
 
     Route::get('/buffalo-calf', [AnimalController::class, 'buffaloCalf'])->name('buffalo.calf');
