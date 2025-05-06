@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\daily_sale;
 use App\Models\Product;
+
 use App\Models\Transaction;
 use App\Http\Requests\Storedaily_saleRequest;
 use App\Http\Requests\Updatedaily_saleRequest;
@@ -71,13 +72,13 @@ class DailySaleController extends Controller
             }
         }
         $product = Product::where('product_name', $validatedData['type'])->first();
-        $product_id = $product->id;
         $transactionType = 'sale';
         if (!$product) {
-            $product_id = 0;
+            $product_id = null;
             $transactionType = 'income';
+        }else {
+            $product_id = $product->id;
         }
-
 
 
 

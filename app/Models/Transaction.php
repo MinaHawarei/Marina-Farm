@@ -25,10 +25,7 @@ class Transaction extends Model
 
     // علاقات (اختياري بس مفيد بعدين)
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+
 
     public function user()
     {
