@@ -21,6 +21,7 @@ class daily_sale extends Model
         'paid',
         'remaining',
         'date',
+        'payment_due_date',
         'buyer_name',
         'buyer_id',
         'description',

@@ -30,6 +30,7 @@ class Storedaily_saleRequest extends FormRequest
             'paid' => 'required|numeric|min:0',
             'remaining' => 'required|numeric|min:0',
             'date' => 'required|date',
+            'payment_due_date' => 'nullable|date',
             'buyer_name' => 'required|string|max:255',
             'buyer_id' => 'nullable|exists:suppliers,id',
             'description' => 'nullable|string',

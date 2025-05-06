@@ -19,8 +19,13 @@
         <form method="GET" action="{{ route('treasury.income') }}" class="mb-6">
             <label for="date" class="block text-sm font-medium text-gray-700 mb-1">اختر التاريخ:</label>
             <div class="flex items-center gap-2">
-                <input type="date" id="date" name="date"
-                       value="{{ request('date') }}"
+                <h2>من : </h2>
+                <input type="date" id="date" name="datefrom"
+                       value="{{ request('datefrom') }}"
+                       class="border rounded p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <h2>إلى : </h2>
+                <input type="date" id="date" name="dateto"
+                       value="{{ request('dateto') }}"
                        class="border rounded p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button type="submit"
                         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
@@ -32,7 +37,6 @@
             <thead class="bg-gray-100">
                 <tr>
                     <th class="px-4 py-2">رقم العملية</th>
-                    <th class="px-4 py-2">رقم المنتج</th>
                     <th class="px-4 py-2">الفئة</th>
                     <th class="px-4 py-2">النوع</th>
                     <th class="px-4 py-2">الكمية</th>
@@ -43,7 +47,7 @@
                     <th class="px-4 py-2">التاريخ</th>
                     <th class="px-4 py-2">نقطة البيع</th>
                     <th class="px-4 py-2">اسم المشتري</th>
-                    <th class="px-4 py-2">رقم المشتري</th>
+                    <th class="px-4 py-2">كود المشتري</th>
                     <th class="px-4 py-2">الوصف</th>
                     <th class="px-4 py-2">تمت الإضافة بواسطة</th>
                     <th class="px-4 py-2">تعديل</th>
@@ -55,7 +59,6 @@
 
                         <tr class="border-t">
                             <td class="px-4 py-2">{{ $item->id }}</td>
-                            <td class="px-4 py-2">{{ $item->product_id }}</td>
                             <td class="px-4 py-2">{{ $item->category }}</td>
                             <td class="px-4 py-2">{{ $item->type }}</td>
                             <td class="px-4 py-2">{{ $item->quantity }}</td>
@@ -120,6 +123,7 @@
                         document.querySelector('select[name="category"]').value = data.category;
                         document.querySelector('input[name="description"]').value = data.description;
                         modal.querySelector('input[name="date"]').value = data.date ?? '';
+                        modal.querySelector('input[name="payment_due_date"]').value = data.payment_due_date ?? '';
                         document.querySelector('input[name="buyer_name"]').value = data.buyer_name || '';
                         document.querySelector('input[name="quantity"]').value = data.quantity;
                         document.querySelector('input[name="unit_price"]').value = data.unit_price;

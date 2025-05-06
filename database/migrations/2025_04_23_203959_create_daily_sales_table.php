@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('paid');
             $table->float('remaining');
             $table->date('date');
+            $table->date('payment_due_date')->nullable();
             $table->string('sales_point')->nullable(); // منفذ البيع
             $table->string('buyer_name');
             $table->unsignedBigInteger('buyer_id')->nullable();

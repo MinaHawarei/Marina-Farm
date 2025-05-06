@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\daily_sale;
-use App\Models\product;
+use App\Models\Product;
 use App\Models\Transaction;
 use App\Http\Requests\Storedaily_saleRequest;
 use App\Http\Requests\Updatedaily_saleRequest;
@@ -42,11 +42,35 @@ class DailySaleController extends Controller
             'paid' => 'required|numeric|min:0',
             'remaining' => 'required|numeric|min:0',
             'date' => 'required|date',
+            'payment_due_date' => 'nullable|date',
             'buyer_name' => 'required|string|max:255',
             'buyer_id' => 'nullable|exists:suppliers,id',
             'description' => 'nullable|string',
         ]);
-        $product = product::where('product_name', $validatedData['type'])->first();
+
+        if ($validatedData['paid'] > $validatedData['amount']) {
+            // إعادة التوجيه مع رسالة خطأ
+            return redirect()->back()->withErrors(['error' => 'المبلغ المدفوع لا يمكن أن يكون أكبر من المبلغ الإجمالي.']);
+        }
+        if ($validatedData['remaining'] > $validatedData['amount']) {
+            // إعادة التوجيه مع رسالة خطأ
+            return redirect()->back()->withErrors(['error' => 'المبلغ المتبقي لا يمكن أن يكون أكبر من المبلغ الإجمالي.']);
+        }
+
+        if ($validatedData['remaining'] > 0) {
+
+            if($validatedData['payment_due_date'] == null && $validatedData['supplier_id'] == null) {
+             // إعادة التوجيه مع رسالة خطأ
+                return redirect()->back()->withErrors(['error' => 'يجب وضع تاريخ الاستحقاق للمبلغ المتبقي و كود العميل.']);
+            }elseif($validatedData['payment_due_date'] == null) {
+                // إعادة التوجيه مع رسالة خطأ
+                return redirect()->back()->withErrors(['error' => 'يجب وضع تاريخ الاستحقاق للمبلغ المتبقي.']);
+            }elseif($validatedData['supplier_id'] == null) {
+                // إعادة التوجيه مع رسالة خطأ
+                return redirect()->back()->withErrors(['error' => 'يجب وضع كود العميل.']);
+            }
+        }
+        $product = Product::where('product_name', $validatedData['type'])->first();
         $product_id = $product->id;
         $transactionType = 'sale';
         if (!$product) {

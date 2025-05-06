@@ -53,8 +53,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Expenses
      Route::prefix('Expenses')->group(function() {
         Route::post('/', [ExpensesController::class, 'store'])->name('expense.store');
-        Route::get('/{id}/edit', [ExpensesController::class, 'edit'])->name('expense.edit');
-        Route::put('/{id}', [ExpensesController::class, 'update'])->name('expense.update');
+        Route::get('/{expense}/edit', [ExpensesController::class, 'edit'])->name('expense.edit');
+        Route::put('/{expense}', [ExpensesController::class, 'update'])->name('expense.update');
+        Route::delete('/{expense}/destroy', [ExpensesController::class, 'destroy'])->name('expense.destroy');
+
     });
     //income
      Route::prefix('income')->group(function() {
@@ -82,6 +84,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [TreasuryController::class, 'index'])->name('treasury.index');
         Route::get('/income', [TreasuryController::class, 'income'])->name('treasury.income');
         Route::get('/expense', [TreasuryController::class, 'expense'])->name('treasury.expense');
+        Route::get('/liabilities', [TreasuryController::class, 'liabilities'])->name('treasury.liabilities');
+        Route::get('/receivables', [TreasuryController::class, 'receivables'])->name('treasury.receivables');
 
         Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
         Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');

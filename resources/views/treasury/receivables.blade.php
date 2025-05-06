@@ -14,9 +14,9 @@
                 </div>
             </div>
         @endif
-        <h3 class="text-lg font-bold mb-4">المصروفات : </h3>
+        <h3 class="text-lg font-bold mb-4">التحصيلات : </h3>
 
-        <form method="GET" action="{{ route('treasury.expense') }}" class="mb-6">
+        <form method="GET" action="{{ route('treasury.receivables') }}" class="mb-6">
             <label for="date" class="block text-sm font-medium text-gray-700 mb-1">اختر التاريخ:</label>
             <div class="flex items-center gap-2">
                 <h2>من : </h2>
@@ -36,6 +36,9 @@
         <table class="table-auto w-full text-sm border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
+                    <th class="px-4 py-2">كود المشتري</th>
+                    <th class="px-4 py-2">اسم المشتري</th>
+
                     <th class="px-4 py-2">رقم العملية</th>
                     <th class="px-4 py-2">الفئة</th>
                     <th class="px-4 py-2">النوع</th>
@@ -45,8 +48,8 @@
                     <th class="px-4 py-2">المدفوع</th>
                     <th class="px-4 py-2">المتبقي</th>
                     <th class="px-4 py-2">التاريخ</th>
-                    <th class="px-4 py-2">المورد</th>
-                    <th class="px-4 py-2">كود المورد</th>
+                    <th class="px-4 py-2">تاريخ التحصيل</th>
+                    <th class="px-4 py-2">نقطة البيع</th>
                     <th class="px-4 py-2">الوصف</th>
                     <th class="px-4 py-2">تمت الإضافة بواسطة</th>
                     <th class="px-4 py-2">تعديل</th>
@@ -57,6 +60,8 @@
                     @forelse($income as $item)
 
                         <tr class="border-t">
+                            <td class="px-4 py-2">{{ $item->buyer_id }}</td>
+                            <td class="px-4 py-2">{{ $item->buyer_name }}</td>
                             <td class="px-4 py-2">{{ $item->id }}</td>
                             <td class="px-4 py-2">{{ $item->category }}</td>
                             <td class="px-4 py-2">{{ $item->type }}</td>
@@ -66,8 +71,8 @@
                             <td class="px-4 py-2">{{ $item->paid }}</td>
                             <td class="px-4 py-2">{{ $item->remaining }}</td>
                             <td class="px-4 py-2">{{ $item->date }}</td>
-                            <td class="px-4 py-2">{{ $item->supplier_name }}</td>
-                            <td class="px-4 py-2">{{ $item->supplier_id }}</td>
+                            <td class="px-4 py-2">{{ $item->payment_due_date }}</td>
+                            <td class="px-4 py-2">{{ $item->sales_point }}</td>
                             <td class="px-4 py-2">{{ $item->description ?? 'غير محددة' }}</td>
                             <td class="px-4 py-2">{{ $item->created_by }}</td>
 
@@ -75,7 +80,7 @@
                                 <button onclick="openEditForm({{ $item->id }})" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">تعديل</button>
                             </td>
                             <td class="px-4 py-2 text-center">
-                                <form action="{{ route('expense.destroy', $item->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا السجل؟');">
+                                <form action="{{ route('income.destroy', $item->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا السجل؟');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-200">
@@ -96,7 +101,7 @@
 
 
         <!-- كمبونينت تعديل الحيوان -->
-        @include('components.edit-expense-form',[
+        @include('components.edit-income-form',[
             'isVisible' => false,
         ])
     </div>
@@ -106,7 +111,7 @@
             function openEditForm(id) {
                 const modal = document.getElementById('edit-form');
 
-                fetch(`/Expenses/${id}/edit`)
+                fetch(`/income/${id}/edit`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('فشل في تحميل بيانات الدخل.');
@@ -122,32 +127,32 @@
                         document.querySelector('input[name="description"]').value = data.description;
                         modal.querySelector('input[name="date"]').value = data.date ?? '';
                         modal.querySelector('input[name="payment_due_date"]').value = data.payment_due_date ?? '';
-                        document.querySelector('input[name="supplier_name"]').value = data.supplier_name || '';
+                        document.querySelector('input[name="buyer_name"]').value = data.buyer_name || '';
                         document.querySelector('input[name="quantity"]').value = data.quantity;
                         document.querySelector('input[name="unit_price"]').value = data.unit_price;
                         document.querySelector('input[name="amount"]').value = data.amount;
                         document.querySelector('input[name="paid"]').value = data.paid;
                         document.querySelector('input[name="remaining"]').value = data.remaining;
-                        document.querySelector('input[name="supplier_id"]').value = data.supplier_id || '';
+                        document.querySelector('input[name="buyer_id"]').value = data.buyer_id || '';
 
                         // أولاً نختار الفئة
-                        document.getElementById('mainCategory').value = data.category;
+                        document.getElementById('income_mainCategory').value = data.category;
                         // ثم نطلق الحدث لتحديث التوزيع الفرعي
-                        document.getElementById('mainCategory').dispatchEvent(new Event('change'));
+                        document.getElementById('income_mainCategory').dispatchEvent(new Event('change'));
 
                         // تأخير بسيط لتضمن تحميل القيم قبل اختيار النوع
                         setTimeout(() => {
-                            document.getElementById('subCategory').value = data.type;
+                            document.getElementById('income_subCategory').value = data.type;
 
                             // إذا كان النوع "أخرى"، املأ الحقل الخاص به
                             if (data.type === 'Other') {
-                                document.getElementById('otherSubCategory').value = data.other_type || '';
-                                document.getElementById('otherSubCategoryContainer').classList.remove('hidden');
+                                document.getElementById('income_otherSubCategory').value = data.other_type || '';
+                                document.getElementById('income_otherSubCategoryContainer').classList.remove('hidden');
                             }
                         }, 200);
 
                         // تعديل الفورم ليرسل البيانات إلى الرابط الصحيح
-                        document.querySelector('#edit-form form').action = `/Expenses/${id}`;
+                        document.querySelector('#edit-form form').action = `/income/${id}`;
                     })
                     .catch(error => {
                         alert(error.message);

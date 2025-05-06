@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class expense extends Model
+class Expense extends Model
 {
     /** @use HasFactory<\Database\Factories\ExpenseFactory> */
     use HasFactory;
@@ -18,6 +18,7 @@ class expense extends Model
         'paid',
         'remaining',
         'date',
+        'payment_due_date',
         'supplier_name',
         'supplier_id',
         'description',

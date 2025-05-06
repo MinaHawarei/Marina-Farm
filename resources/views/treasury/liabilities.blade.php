@@ -14,9 +14,9 @@
                 </div>
             </div>
         @endif
-        <h3 class="text-lg font-bold mb-4">المصروفات : </h3>
+        <h3 class="text-lg font-bold mb-4">المديونات : </h3>
 
-        <form method="GET" action="{{ route('treasury.expense') }}" class="mb-6">
+        <form method="GET" action="{{ route('treasury.liabilities') }}" class="mb-6">
             <label for="date" class="block text-sm font-medium text-gray-700 mb-1">اختر التاريخ:</label>
             <div class="flex items-center gap-2">
                 <h2>من : </h2>
@@ -36,6 +36,8 @@
         <table class="table-auto w-full text-sm border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
+                    <th class="px-4 py-2">كود المورد</th>
+                    <th class="px-4 py-2">المورد</th>
                     <th class="px-4 py-2">رقم العملية</th>
                     <th class="px-4 py-2">الفئة</th>
                     <th class="px-4 py-2">النوع</th>
@@ -44,9 +46,8 @@
                     <th class="px-4 py-2">المبلغ الكلي</th>
                     <th class="px-4 py-2">المدفوع</th>
                     <th class="px-4 py-2">المتبقي</th>
-                    <th class="px-4 py-2">التاريخ</th>
-                    <th class="px-4 py-2">المورد</th>
-                    <th class="px-4 py-2">كود المورد</th>
+                    <th class="px-4 py-2">تاريخ المعاملة</th>
+                    <th class="px-4 py-2">تاريخ الاستحقاق</th>
                     <th class="px-4 py-2">الوصف</th>
                     <th class="px-4 py-2">تمت الإضافة بواسطة</th>
                     <th class="px-4 py-2">تعديل</th>
@@ -57,6 +58,9 @@
                     @forelse($income as $item)
 
                         <tr class="border-t">
+                            <td class="px-4 py-2">{{ $item->supplier_id }}</td>
+                            <td class="px-4 py-2">{{ $item->supplier_name }}</td>
+
                             <td class="px-4 py-2">{{ $item->id }}</td>
                             <td class="px-4 py-2">{{ $item->category }}</td>
                             <td class="px-4 py-2">{{ $item->type }}</td>
@@ -66,8 +70,7 @@
                             <td class="px-4 py-2">{{ $item->paid }}</td>
                             <td class="px-4 py-2">{{ $item->remaining }}</td>
                             <td class="px-4 py-2">{{ $item->date }}</td>
-                            <td class="px-4 py-2">{{ $item->supplier_name }}</td>
-                            <td class="px-4 py-2">{{ $item->supplier_id }}</td>
+                            <td class="px-4 py-2">{{ $item->payment_due_date }}</td>
                             <td class="px-4 py-2">{{ $item->description ?? 'غير محددة' }}</td>
                             <td class="px-4 py-2">{{ $item->created_by }}</td>
 

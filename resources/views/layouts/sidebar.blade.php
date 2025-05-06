@@ -251,15 +251,6 @@
                     </div>
 
                 </a>
-                    <a href="{{ route('treasury.expense') }}"
-                    class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
-                    style="{{ request()->routeIs('treasury.expense') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-tachometer-alt ml-2"></i>
-                        <span class="mr-2">مصروفات</span>
-                    </div>
-
-                </a>
                 <a href="{{ route('treasury.income') }}"
                     class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
                     style="{{ request()->routeIs('treasury.income') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
@@ -268,7 +259,16 @@
                         <span class="mr-2">ايرادات</span>
                     </div>
                 </a>
-                <a href="{{ route('daily.consumption') }}"
+                <a href="{{ route('treasury.expense') }}"
+                    class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                    style="{{ request()->routeIs('treasury.expense') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                    <div class="flex items-center">
+                        <i class="fas fa-tachometer-alt ml-2"></i>
+                        <span class="mr-2">مصروفات</span>
+                    </div>
+
+                </a>
+                <a href="{{ route('treasury.liabilities') }}"
                     class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
                     style="{{ request()->routeIs('daily.consumption') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
                     <div class="flex items-center">
@@ -276,7 +276,7 @@
                         <span class="mr-2">مديونات</span>
                     </div>
                 </a>
-                <a href="{{ route('daily.consumption') }}"
+                <a href="{{ route('treasury.receivables') }}"
                     class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
                     style="{{ request()->routeIs('daily.consumption') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
                     <div class="flex items-center">
