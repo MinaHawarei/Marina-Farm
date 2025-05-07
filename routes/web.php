@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cow', function () {return view('cow.index');})->name('cow.index');
 
     Route::post('/milke', [MilkProductionDetailsController::class, 'store'])->name('milk.store');
+    Route::put('/milk-records/{milkId}', [MilkProductionDetailsController::class, 'update'])->name('milk.update');
     Route::get('/animals/{animal}/milk-records', [AnimalController::class, 'milkRecords']);
 
 
@@ -103,12 +104,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/buffalo-calf', [AnimalController::class, 'buffaloCalf'])->name('buffalo.calf');
     Route::get('/buffalo-pregnant', [AnimalController::class, 'buffaloPregnant'])->name('buffalo.pregnant');
     Route::get('/buffalo-dairy', [AnimalController::class, 'buffaloDairy'])->name('buffalo.dairy');
+    Route::get('/buffalo-dairy-milk', [AnimalController::class, 'buffaloDairyMilk'])->name('milk.index');
     Route::get('/buffalo-fattening', [AnimalController::class, 'buffaloFattening'])->name('buffalo.fattening');
 
     Route::get('/cow-calf', [AnimalController::class, 'cowCalf'])->name('cow.calf');
     Route::get('/cow-pregnant', [AnimalController::class, 'cowPregnant'])->name('cow.pregnant');
     Route::get('/cow-dairy', [AnimalController::class, 'cowDairy'])->name('cow.dairy');
     Route::get('/cow-fattening', [AnimalController::class, 'cowFattening'])->name('cow.fattening');
+    Route::get('/cow-dairy-milk', [AnimalController::class, 'cowDairyMilk'])->name('Cowmilk.index');
 
 });
 

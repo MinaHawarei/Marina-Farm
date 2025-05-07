@@ -15,14 +15,35 @@
             </div>
         @endif
         <h3 class="text-lg font-bold mb-4">البهائم الجاموس وحالتهم حلوب:</h3>
-        <div class="mb-6 flex flex-wrap gap-3 items-center">
-            <button onclick="milkForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                اضافة انتاج الحليب
-            </button>
+        <div class="flex items-center gap-2">
+            <form method="GET" action="{{ route('milk.index') }}" class="mb-6">
+                <div class="flex items-center gap-2">
+                    <h2>من : </h2>
+                    <input type="date" id="date" name="datefrom"
+                        value="{{ request('datefrom') }}"
+                        class="border rounded p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <h2>إلى : </h2>
+                    <input type="date" id="date" name="dateto"
+                        value="{{ request('dateto') }}"
+                        class="border rounded p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                        عرض
+                    </button>
+                </div>
+            </form>
+
+            <div class="mb-6 flex items-center gap-4 ">
+                <button onclick="milkForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    اضافة انتاج الحليب
+                </button>
+            </div>
         </div>
+
+
         <table class="table-auto w-full text-sm border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
@@ -90,8 +111,8 @@
             </div>
         </div>
         <!-- مودال عرض انتاج اللبن -->
-        <div id="MilkModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center">
-            <div class="bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative">
+        <div id="MilkModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
+            <div class="bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative" style="max-height: 80vh; overflow-y:auto;">
                 <button onclick="document.getElementById('MilkModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
                 <h3 class="text-xl font-semibold mb-6 text-center">انتاج اللبن</h3>
                 <table class="table-auto w-full border border-gray-300 text-sm">
@@ -103,13 +124,14 @@
                             <th class="px-4 py-2">اجمالي الانتاج</th>
                             <th class="px-4 py-2">ملاحظات</th>
                             <th class="px-4 py-2">تعديل</th>
-
                         </tr>
                     </thead>
                     <tbody id="MilkRecordsTable"></tbody>
                 </table>
             </div>
         </div>
+
+
 
         <!-- كمبونينت تعديل الحيوان -->
         @include('components.animal-edit-form')
@@ -123,15 +145,21 @@
             'buttonText' => 'إضافة'
         ])
 
+
     </div>
 
     <script>
+
         function toggleModal() {
             const modal = document.getElementById('healthModal');
             modal.classList.toggle('hidden');
         }
         function milkForm() {
             const modal = document.getElementById('milk-form');
+            modal.classList.toggle('hidden');
+        }
+        function openMilkEditForm() {
+            const modal = document.getElementById('edit-milk-form');
             modal.classList.toggle('hidden');
         }
 
@@ -142,6 +170,8 @@
             const tableBody = document.getElementById('MilkRecordsTable');
             tableBody.innerHTML = '<tr><td colspan="6" class="text-center">جارٍ التحميل...</td></tr>';
 
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
             fetch(`/animals/${animalId}/milk-records`)
                 .then(res => res.json())
                 .then(data => {
@@ -151,16 +181,44 @@
                             const total = (record.morning_milk || 0) + (record.evening_milk || 0);
                             tableBody.innerHTML += `
                                 <tr class="border-t">
-                                    <td class="px-4 py-2">${record.date}</td>
-                                    <td class="px-4 py-2">${record.morning_milk ?? 0}</td>
-                                    <td class="px-4 py-2">${record.evening_milk ?? 0}</td>
-                                    <td class="px-4 py-2">${total}</td>
-                                    <td class="px-4 py-2">${record.notes ?? '-'}</td>
-                                    <td class="px-4 py-2 text-center">
-                                        <button onclick="openMilkEditForm(${record.id})"
-                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                                            تعديل
-                                        </button>
+                                    <td colspan="6">
+                                        <div class="block w-full">
+                                        <form action="/milk-records/${record.id}" method="POST" class="flex justify-between items-center gap-2">
+                                            <input type="hidden" name="_token" value="${csrfToken}">
+                                            <input type="hidden" name="_method" value="PUT">
+
+                                            <div class="basis-1/6">
+                                                <input type="text" name="date" value="${record.date}" class="w-full p-1 border rounded bg-gray-100" style="max-width: 120px; readonly>
+                                            </div>
+
+                                            <!-- كل عنصر هنا ياخد 1/6 -->
+                                            <div class="basis-1/6">
+                                                <input type="number" name="morning_milk" value="${record.morning_milk || 0}"
+                                                    class="w-full p-1 border rounded text-xl font-bold text-center"
+                                                    style="max-width: 120px;" step="1">
+                                            </div>
+                                            <div class="basis-1/6">
+                                                <input type="number" name="morning_milk" value="${record.evening_milk || 0}"
+                                                    class="w-full p-1 border rounded text-xl font-bold text-center"
+                                                    style="max-width: 120px;" step="1">
+                                            </div>
+
+
+
+                                            <div class="basis-1/6">
+                                                <strong class="block w-full p-1 border rounded" style="font-size: 180%;"> ${total}</strong>
+                                            </div>
+
+                                            <div class="basis-1/6">
+                                                <textarea name="notes" class="w-full p-1 border rounded" placeholder="ملاحظات">${record.notes || ''}</textarea>
+                                            </div>
+
+                                            <div class="basis-1/6">
+                                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">حفظ</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
                                     </td>
                                 </tr>
                             `;
@@ -168,11 +226,44 @@
                     } else {
                         tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500">لا يوجد انتاج بعد.</td></tr>';
                     }
-                })
-                .catch(() => {
-                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-red-500">فشل في تحميل البيانات.</td></tr>';
                 });
         }
+
+        function saveMilkRecord(button, id) {
+            const row = button.closest('tr');
+            const morning = parseFloat(row.querySelector('[data-field="morning_milk"]').value) || 0;
+            const evening = parseFloat(row.querySelector('[data-field="evening_milk"]').value) || 0;
+            const notes = row.querySelector('[data-field="notes"]').value;
+
+            const data = {
+                id: id,
+                morning_milk: morning,
+                evening_milk: evening,
+                notes: notes
+            };
+
+            fetch(`/milk-records/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('تم التحديث بنجاح!');
+                } else {
+                    alert('حدث خطأ أثناء التحديث.');
+                }
+            })
+            .catch(() => {
+                alert('حدث خطأ في الاتصال بالخادم.');
+            });
+        }
+
+
 
         function fetchHealthRecords(animalId) {
             toggleModal();

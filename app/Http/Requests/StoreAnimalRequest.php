@@ -28,7 +28,7 @@ class StoreAnimalRequest extends FormRequest
             'age' => 'required|integer|min:0',
             'weight' => 'required|numeric|min:0',
             'health_status' => 'nullable|string',
-            'gender' => 'required|in:Male,Female',
+            'gender' => 'required',
             'origin' => 'required|string',
             'arrival_date' => 'required|date',
             'status' => 'required|string',

@@ -6,6 +6,9 @@ use App\Models\Animal;
 use App\Models\health_record;
 use App\Http\Requests\StoreAnimalRequest;
 use App\Http\Requests\UpdateAnimalsRequest;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class AnimalController extends Controller
 {
@@ -30,11 +33,32 @@ class AnimalController extends Controller
     }
     public function buffaloDairy()
     {
+        $startDate =Carbon::now()->subDays(30)->format('Y-m-d');
+        $endDate =Carbon::now()->format('Y-m-d');
+
 
         $animals = Animal::where('type', 'Buffalo')
         ->where('status', 'dairy')
-        ->withSum('milkProductions as total_milk', 'total_milk')
+        ->withSum(['milkProductions as total_milk' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('date', [$startDate, $endDate]);
+        }], 'total_milk')
         ->get();
+
+        return view('buffalo-dairy', compact('animals'));
+    }
+    public function buffaloDairyMilk(Request $request )
+    {
+        $startDate = $request->has('datefrom') ? $request->datefrom : Carbon::now()->subDays(30)->format('Y-m-d');
+        $endDate = $request->has('dateto') ? $request->dateto : Carbon::now()->format('Y-m-d');
+
+
+        $animals = Animal::where('type', 'Buffalo')
+        ->where('status', 'dairy')
+        ->withSum(['milkProductions as total_milk' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('date', [$startDate, $endDate]);
+        }], 'total_milk')
+        ->get();
+
         return view('buffalo-dairy', compact('animals'));
     }
     public function buffaloFattening()
@@ -56,7 +80,34 @@ class AnimalController extends Controller
     }
     public function cowDairy()
     {
-        $animals = Animal::where('type', 'Cow')->where('status', 'dairy')->get();
+
+        $startDate =Carbon::now()->subDays(30)->format('Y-m-d');
+        $endDate =Carbon::now()->format('Y-m-d');
+
+
+        $animals = Animal::where('type', 'Cow')
+        ->where('status', 'dairy')
+        ->withSum(['milkProductions as total_milk' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('date', [$startDate, $endDate]);
+        }], 'total_milk')
+        ->get();
+
+        return view('cow.dairy', compact('animals'));
+    }
+    public function cowDairyMilk(Request $request)
+    {
+
+        $startDate = $request->has('datefrom') ? $request->datefrom : Carbon::now()->subDays(30)->format('Y-m-d');
+        $endDate = $request->has('dateto') ? $request->dateto : Carbon::now()->format('Y-m-d');
+
+
+        $animals = Animal::where('type', 'Cow')
+        ->where('status', 'dairy')
+        ->withSum(['milkProductions as total_milk' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('date', [$startDate, $endDate]);
+        }], 'total_milk')
+        ->get();
+
         return view('cow.dairy', compact('animals'));
     }
     public function cowFattening()
@@ -68,6 +119,7 @@ class AnimalController extends Controller
 
     public function milkRecords(Animal $animal)
     {
+
         return response()->json($animal->milkProductions()->orderBy('date', 'desc')->get());
     }
 
@@ -95,7 +147,6 @@ class AnimalController extends Controller
 
      public function store(StoreAnimalRequest $request)
      {
-        dd($request);
 
          // التحقق من البيانات (بدون created_by)
          $validatedData = $request->validate([
@@ -105,7 +156,7 @@ class AnimalController extends Controller
              'age' => 'required|integer|min:0',
              'weight' => 'required|numeric|min:0',
              'health_status' => 'nullable|string',
-             'gender' => 'required|in:Male,Female',
+             'gender' => 'required',
              'origin' => 'required|string',
              'arrival_date' => 'required|date',
              'status' => 'required|string',
