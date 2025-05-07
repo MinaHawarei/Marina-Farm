@@ -8,6 +8,10 @@
     <div class="p-6 space-y-6">
         {{-- نظرة عامة --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-green-100 p-4 rounded shadow">
                 <h3 class="text-lg font-bold text-green-800">إجمالي الإيرادات</h3>
                 <p class="text-2xl font-semibold mt-2 text-green-700">{{ number_format($total_income) }} ج.م</p>
@@ -16,17 +20,15 @@
                 <h3 class="text-lg font-bold text-red-800">إجمالي المصروفات</h3>
                 <p class="text-2xl font-semibold mt-2 text-red-700">{{ number_format($total_expense) }} ج.م</p>
             </div>
+            <div class="bg-blue-100 p-4 rounded shadow">
+                <h3 class="text-lg font-bold text-blue-800">تحصيلات مستحقة</h3>
+                <p class="text-2xl font-semibold mt-2 text-blue-700">{{ number_format($total_receivables) }} ج.م</p>
+            </div>
             <div class="bg-yellow-100 p-4 rounded shadow">
                 <h3 class="text-lg font-bold text-yellow-800">إجمالي المديونيات</h3>
-                <p class="text-2xl font-semibold mt-2 text-yellow-700">{{ number_format($total_debt) }} ج.م</p>
+                <p class="text-2xl font-semibold mt-2 text-yellow-700">{{ number_format($total_liabilities) }} ج.م</p>
             </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-blue-100 p-4 rounded shadow">
-                <h3 class="text-lg font-bold text-blue-800">التحصيلات المتوقعة</h3>
-                <p class="text-2xl font-semibold mt-2 text-blue-700">{{ number_format($expected_collections) }} ج.م</p>
-            </div>
             <div class="bg-gray-100 p-4 rounded shadow">
                 <h3 class="text-lg font-bold text-gray-800">الرصيد الحالي</h3>
                 <p class="text-2xl font-semibold mt-2 text-gray-700">{{ number_format($current_balance) }} ج.م</p>

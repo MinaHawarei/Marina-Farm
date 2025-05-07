@@ -30,7 +30,11 @@ class AnimalController extends Controller
     }
     public function buffaloDairy()
     {
-        $animals = Animal::where('type', 'Buffalo')->where('status', 'dairy')->get();
+
+        $animals = Animal::where('type', 'Buffalo')
+        ->where('status', 'dairy')
+        ->withSum('milkProductions as total_milk', 'total_milk')
+        ->get();
         return view('buffalo-dairy', compact('animals'));
     }
     public function buffaloFattening()
@@ -62,7 +66,10 @@ class AnimalController extends Controller
     }
 
 
-
+    public function milkRecords(Animal $animal)
+    {
+        return response()->json($animal->milkProductions()->orderBy('date', 'desc')->get());
+    }
 
     public function getHealthRecords($animalId)
     {
@@ -88,6 +95,8 @@ class AnimalController extends Controller
 
      public function store(StoreAnimalRequest $request)
      {
+        dd($request);
+
          // التحقق من البيانات (بدون created_by)
          $validatedData = $request->validate([
              'animal_code' => 'required|unique:animals',
@@ -108,7 +117,6 @@ class AnimalController extends Controller
          Animal::create(array_merge($validatedData, [
              'created_by' => auth()->id()
          ]));
-
          return redirect()->back()->with('success', 'تم إضافة الحيوان بنجاح!');
         }
 
@@ -135,8 +143,6 @@ class AnimalController extends Controller
     public function update(UpdateAnimalsRequest $request, Animal $animal)
     {
 
-        //dd($request->validated());
-        //dd($request->all());{
         try {
             $data = $request->except(['_token', '_method', 'created_at', 'updated_at']);
 

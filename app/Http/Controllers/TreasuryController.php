@@ -15,8 +15,8 @@ class TreasuryController extends Controller
         // القيم العامة
         $total_income = daily_sale::sum('amount');
         $total_expense = expense::sum('amount');
-        $total_debt = daily_sale::where('remaining', '>', 0)->sum('remaining');
-        $expected_collections = $total_debt;
+        $total_liabilities = daily_sale::where('remaining', '>', 0)->sum('remaining');
+        $total_receivables = expense::where('remaining', '>', 0)->sum('remaining');
         $current_balance = $total_income - $total_expense;
 
         // آخر العمليات
@@ -41,8 +41,8 @@ class TreasuryController extends Controller
         return view('treasury.index', compact(
             'total_income',
             'total_expense',
-            'total_debt',
-            'expected_collections',
+            'total_liabilities',
+            'total_receivables',
             'current_balance',
             'latest_transactions',
             'monthly_data'

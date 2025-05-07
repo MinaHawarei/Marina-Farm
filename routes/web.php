@@ -7,6 +7,7 @@ use App\Http\Controllers\DailyConsumptionController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\TreasuryController;
+use App\Http\Controllers\MilkProductionDetailsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,6 +24,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/buffalo', function () {return view('buffalo');})->name('buffalo.index');
     Route::get('/cow', function () {return view('cow.index');})->name('cow.index');
+
+    Route::post('/milke', [MilkProductionDetailsController::class, 'store'])->name('milk.store');
+    Route::get('/animals/{animal}/milk-records', [AnimalController::class, 'milkRecords']);
 
 
 });

@@ -15,7 +15,14 @@
             </div>
         @endif
         <h3 class="text-lg font-bold mb-4">البهائم الجاموس وحالتهم حلوب:</h3>
-
+        <div class="mb-6 flex flex-wrap gap-3 items-center">
+            <button onclick="milkForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                اضافة انتاج الحليب
+            </button>
+        </div>
         <table class="table-auto w-full text-sm border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
@@ -28,6 +35,7 @@
                     <th class="px-4 py-2">تاريخ الوصول</th>
                     <th class="px-4 py-2">مكان الحظيرة</th>
                     <th class="px-4 py-2">الحالة الصحية</th>
+                    <th class="px-4 py-2">اجمالي انتاج اللبن</th>
                     <th class="px-4 py-2">التاريخ الصحي</th>
                     <th class="px-4 py-2">تعديل</th>
                 </tr>
@@ -44,6 +52,9 @@
                         <td class="px-4 py-2">{{ $animal->arrival_date }}</td>
                         <td class="px-4 py-2">{{ $animal->pen_id }}</td>
                         <td class="px-4 py-2">{{ $animal->health_status ?? 'غير محددة' }}</td>
+                        <td class="px-4 py-2">{{ $animal->total_milk ?? '0' }}
+                            <button onclick="openMilkModal({{ $animal->id }})" class="text-blue-500 underline ml-2">تفاصيل</button>
+                        </td>
                         <td class="px-4 py-2 text-center">
                             <button onclick="fetchHealthRecords({{ $animal->id }})" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">عرض</button>
                         </td>
@@ -78,15 +89,89 @@
                 </table>
             </div>
         </div>
+        <!-- مودال عرض انتاج اللبن -->
+        <div id="MilkModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center">
+            <div class="bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative">
+                <button onclick="document.getElementById('MilkModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                <h3 class="text-xl font-semibold mb-6 text-center">انتاج اللبن</h3>
+                <table class="table-auto w-full border border-gray-300 text-sm">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-2">التاريخ</th>
+                            <th class="px-4 py-2">انتاج صباحي</th>
+                            <th class="px-4 py-2">انتاج مسائي</th>
+                            <th class="px-4 py-2">اجمالي الانتاج</th>
+                            <th class="px-4 py-2">ملاحظات</th>
+                            <th class="px-4 py-2">تعديل</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="MilkRecordsTable"></tbody>
+                </table>
+            </div>
+        </div>
 
         <!-- كمبونينت تعديل الحيوان -->
         @include('components.animal-edit-form')
+            {{-- مودال إضافة الحيوان --}}
+        @include('components.milk-prodection-form', [
+            'modalId' => 'milk-form',
+            'title' => 'اضافة انتاج الحليب',
+            'action' => route('milk.store'),
+            'isVisible' => false,
+            'milkRecord' => null, // هذا هو المطلوب لتفادي الخطأ
+            'buttonText' => 'إضافة'
+        ])
+
     </div>
 
     <script>
         function toggleModal() {
             const modal = document.getElementById('healthModal');
             modal.classList.toggle('hidden');
+        }
+        function milkForm() {
+            const modal = document.getElementById('milk-form');
+            modal.classList.toggle('hidden');
+        }
+
+        function openMilkModal(animalId) {
+            const modal = document.getElementById('MilkModal');
+            modal.classList.remove('hidden');
+
+            const tableBody = document.getElementById('MilkRecordsTable');
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center">جارٍ التحميل...</td></tr>';
+
+            fetch(`/animals/${animalId}/milk-records`)
+                .then(res => res.json())
+                .then(data => {
+                    tableBody.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(record => {
+                            const total = (record.morning_milk || 0) + (record.evening_milk || 0);
+                            tableBody.innerHTML += `
+                                <tr class="border-t">
+                                    <td class="px-4 py-2">${record.date}</td>
+                                    <td class="px-4 py-2">${record.morning_milk ?? 0}</td>
+                                    <td class="px-4 py-2">${record.evening_milk ?? 0}</td>
+                                    <td class="px-4 py-2">${total}</td>
+                                    <td class="px-4 py-2">${record.notes ?? '-'}</td>
+                                    <td class="px-4 py-2 text-center">
+                                        <button onclick="openMilkEditForm(${record.id})"
+                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                                            تعديل
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500">لا يوجد انتاج بعد.</td></tr>';
+                    }
+                })
+                .catch(() => {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-red-500">فشل في تحميل البيانات.</td></tr>';
+                });
         }
 
         function fetchHealthRecords(animalId) {
@@ -156,24 +241,36 @@
             }
         }
 
-        // إغلاق عند الضغط خارج المودال
-        document.addEventListener('click', function (e) {
-            const modal = document.getElementById('edit-form');
-            const formBox = modal.querySelector('form');
+        const modalIds = ['edit-form', 'milk-form', 'healthModal', 'MilkModal'];
 
-            if (!modal.classList.contains('hidden') && !formBox.contains(e.target) && !e.target.closest('button[onclick="toggleForm()"]')) {
-                toggleForm();
-            }
+        function closeAllModals() {
+            modalIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('hidden')) {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        // إغلاق عند الضغط خارج المودال
+        document.addEventListener('mousedown', function (e) {
+            modalIds.forEach(id => {
+                const modal = document.getElementById(id);
+                if (modal && !modal.classList.contains('hidden')) {
+                    const content = modal.querySelector('.bg-white, form');
+                    if (content && !content.contains(e.target)) {
+                        modal.classList.add('hidden');
+                    }
+                }
+            });
         });
 
         // إغلاق بزر ESC
         document.addEventListener('keydown', function (e) {
             if (e.key === "Escape") {
-                const modal = document.getElementById('edit-form');
-                if (!modal.classList.contains('hidden')) {
-                    toggleForm();
-                }
+                closeAllModals();
             }
         });
+
     </script>
 </x-app-layout>

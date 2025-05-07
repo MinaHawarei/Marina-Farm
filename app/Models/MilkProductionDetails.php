@@ -1,28 +1,23 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Animal extends Model
+class MilkProductionDetails extends Model
 {
     use HasFactory;
-    protected $table = 'animals';
+    protected $table = 'milk_production_details';
 
     // الحقول القابلة للتعبئة
     protected $fillable = [
-        'animal_code',
-        'type',
-        'breed',
-        'age',
-        'weight',
-        'health_status',
-        'gender',
-        'origin',
-        'arrival_date',
-        'status',
-        'pen_id',
-        'insemination_type',
+        'animal_id' ,
+        'morning_milk' ,
+        'evening_milk',
+        'total_milk',
+        'date',
+        'notes',
         'created_by',
         'updated_at' => 'datetime:Y-m-d H:i:s',
         'created_at' => 'datetime:Y-m-d H:i:s',
@@ -32,9 +27,5 @@ class Animal extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
-    }
-    public function milkProductions()
-    {
-        return $this->hasMany(MilkProductionDetails::class, 'animal_id', 'animal_code');
     }
 }
