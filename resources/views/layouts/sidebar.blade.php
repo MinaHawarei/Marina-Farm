@@ -284,6 +284,14 @@
                         <span class="mr-2">تحصيلات</span>
                     </div>
                 </a>
+                <a href="{{ route('treasury.daily') }}"
+                    class="flex justify-between items-center px-6 py-3 font-bold border-r-4 transition duration-200"
+                    style="{{ request()->routeIs('treasury.daily') ? 'background-color: #f4f4f4; color: #2c3e50; border-color: transparent; border-radius: 0 15px 15px 0;' : 'color: #cccccc;' }}">
+                    <div class="flex items-center">
+                        <i class="fas fa-tachometer-alt ml-2"></i>
+                        <span class="mr-2">يومية</span>
+                    </div>
+                </a>
 
             </div>
         </div>

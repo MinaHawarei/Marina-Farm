@@ -246,4 +246,24 @@ class TreasuryController extends Controller
 
         return view('treasury.liabilities', compact('income'));
     }
+    public function daily(Request $request)
+    {
+        $income = daily_sale::query();
+        $expense = expense::query();
+        if ($request->has('date')) {
+            $income->whereDate('date', $request->date);
+            $expense->whereDate('date', $request->date);
+        }  else {
+        $income->whereDate('date', Carbon::today());
+        $expense->whereDate('date', Carbon::today());
+        }
+
+        $income = $income->get();
+        $expense = $expense->get();
+        $total_income = $income->sum('paid');
+        $total_expense = $expense->sum('paid');
+
+        return view('treasury.daily', compact('income' , 'expense','total_income','total_expense',));
+    }
+
 }

@@ -91,6 +91,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/expense', [TreasuryController::class, 'expense'])->name('treasury.expense');
         Route::get('/liabilities', [TreasuryController::class, 'liabilities'])->name('treasury.liabilities');
         Route::get('/receivables', [TreasuryController::class, 'receivables'])->name('treasury.receivables');
+        Route::get('/daily', [TreasuryController::class, 'daily'])->name('treasury.daily');
 
         Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
         Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
