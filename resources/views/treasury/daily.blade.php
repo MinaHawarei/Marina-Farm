@@ -66,9 +66,7 @@
 
                                     <td class="px-4 py-2 text-center">
                                         <div class="flex space-x-2">
-                                            <button onclick="openEditForm({{ $item->id }})" class="bg-blue-600 text-white px-2 py-2 rounded-lg hover:bg-blue-700 flex items-center">
-                                                i
-                                            </button>
+
 
                                             <form action="{{ route('income.destroy', $item->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا السجل؟');">
                                                 @csrf
@@ -114,9 +112,7 @@
 
                                     <td class="px-4 py-2 text-center">
                                          <div class="flex space-x-2">
-                                            <button onclick="openEditForm({{ $item->id }})" class="bg-blue-600 text-white px-2 py-2 rounded-lg hover:bg-blue-700 flex items-center">
-                                                i
-                                            </button>
+
 
                                             <form action="{{ route('expense.destroy', $item->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا السجل؟');">
                                                 @csrf
@@ -141,8 +137,12 @@
         </div>
 
 
-        <!-- كمبونينت تعديل الحيوان -->
+        <!-- كمبونينت تعديل الإيرادات -->
         @include('components.edit-income-form',[
+            'isVisible' => false,
+        ])
+         <!-- كمبونينت تعديل مصروفات -->
+        @include('components.edit-expense-form',[
             'isVisible' => false,
         ])
     </div>

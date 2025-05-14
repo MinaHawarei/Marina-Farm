@@ -8,6 +8,7 @@ use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\TreasuryController;
 use App\Http\Controllers\MilkProductionDetailsController;
+use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -101,6 +102,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/consumption/{daily_consumption}', [DailyConsumptionController::class, 'destroy'])->name('daily-consumption.destroy');
     });
 
+    // stock
+    Route::prefix('stock')->group(function() {
+        Route::get('/', [DailyProductionController::class, 'index'])->name('stock.index');
+        Route::get('/producs', [StockController::class, 'producs'])->name('stock.producs');
+        Route::get('/feeds', [StockController::class, 'feeds'])->name('stock.feeds');
+        Route::get('/other', [StockController::class, 'other'])->name('stock.other');
+
+    });
 
     Route::get('/buffalo-calf', [AnimalController::class, 'buffaloCalf'])->name('buffalo.calf');
     Route::get('/buffalo-pregnant', [AnimalController::class, 'buffaloPregnant'])->name('buffalo.pregnant');

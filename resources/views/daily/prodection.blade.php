@@ -35,8 +35,10 @@
                     <th class="px-4 py-2">لبن جاموس</th>
                     <th class="px-4 py-2">لبن بقري</th>
                     <th class="px-4 py-2">بيض</th>
-                    <th class="px-4 py-2">بلح (كيلو)</th>
-                    <th class="px-4 py-2">برسيم(كيلو)</th>
+                    <th class="px-4 py-2">بلح</th>
+                    <th class="px-4 py-2">جبنة</th>
+                    <th class="px-4 py-2">سمنة</th>
+                    <th class="px-4 py-2">برسيم</th>
                     <th class="px-4 py-2">تمت الاضافة بواسطة</th>
                     <th class="px-4 py-2">ملاحظات</th>
                     <th class="px-4 py-2">تعديل</th>
@@ -51,6 +53,8 @@
                             <td class="px-4 py-2">{{ $production->cowMilk }}</td>
                             <td class="px-4 py-2">{{ $production->eggs }}</td>
                             <td class="px-4 py-2">{{ $production->dates }}</td>
+                            <td class="px-4 py-2">{{ $production->ghee }}</td>
+                            <td class="px-4 py-2">{{ $production->cheese }}</td>
                             <td class="px-4 py-2">{{ $production->clover }}</td>
                             <td class="px-4 py-2">{{ $production->created_by }}</td>
                             <td class="px-4 py-2">{{ $production->notes ?? 'غير محددة' }}</td>
@@ -103,6 +107,8 @@
                     modal.querySelector('input[name="production_date"]').value = data.production_date ?? '';
                     modal.querySelector('input[name="eggs"]').value = data.eggs;
                     modal.querySelector('input[name="dates"]').value = data.dates;
+                    modal.querySelector('input[name="ghee"]').value = data.ghee;
+                    modal.querySelector('input[name="cheese"]').value = data.cheese;
                     modal.querySelector('input[name="clover"]').value = data.clover;
                     modal.querySelector('input[name="notes"]').value = data.notes ?? '';
                 })

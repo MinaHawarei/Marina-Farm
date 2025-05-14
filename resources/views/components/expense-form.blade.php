@@ -115,9 +115,13 @@
     const subCategoriesData = {
         "Feed Costs": [
             { value: "Hay", text: "تبن" },
-            { value: "Concentrates", text: "المركزات" },
-            { value: "Feed", text: "علف" },
             { value: "clover Feed", text: "برسيم" },
+            { value: "Corn", text: "ذرة" },
+            { value: "Soybean", text: "فول الصويا" },
+            { value: "Soybean Hulls", text: "قشور فول الصويا" },
+            { value: "Bran", text: "ردة" },
+            { value: "Silage", text: "سيلاج" },
+            { value: "Concentrates", text: "المركزات" }
         ],
         "Veterinary Expenses": [
             { value: "Medicines and Vaccines", text: "الأدوية البيطرية واللقاحات" },

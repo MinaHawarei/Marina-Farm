@@ -63,16 +63,18 @@ class DailyProductionController extends Controller
             return redirect()->back()->withErrors(['production_date' => 'لقد تم اضافة يومية الانتاج من قبل !!'])->withInput();
         }
 
-
         $validatedData = $request->validate([
             'buffaloMilk' => 'required|numeric|min:0',
             'cowMilk' => 'required|numeric|min:0',
             'eggs' => 'required|numeric|min:0',
             'dates' => 'required|numeric|min:0',
+            'ghee' => 'required|numeric|min:0',
+            'cheese' => 'required|numeric|min:0',
             'clover' => 'required|numeric|min:0',
             'production_date' => 'required|date',
             'notes' => 'nullable|string',
         ]);
+
 
         // إنشاء السجل الجديد مع إضافة created_by
         daily_production::create(array_merge($validatedData, [
@@ -84,6 +86,8 @@ class DailyProductionController extends Controller
             2 => 'cowMilk',     // اللبن ابقار
             3 => 'eggs',        // البيض
             9 => 'dates',       // البلح
+            18 => 'ghee',       // البلح
+            20 => 'cheese',       // البلح
             11 => 'clover',       // البرسيم
         ];
 

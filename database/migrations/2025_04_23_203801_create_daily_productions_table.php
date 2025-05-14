@@ -17,6 +17,8 @@ return new class extends Migration
             $table->float('cowMilk');
             $table->float('eggs');
             $table->float('dates');
+            $table->float('ghee');
+            $table->float('cheese');
             $table->float('clover');
             $table->date('production_date')->unique();
             $table->text('notes')->nullable();

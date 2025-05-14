@@ -26,6 +26,8 @@ class Storedaily_productionRequest extends FormRequest
             'cowMilk' => 'required',
             'eggs' => 'required',
             'dates' => 'required',
+            'ghee' => 'required',
+            'cheese' => 'required',
             'production_date' => 'required',
             'created_by' => 'nullable|exists:users,id',
         ];
