@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+
 
 
 class UserController extends Controller
@@ -60,23 +64,32 @@ class UserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $request->validate([
-        'name' => 'required|string|max:255',
-        'username' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-        'role' => 'required|string|in:admin,accountant,employee',
-        'password' => 'nullable|string|min:6',
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'role' => 'required|string|in:admin,accountant,employee',
+            'password' => 'nullable|string|min:6',
         ]);
+
+        $passwordChanged = $request->filled('password');
 
         $user->update([
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
-            'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+            'password' => $passwordChanged ? Hash::make($request->password) : $user->password ,
         ]);
 
         $user->syncRoles([$request->role]);
 
-        return redirect()->back()->with('success', 'User updated successfully.');
+        // تسجيل خروج المستخدم من كل جلساته
+        if ($passwordChanged) {
+           DB::table('sessions')->where('user_id', $user->id)->delete(); // حذف الجلسات
+            $user->update(['remember_token' => null]);
+        }
+
+
+        return redirect()->back()->with('success', 'User updated and forced logout applied if password changed.');
     }
 
     /**

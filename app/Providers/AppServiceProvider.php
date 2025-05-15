@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Animal;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -20,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (Auth::check()) {
+            DB::table('sessions')
+                ->where('id', Session::getId())
+                ->update(['user_id' => Auth::id()]);
+        }
         view()->composer('*', function(View $view) {
             // عدد الجاموس
             $BuffaloCount = Animal::where('type', 'Buffalo')->count();

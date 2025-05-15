@@ -12,10 +12,12 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\SyncSessionUser;
 
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+
+Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -32,9 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/milk-records/{milkId}', [MilkProductionDetailsController::class, 'update'])->name('milk.update');
     Route::get('/animals/{animal}/milk-records', [AnimalController::class, 'milkRecords']);
 
-
-});
-    Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -49,8 +48,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //daily Prodection
      Route::prefix('dailyProdection')->group(function() {
         Route::post('/', [DailyProductionController::class, 'store'])->name('dailyProdection.store');
-        //Route::get('/{id}/edit', [DailyProductionController::class, 'edit'])->name('dailyProdection.edit');
-        //Route::put('/{id}', [DailyProductionController::class, 'update'])->name('dailyProdection.update');
     });
     //daily Consumption
      Route::prefix('DailyConsumption')->group(function() {
@@ -134,6 +131,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cow-dairy', [AnimalController::class, 'cowDairy'])->name('cow.dairy');
     Route::get('/cow-fattening', [AnimalController::class, 'cowFattening'])->name('cow.fattening');
     Route::get('/cow-dairy-milk', [AnimalController::class, 'cowDairyMilk'])->name('Cowmilk.index');
+
 
 });
 

@@ -496,7 +496,7 @@
             </div>
         </div>
           <!-- قسم الصيانة و المعدات مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('stock.*') ? 'true' : 'false' }} }" class="relative">
+        <div x-data="{ isOpen: {{ request()->routeIs('tools.*') ? 'true' : 'false' }} }" class="relative">
             <!-- زر القسم الرئيسي -->
             <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
                 <div class="flex items-center">
@@ -511,13 +511,13 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('stock.producs') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('tools.tools') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-list ml-2"></i>
                         <span class="mr-2">المعدات</span>
                     </div>
                 </a>
-                <a href="{{ route('stock.feeds') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-calendar-check ml-2"></i>
                         <span class="mr-2">جدول الصيانة</span>
@@ -541,13 +541,13 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('stock.producs') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
                     <div class="flex items-center">
                          <i class="fas fa-user-tie ml-2"></i>
                         <span class="mr-2">العملاء</span>
                     </div>
                 </a>
-                <a href="{{ route('stock.feeds') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-truck ml-2"></i>
                         <span class="mr-2">الموردين</span>
@@ -571,19 +571,19 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('stock.producs') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-chart-line ml-2"></i>
                         <span class="mr-2">تقارير الانتاج</span>
                     </div>
                 </a>
-                <a href="{{ route('stock.feeds') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-chart-pie ml-2"></i>
                         <span class="mr-2">تقارير المبيعات</span>
                     </div>
                 </a>
-                <a href="{{ route('stock.feeds') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-file-alt ml-2"></i>
                         <span class="mr-2">تقارير مالية</span>
@@ -607,7 +607,7 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('stock.producs') }}" class="sidebar-dropdown-item {{ request()->routeIs('user.producs') ? 'active' : '' }}">
+                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('user.producs') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-user-friends ml-2"></i>
                         <span class="mr-2">الموظفون</span>
