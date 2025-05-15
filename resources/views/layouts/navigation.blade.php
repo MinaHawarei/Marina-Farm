@@ -1,12 +1,13 @@
 <nav x-data="{ open: false }" class="bg-dark border-b border-gray-800" dir="rtl" style="background-color: #040629; color: white;">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class=" mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <!-- اللوجو (أقصى اليمين بعد التبديل) -->
             <div class="shrink-0 flex items-center ms-4">
                 <div class="p-6 text-center">
-                    <h1 class="text-2xl font-bold" style="color: white;">Marina Farm</h1>    </div>
-                <nav class="mt-8">
+                    <h1 class="text-2xl font-bold" style="color: white;">مزراع مارينا</h1>
+                </div>
             </div>
 
             <!-- عنوان الصفحة (في المنتصف) -->
