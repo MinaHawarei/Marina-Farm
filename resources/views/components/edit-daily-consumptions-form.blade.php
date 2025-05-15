@@ -1,5 +1,5 @@
 {{-- AnimalFormComponent.blade.php --}}
-<div id="edit-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
+<div id="edit-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
         <h3 class="text-xl font-semibold text-gray-800 mb-6"> تحديث البيانات </h3>
         @if(isset($production))

@@ -60,7 +60,7 @@
         </table>
 
         <!-- مودال عرض التقارير الصحية -->
-        <div id="healthModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center">
+        <div id="healthModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center p-4 overflow-y-auto">
             <div class="bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative">
                 <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
                 <h3 class="text-xl font-semibold mb-6 text-center">التقارير الصحية</h3>

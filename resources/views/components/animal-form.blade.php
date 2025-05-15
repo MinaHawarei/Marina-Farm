@@ -1,5 +1,5 @@
 {{-- AnimalFormComponent.blade.php --}}
-<div id="{{ $modalId }}" class="fixed inset-0 z-50 bg-black bg-opacity-50 {{ $isVisible ? '' : 'hidden' }} flex items-center justify-center">
+<div id="{{ $modalId }}" class="fixed inset-0 z-50 bg-black bg-opacity-50 {{ $isVisible ? '' : 'hidden' }} flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
         <h3 class="text-xl font-semibold text-gray-800 mb-6">{{ $title }}</h3>
         <form action="{{ $formAction }}" method="POST">
