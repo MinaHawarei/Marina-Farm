@@ -83,7 +83,7 @@
                     </td>
                     <td class="border px-2 py-1" contenteditable="true"></td>
                     <td class="border px-2 py-1">
-                        <button onclick="saveUser(this, 'new')" class="bg-green-600 text-white px-2 py-1 text-sm rounded">Add</button>
+                        <button onclick="saveUser(this, 'new')" style="background-color: #16a34a;" class="text-white px-2 py-1 text-sm rounded">Add</button>
                     </td>
                 </tr>
             </tbody>

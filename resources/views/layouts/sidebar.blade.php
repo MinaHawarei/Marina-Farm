@@ -511,13 +511,13 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('tools.tools') ? 'active' : '' }}">
+                <a href="{{ route('tools.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('tools.index') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-list ml-2"></i>
                         <span class="mr-2">المعدات</span>
                     </div>
                 </a>
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="{{ route('tools.schedule') }}" class="sidebar-dropdown-item {{ request()->routeIs('tools.schedule') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-calendar-check ml-2"></i>
                         <span class="mr-2">جدول الصيانة</span>

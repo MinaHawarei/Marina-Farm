@@ -10,6 +10,7 @@ use App\Http\Controllers\TreasuryController;
 use App\Http\Controllers\MilkProductionDetailsController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ToolController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SyncSessionUser;
@@ -117,6 +118,18 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+
+    });
+    // tools
+    Route::prefix('tools')->group(function() {
+        Route::get('/', [ToolController::class, 'index'])->name('tools.index');
+        Route::post('/store', [ToolController::class, 'store'])->name('tools.store');
+        Route::get('/{user}/edit', [ToolController::class, 'edit'])->name('tools.edit');
+        Route::put('/{user}', [ToolController::class, 'update'])->name('tools.update');
+        Route::delete('/{user}', [ToolController::class, 'destroy'])->name('tools.destroy');
+
+        Route::get('/schedule', [ToolController::class, 'schedule'])->name('tools.schedule');
+
 
     });
 
