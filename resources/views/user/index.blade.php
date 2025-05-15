@@ -1,11 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
             {{ __('User Management') }}
         </h2>
     </x-slot>
 
-    <div class="flex-1 overflow-y-auto p-8">
+    <div class="p-6">
+        {{-- رسائل التنبيه --}}
         @if(session('success'))
             <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
                 <div class="flex justify-between items-center">
@@ -15,132 +16,126 @@
             </div>
         @endif
 
-        <h3 class="text-lg font-bold mb-4">Users List</h3>
+        @if($errors->any())
+            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+                <div class="flex justify-between items-center">
+                    <ul class="list-disc pl-5 space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-700">&times;</button>
+                </div>
+            </div>
+        @endif
 
-        <table class="table-auto w-full text-sm border border-gray-300 mb-8">
-            <thead class="bg-gray-100">
+        <h1>
+            <span class="text-2xl font-bold">Users</span>
+        </h1>
+
+        <table class="w-full border border-gray-400 text-center" id="user-table">
+            <thead class="bg-gray-200">
                 <tr>
-                    <th class="px-4 py-2">ID</th>
-                    <th class="px-4 py-2">Name</th>
-                    <th class="px-4 py-2">Username</th>
-                    <th class="px-4 py-2">Email</th>
-                    <th class="px-4 py-2">Role</th>
-                    <th class="px-4 py-2">Edit</th>
+                    <th class="border px-2 py-1">ID</th>
+                    <th class="border px-2 py-1">Name</th>
+                    <th class="border px-2 py-1">Username</th>
+                    <th class="border px-2 py-1">Email</th>
+                    <th class="border px-2 py-1">Role</th>
+                    <th class="border px-2 py-1">Password</th>
+                    <th class="border px-2 py-1">Action</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($users as $user)
-                    <tr class="border-t">
-                        <td class="px-4 py-2">{{ $user->id }}</td>
-                        <td class="px-4 py-2">{{ $user->name }}</td>
-                        <td class="px-4 py-2">{{ $user->username }}</td>
-                        <td class="px-4 py-2">{{ $user->email }}</td>
-                        <td class="px-4 py-2">{{ $user->roles->pluck('name')->join(', ') }}</td>
-                        <td class="px-4 py-2 text-center">
-                            <button onclick="openEditForm({{ $user->id }})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">Edit</button>
+                @foreach($users as $user)
+                    <tr data-id="{{ $user->id }}">
+                        <td class="border px-2 py-1">{{ $user->id }}</td>
+                        <td class="border px-2 py-1" contenteditable="true">{{ $user->name }}</td>
+                        <td class="border px-2 py-1" contenteditable="true">{{ $user->username }}</td>
+                        <td class="border px-2 py-1" contenteditable="true">{{ $user->email }}</td>
+                        <td class="border px-2 py-1">
+                            <select class="w-full border-none bg-transparent focus:outline-none text-center">
+                                <option value="admin" @selected($user->hasRole('admin'))>admin</option>
+                                <option value="accountant" @selected($user->hasRole('accountant'))>accountant</option>
+                                <option value="employee" @selected($user->hasRole('employee'))>employee</option>
+                            </select>
+                        </td>
+                        <td class="border px-2 py-1" contenteditable="true" placeholder="Leave blank if unchanged"></td>
+                        <td class="border px-2 py-1">
+                            <button onclick="saveUser(this, {{ $user->id }})" class="bg-blue-600 text-white px-2 py-1 text-sm rounded">Save</button>
                         </td>
                     </tr>
+                @endforeach
 
-                    {{-- Edit Form --}}
-                    <tr id="edit-form-{{ $user->id }}" class="hidden bg-gray-50 border-b">
-                        <td colspan="6">
-                            <form action="{{ route('user.update', $user->id) }}" method="POST" class="p-4 space-y-2">
-                                @csrf
-                                @method('PUT')
+                <!-- Row to Add New User -->
+                <tr data-id="new">
+                    <td class="border px-2 py-1 text-gray-400">New</td>
+                    <td class="border px-2 py-1" contenteditable="true"></td>
+                    <td class="border px-2 py-1" contenteditable="true"></td>
+                    <td class="border px-2 py-1" contenteditable="true"></td>
+                    <td class="border px-2 py-1">
+                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
+                            <option value=" "> </option>
+                            <option value="employee">employee</option>
+                            <option value="accountant">accountant</option>
+                            <option value="admin">admin</option>
 
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium">Name</label>
-                                        <input type="text" name="name" value="{{ $user->name }}" class="w-full border rounded px-2 py-1">
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium">Username</label>
-                                        <input type="text" name="username" value="{{ $user->username }}" class="w-full border rounded px-2 py-1">
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium">Email</label>
-                                        <input type="email" name="email" value="{{ $user->email }}" class="w-full border rounded px-2 py-1">
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium">Role</label>
-                                        <select name="role" class="w-full border rounded px-2 py-1">
-                                            <option value="admin" @if($user->hasRole('admin')) selected @endif>admin</option>
-                                            <option value="accountant" @if($user->hasRole('accountant')) selected @endif>accountant</option>
-                                            <option value="employee" @if($user->hasRole('employee')) selected @endif>employee</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium">New Password (optional)</label>
-                                        <input type="password" name="password" class="w-full border rounded px-2 py-1" placeholder="Leave blank">
-                                    </div>
-                                </div>
-
-                                <div class="mt-4">
-                                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Save</button>
-                                </div>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center text-gray-500 py-4">No users found</td>
-                    </tr>
-                @endforelse
+                        </select>
+                    </td>
+                    <td class="border px-2 py-1" contenteditable="true"></td>
+                    <td class="border px-2 py-1">
+                        <button onclick="saveUser(this, 'new')" class="bg-green-600 text-white px-2 py-1 text-sm rounded">Add</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
-
-        {{-- Add New User --}}
-        <div class="bg-white p-6 rounded shadow">
-            <h3 class="text-lg font-semibold mb-4">Add New User</h3>
-            <form action="{{ route('user.store') }}" method="POST" class="space-y-4">
-                @csrf
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium">Name</label>
-                        <input type="text" name="name" class="w-full border rounded px-2 py-1" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium">Username</label>
-                        <input type="text" name="username" class="w-full border rounded px-2 py-1" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium">Email</label>
-                        <input type="email" name="email" class="w-full border rounded px-2 py-1" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium">Role</label>
-                        <select name="role" class="w-full border rounded px-2 py-1" required>
-                            <option value="admin">admin</option>
-                            <option value="accountant">accountant</option>
-                            <option value="employee">employee</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium">Password</label>
-                        <input type="password" name="password" class="w-full border rounded px-2 py-1" required>
-                    </div>
-                </div>
-
-                <div>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Add User</button>
-                </div>
-            </form>
-        </div>
     </div>
 
+    <form id="user-form" method="POST" style="display: none;">
+        @csrf
+        <input type="hidden" name="_method" value="PUT" id="form-method">
+        <input type="hidden" name="id" id="form-id">
+        <input type="hidden" name="name" id="form-name">
+        <input type="hidden" name="username" id="form-username">
+        <input type="hidden" name="email" id="form-email">
+        <input type="hidden" name="role" id="form-role">
+        <input type="hidden" name="password" id="form-password">
+    </form>
+
     <script>
-        function openEditForm(userId) {
-            const form = document.getElementById(`edit-form-${userId}`);
-            form.classList.toggle('hidden');
+        function saveUser(button, userId) {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+            const select = row.querySelector('select');
+
+            const data = {
+                id: userId,
+                name: cells[1].innerText.trim(),
+                username: cells[2].innerText.trim(),
+                email: cells[3].innerText.trim(),
+                role: select.value,
+                password: cells[5].innerText.trim()
+            };
+
+            // تعبئة الفورم
+            document.getElementById('form-id').value = data.id;
+            document.getElementById('form-name').value = data.name;
+            document.getElementById('form-username').value = data.username;
+            document.getElementById('form-email').value = data.email;
+            document.getElementById('form-role').value = data.role;
+            document.getElementById('form-password').value = data.password;
+
+            const form = document.getElementById('user-form');
+            const methodInput = document.getElementById('form-method');
+
+            if (userId === 'new') {
+                form.action = "{{ route('user.store') }}";
+                methodInput.value = 'POST';
+            } else {
+                form.action = "{{ url('/user') }}/" + userId;
+                methodInput.value = 'PUT';
+            }
+
+            form.submit();
         }
     </script>
 </x-app-layout>
