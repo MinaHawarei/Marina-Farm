@@ -6,7 +6,7 @@
             <!-- اللوجو (أقصى اليمين بعد التبديل) -->
             <div class="shrink-0 flex items-center ms-4">
                 <div class="p-6 text-center">
-                    <h1 class="text-2xl font-bold" style="color: white;">مزراع مارينا</h1>
+                    <h1 class="text-2xl font-bold" style="color: white;">مزارع مارينا</h1>
                 </div>
             </div>
 
