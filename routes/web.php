@@ -9,6 +9,8 @@ use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\TreasuryController;
 use App\Http\Controllers\MilkProductionDetailsController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -108,6 +110,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/producs', [StockController::class, 'producs'])->name('stock.producs');
         Route::get('/feeds', [StockController::class, 'feeds'])->name('stock.feeds');
         Route::get('/other', [StockController::class, 'other'])->name('stock.other');
+
+    });
+
+    // user
+    Route::prefix('user')->group(function() {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::post('/store', [UserController::class, 'store'])->name('user.store');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+        Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 
     });
 

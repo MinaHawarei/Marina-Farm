@@ -16,6 +16,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+    @if(session('error'))
+        <script>
+            alert("{{ session('error') }}");
+        </script>
+    @endif
 <body class="bg-gray-100 font-sans">
     @include('layouts.navigation')
 

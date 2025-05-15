@@ -3,6 +3,9 @@
 
     <div class=" mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
+             <button id="mobile-menu-button" class="md:hidden p-2 text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
             <!-- اللوجو (أقصى اليمين بعد التبديل) -->
             <div class="shrink-0 flex items-center ms-4">
                 <div class="p-6 text-center">
