@@ -15,6 +15,7 @@ use App\Http\Controllers\BuyersController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HealthRecordController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SyncSessionUser;
@@ -26,10 +27,6 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-
-    Route::get('/suppliers', function () {
-        return view('suppliers');
-    })->name('suppliers');
 
 
     Route::get('/buffalo', function () {return view('buffalo');})->name('buffalo.index');
@@ -124,7 +121,18 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 
+
+
     });
+    // employee
+    Route::prefix('employees')->group(function() {
+        Route::get('/', [EmployeeController::class, 'index'])->name('user.employees');
+        Route::post('/store', [EmployeeController::class, 'store'])->name('employees.store');
+        Route::get('/{user}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
+        Route::put('/{user}', [EmployeeController::class, 'update'])->name('employees.update');
+        Route::delete('/{user}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    });
+
     // tools
     Route::prefix('tools')->group(function() {
         Route::get('/', [ToolController::class, 'index'])->name('tools.index');

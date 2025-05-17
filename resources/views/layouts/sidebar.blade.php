@@ -607,7 +607,7 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('user.producs') ? 'active' : '' }}">
+                <a href="{{ route('user.employees') }}" class="sidebar-dropdown-item {{ request()->routeIs('user.employees') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-user-friends ml-2"></i>
                         <span class="mr-2">الموظفون</span>
