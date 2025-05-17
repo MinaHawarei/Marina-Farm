@@ -12,7 +12,7 @@ class ToolController extends Controller
     // عرض جميع الأدوات
     public function index()
     {
-         $tools = Tool::all();
+        $tools = Tool::all();
         return view('tools.index', compact('tools'));
     }
     public function schedule(Request $request)

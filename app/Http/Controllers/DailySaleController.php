@@ -45,7 +45,7 @@ class DailySaleController extends Controller
             'date' => 'required|date',
             'payment_due_date' => 'nullable|date',
             'buyer_name' => 'required|string|max:255',
-            'buyer_id' => 'nullable|exists:suppliers,id',
+            'buyer_id' => 'nullable|exists:buyers,id',
             'description' => 'nullable|string',
         ]);
 
@@ -60,13 +60,13 @@ class DailySaleController extends Controller
 
         if ($validatedData['remaining'] > 0) {
 
-            if($validatedData['payment_due_date'] == null && $validatedData['supplier_id'] == null) {
+            if($validatedData['payment_due_date'] == null && $validatedData['buyer_id'] == null) {
              // إعادة التوجيه مع رسالة خطأ
                 return redirect()->back()->withErrors(['error' => 'يجب وضع تاريخ الاستحقاق للمبلغ المتبقي و كود العميل.']);
             }elseif($validatedData['payment_due_date'] == null) {
                 // إعادة التوجيه مع رسالة خطأ
                 return redirect()->back()->withErrors(['error' => 'يجب وضع تاريخ الاستحقاق للمبلغ المتبقي.']);
-            }elseif($validatedData['supplier_id'] == null) {
+            }elseif($validatedData['buyer_id'] == null) {
                 // إعادة التوجيه مع رسالة خطأ
                 return redirect()->back()->withErrors(['error' => 'يجب وضع كود العميل.']);
             }

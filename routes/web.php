@@ -11,6 +11,8 @@ use App\Http\Controllers\MilkProductionDetailsController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ToolController;
+use App\Http\Controllers\BuyersController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SyncSessionUser;
@@ -129,7 +131,23 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::delete('/{user}', [ToolController::class, 'destroy'])->name('tools.destroy');
 
         Route::get('/schedule', [ToolController::class, 'schedule'])->name('tools.schedule');
+    });
+    // clients
+    Route::prefix('clients')->group(function() {
+        Route::get('/', [BuyersController::class, 'index'])->name('clients.index');
+        Route::post('/store', [BuyersController::class, 'store'])->name('clients.store');
+        Route::get('/{user}/edit', [BuyersController::class, 'edit'])->name('clients.edit');
+        Route::put('/{user}', [BuyersController::class, 'update'])->name('clients.update');
+        Route::delete('/{user}', [BuyersController::class, 'destroy'])->name('clients.destroy');
 
+    });
+    // suppliers
+    Route::prefix('suppliers')->group(function() {
+        Route::get('/', [SupplierController::class, 'index'])->name('suppliers.index');
+        Route::post('/store', [SupplierController::class, 'store'])->name('suppliers.store');
+        Route::get('/{user}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
+        Route::put('/{user}', [SupplierController::class, 'update'])->name('suppliers.update');
+        Route::delete('/{user}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
 
     });
 

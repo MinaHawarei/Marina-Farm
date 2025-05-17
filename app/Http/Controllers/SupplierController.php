@@ -13,7 +13,11 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+         $clients = supplier::withSum('sales', 'amount')
+                    ->withSum('sales', 'remaining')
+                    ->get();
+
+        return view('clients.suppliers', compact('clients'));
     }
 
     /**
@@ -29,7 +33,18 @@ class SupplierController extends Controller
      */
     public function store(StoresupplierRequest $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string|max:255',
+            'purchase_type' => 'nullable|string|max:100',
+        ]);
+
+        supplier::create($validated);
+
+        return redirect()->route('suppliers.index')->with('success', 'تم إضافة المورد بنجاح');
     }
 
     /**
@@ -53,7 +68,20 @@ class SupplierController extends Controller
      */
     public function update(UpdatesupplierRequest $request, supplier $supplier)
     {
-        //
+        $client = supplier::findOrFail($request->id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string|max:255',
+            'purchase_type' => 'nullable|string|max:100',
+        ]);
+
+        $client->update($validated);
+
+        return redirect()->route('suppliers.index')->with('success', 'تم تحديث بيانات العميل بنجاح');
     }
 
     /**

@@ -29,49 +29,70 @@
             </div>
         @endif
 
-        {{-- زر الإضافة --}}
-        <div class="mb-6 flex flex-wrap gap-3 items-stretch justify-start sm:justify-start">
-            <button onclick="toggleForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+      {{-- زر الإضافة --}}
+    <div class="mb-6 flex flex-wrap gap-4 justify-start items-stretch">
+        <!-- زر حيوان جديد -->
+        <div class="flex-shrink-0">
+            <button onclick="toggleForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 حيوان جديد
             </button>
+        </div>
 
-            <button onclick="dailyProdectionForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+        <!-- زر الانتاج اليومي -->
+        <div class="flex-shrink-0">
+            <button onclick="dailyProdectionForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 الانتاج اليومي
             </button>
+        </div>
 
-            <button onclick="dailyConsumptionsForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+        <!-- زر الاستهلاك اليومي -->
+        <div class="flex-shrink-0">
+            <button onclick="dailyConsumptionsForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 الاستهلاك اليومي
             </button>
+        </div>
 
-            <button onclick="dailyExpenseForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+        <!-- زر تسجيل مصروف -->
+        <div class="flex-shrink-0">
+            <button onclick="dailyExpenseForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 تسجيل مصروف
             </button>
+        </div>
 
-            <button onclick="incomeForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+        <!-- زر تسجيل ايراد -->
+        <div class="flex-shrink-0">
+            <button onclick="incomeForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 تسجيل ايراد
             </button>
-            <button onclick="#" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+        </div>
+
+        <!-- زر تسجيل تقرير صحي -->
+        <div class="flex-shrink-0">
+            <button onclick="#" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 تسجيل تقرير صحي
             </button>
         </div>
+
+    </div>
+
 
 
 

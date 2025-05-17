@@ -526,7 +526,7 @@
             </div>
         </div>
         <!-- قسم العملاء و الموردين مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('stock.*') ? 'true' : 'false' }} }" class="relative">
+        <div x-data="{ isOpen: {{ request()->routeIs('clients.*') ? 'true' : 'false' }} }" class="relative">
             <!-- زر القسم الرئيسي -->
             <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
                 <div class="flex items-center">
@@ -541,13 +541,13 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
+                <a href="{{ route('clients.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('clients.index') ? 'active' : '' }}">
                     <div class="flex items-center">
                          <i class="fas fa-user-tie ml-2"></i>
                         <span class="mr-2">العملاء</span>
                     </div>
                 </a>
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="{{ route('suppliers.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('clients.suppliers') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-truck ml-2"></i>
                         <span class="mr-2">الموردين</span>
