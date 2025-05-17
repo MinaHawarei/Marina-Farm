@@ -547,7 +547,7 @@
                         <span class="mr-2">العملاء</span>
                     </div>
                 </a>
-                <a href="{{ route('suppliers.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('clients.suppliers') ? 'active' : '' }}">
+                <a href="{{ route('clients.suppliers') }}" class="sidebar-dropdown-item {{ request()->routeIs('clients.suppliers') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-truck ml-2"></i>
                         <span class="mr-2">الموردين</span>

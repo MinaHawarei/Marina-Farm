@@ -83,7 +83,7 @@
 
         <!-- زر تسجيل تقرير صحي -->
         <div class="flex-shrink-0">
-            <button onclick="#" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
+            <button onclick="toggleHealthForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
@@ -148,6 +148,16 @@
         'animal' => null,
         'buttonText' => 'إضافة'
     ])
+    {{-- موديل اضافة الاستهلاك اليومي --}}
+    @include('components.health-report-form', [
+        'modalId' => 'health-form',
+        'title' => 'اضافة تقرير صحي',
+        'formAction' => route('income.store'),
+        'isVisible' => false,
+        'method' => 'POST',
+        'animal' => null,
+        'buttonText' => 'إضافة'
+    ])
 
     <script>
         function toggleForm() {
@@ -170,6 +180,10 @@
             const modal5 = document.getElementById('income-form');
             modal5.classList.toggle('hidden');
         }
+        function toggleHealthForm() {
+            const modal6 = document.getElementById('health-form');
+            modal6.classList.toggle('hidden');
+        }
 
         document.addEventListener('click', function (e) {
             const modals = [
@@ -178,6 +192,7 @@
                 { el: document.getElementById('daily-consumptions-form'), toggle: dailyConsumptionsForm },
                 { el: document.getElementById('expense-form'), toggle: dailyExpenseForm },
                 { el: document.getElementById('income-form'), toggle: incomeForm },
+                { el: document.getElementById('health-form'), toggle: toggleHealthForm },
             ];
 
             modals.forEach(modal => {
@@ -199,6 +214,7 @@
                     { el: document.getElementById('daily-consumptions-form'), toggle: dailyConsumptionsForm },
                     { el: document.getElementById('expense-form'), toggle: dailyExpenseForm },
                     { el: document.getElementById('income-form'), toggle: incomeForm },
+                    { el: document.getElementById('health-form'), toggle: toggleHealthForm },
 
                     ];
 

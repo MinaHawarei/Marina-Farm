@@ -13,6 +13,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\BuyersController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SyncSessionUser;
@@ -21,9 +23,9 @@ use App\Http\Middleware\SyncSessionUser;
 
 
 Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
 
     Route::get('/suppliers', function () {
         return view('suppliers');
@@ -34,6 +36,7 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
     Route::get('/cow', function () {return view('cow.index');})->name('cow.index');
 
     Route::post('/milke', [MilkProductionDetailsController::class, 'store'])->name('milk.store');
+    Route::post('/health', [HealthRecordController::class, 'store'])->name('health.store');
     Route::put('/milk-records/{milkId}', [MilkProductionDetailsController::class, 'update'])->name('milk.update');
     Route::get('/animals/{animal}/milk-records', [AnimalController::class, 'milkRecords']);
 
@@ -143,7 +146,7 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
     });
     // suppliers
     Route::prefix('suppliers')->group(function() {
-        Route::get('/', [SupplierController::class, 'index'])->name('suppliers.index');
+        Route::get('/', [SupplierController::class, 'index'])->name('clients.suppliers');
         Route::post('/store', [SupplierController::class, 'store'])->name('suppliers.store');
         Route::get('/{user}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
         Route::put('/{user}', [SupplierController::class, 'update'])->name('suppliers.update');
