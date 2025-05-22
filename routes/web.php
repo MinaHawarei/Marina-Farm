@@ -16,6 +16,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SyncSessionUser;
@@ -27,21 +28,17 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-
-
-    Route::get('/buffalo', function () {return view('buffalo');})->name('buffalo.index');
-    Route::get('/cow', function () {return view('cow.index');})->name('cow.index');
-
     Route::post('/milke', [MilkProductionDetailsController::class, 'store'])->name('milk.store');
     Route::post('/health', [HealthRecordController::class, 'store'])->name('health.store');
     Route::put('/milk-records/{milkId}', [MilkProductionDetailsController::class, 'update'])->name('milk.update');
     Route::get('/animals/{animal}/milk-records', [AnimalController::class, 'milkRecords']);
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-     // مسارات الحيوانات
+    //profile
+    Route::prefix('profile')->group(function() {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+     //animals
      Route::prefix('animals')->group(function() {
         Route::post('/', [AnimalController::class, 'store'])->name('animals.store');
         Route::get('/{animal}/edit', [AnimalController::class, 'edit'])->name('animals.edit');
@@ -79,7 +76,6 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/', [DailyProductionController::class, 'index'])->name('daily.index');
         Route::get('/production', [DailyProductionController::class, 'production'])->name('daily.production');
         Route::get('/consumption', [DailyConsumptionController::class, 'consumption'])->name('daily.consumption');
-
         Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
         Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
         Route::delete('/production/{daily_production}', [DailyProductionController::class, 'destroy'])->name('daily-production.destroy');
@@ -95,7 +91,6 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/liabilities', [TreasuryController::class, 'liabilities'])->name('treasury.liabilities');
         Route::get('/receivables', [TreasuryController::class, 'receivables'])->name('treasury.receivables');
         Route::get('/daily', [TreasuryController::class, 'daily'])->name('treasury.daily');
-
         Route::get('/production/{daily_production}/edit', [DailyProductionController::class, 'edit'])->name('daily-production.edit');
         Route::put('/production/{daily_production}', [DailyProductionController::class, 'update'])->name('daily-production.update');
         Route::delete('/production/{daily_production}', [DailyProductionController::class, 'destroy'])->name('daily-production.destroy');
@@ -120,9 +115,6 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-
-
-
     });
     // employee
     Route::prefix('employees')->group(function() {
@@ -161,19 +153,32 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::delete('/{user}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
 
     });
-
-    Route::get('/buffalo-calf', [AnimalController::class, 'buffaloCalf'])->name('buffalo.calf');
-    Route::get('/buffalo-pregnant', [AnimalController::class, 'buffaloPregnant'])->name('buffalo.pregnant');
-    Route::get('/buffalo-dairy', [AnimalController::class, 'buffaloDairy'])->name('buffalo.dairy');
-    Route::get('/buffalo-dairy-milk', [AnimalController::class, 'buffaloDairyMilk'])->name('milk.index');
-    Route::get('/buffalo-fattening', [AnimalController::class, 'buffaloFattening'])->name('buffalo.fattening');
-
-    Route::get('/cow-calf', [AnimalController::class, 'cowCalf'])->name('cow.calf');
-    Route::get('/cow-pregnant', [AnimalController::class, 'cowPregnant'])->name('cow.pregnant');
-    Route::get('/cow-dairy', [AnimalController::class, 'cowDairy'])->name('cow.dairy');
-    Route::get('/cow-fattening', [AnimalController::class, 'cowFattening'])->name('cow.fattening');
-    Route::get('/cow-dairy-milk', [AnimalController::class, 'cowDairyMilk'])->name('Cowmilk.index');
-
+    //buffalo
+    Route::prefix('buffalo')->group(function() {
+        Route::get('/', function () {return view('buffalo.index');})->name('buffalo.index');
+        Route::get('/calf', [AnimalController::class, 'buffaloCalf'])->name('buffalo.calf');
+        Route::get('/pregnant', [AnimalController::class, 'buffaloPregnant'])->name('buffalo.pregnant');
+        Route::get('/dairy', [AnimalController::class, 'buffaloDairy'])->name('buffalo.dairy');
+        Route::get('/dairy-milk', [AnimalController::class, 'buffaloDairyMilk'])->name('milk.index');
+        Route::get('/fattening', [AnimalController::class, 'buffaloFattening'])->name('buffalo.fattening');
+    });
+    //cow
+    Route::prefix('cow')->group(function() {
+        Route::get('/', function () {return view('cow.index');})->name('cow.index');
+        Route::get('/calf', [AnimalController::class, 'cowCalf'])->name('cow.calf');
+        Route::get('/pregnant', [AnimalController::class, 'cowPregnant'])->name('cow.pregnant');
+        Route::get('/dairy', [AnimalController::class, 'cowDairy'])->name('cow.dairy');
+        Route::get('/fattening', [AnimalController::class, 'cowFattening'])->name('cow.fattening');
+        Route::get('/dairy-milk', [AnimalController::class, 'cowDairyMilk'])->name('Cowmilk.index');
+    });
+    //Reports
+    Route::prefix('reports')->group(function() {
+        Route::get('/production', [ReportController::class, 'production'])->name('reports.production');
+        Route::get('/production/export', [ReportController::class, 'exportProductionReport'])->name('reports.production.export');
+        Route::get('/sales', [ReportController::class, 'sales'])->name('reports.sales');
+        Route::get('/sales/export', [ReportController::class, 'exportSalesReport'])->name('reports.sales.export');
+        Route::get('/financial', [ReportController::class, 'financial'])->name('reports.financial');
+    });
 
 });
 

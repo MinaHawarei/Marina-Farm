@@ -14,7 +14,7 @@
                 </div>
             </div>
         @endif
-        <h3 class="text-lg font-bold mb-4">البهائم الجاموس وحالتهم حلوب:</h3>
+        <h3 class="text-lg font-bold mb-4">البهائم الجاموس وحالتهم حلاب:</h3>
         <div class="flex items-center gap-2">
             <form method="GET" action="{{ route('milk.index') }}" class="mb-6">
                 <div class="flex items-center gap-2">

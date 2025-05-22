@@ -556,7 +556,7 @@
             </div>
         </div>
         <!-- قسم التقارير و التحليلات مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('stock.*') ? 'true' : 'false' }} }" class="relative">
+        <div x-data="{ isOpen: {{ request()->routeIs('reports.*') ? 'true' : 'false' }} }" class="relative">
             <!-- زر القسم الرئيسي -->
             <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
                 <div class="flex items-center">
@@ -571,19 +571,19 @@
 
             <!-- القائمة المنسدلة -->
             <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
+                <a href="{{ route('reports.production') }}" class="sidebar-dropdown-item {{ request()->routeIs('reports.production') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-chart-line ml-2"></i>
                         <span class="mr-2">تقارير الانتاج</span>
                     </div>
                 </a>
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="{{ route('reports.sales') }}" class="sidebar-dropdown-item {{ request()->routeIs('reports.sales') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-chart-pie ml-2"></i>
                         <span class="mr-2">تقارير المبيعات</span>
                     </div>
                 </a>
-                <a href="#" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
+                <a href="{{ route('reports.financial') }}" class="sidebar-dropdown-item {{ request()->routeIs('reports.financial') ? 'active' : '' }}">
                     <div class="flex items-center">
                         <i class="fas fa-file-alt ml-2"></i>
                         <span class="mr-2">تقارير مالية</span>

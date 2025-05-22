@@ -31,4 +31,8 @@ class daily_sale extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+     protected $casts = [
+        'date' => 'date', // هنا الحل!
+        'payment_due_date' => 'date', // لو payment_due_date كمان بيسبب نفس المشكلة
+    ];
 }

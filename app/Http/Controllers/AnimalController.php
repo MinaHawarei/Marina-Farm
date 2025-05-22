@@ -24,12 +24,12 @@ class AnimalController extends Controller
     public function buffaloCalf()
     {
         $animals = Animal::where('type', 'Buffalo')->where('status', 'calf')->get();
-        return view('buffalo-calf', compact('animals'));
+        return view('buffalo.calf', compact('animals'));
     }
     public function buffaloPregnant()
     {
         $animals = Animal::where('type', 'Buffalo')->where('status', 'pregnant')->get();
-        return view('buffalo-pregnant', compact('animals'));
+        return view('buffalo.pregnant', compact('animals'));
     }
     public function buffaloDairy()
     {
@@ -44,7 +44,7 @@ class AnimalController extends Controller
         }], 'total_milk')
         ->get();
 
-        return view('buffalo-dairy', compact('animals'));
+        return view('buffalo.dairy', compact('animals'));
     }
     public function buffaloDairyMilk(Request $request )
     {
@@ -59,12 +59,12 @@ class AnimalController extends Controller
         }], 'total_milk')
         ->get();
 
-        return view('buffalo-dairy', compact('animals'));
+        return view('buffalo.dairy', compact('animals'));
     }
     public function buffaloFattening()
     {
         $animals = Animal::where('type', 'Buffalo')->where('status', 'fattening')->get();
-        return view('buffalo-fattening', compact('animals'));
+        return view('buffalo.fattening', compact('animals'));
     }
 
 
