@@ -29,72 +29,116 @@
             </div>
         @endif
 
-      {{-- زر الإضافة --}}
-    <div class="mb-6 flex flex-wrap gap-4 justify-start items-stretch">
-        <!-- زر حيوان جديد -->
-        <div class="flex-shrink-0">
-            <button onclick="toggleForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+      {{-- قسم الأزرار --}}
+      <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+
+        <button onclick="toggleForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
-                حيوان جديد
+                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">حيوان جديد</p>
+            </button>
+
+        <button onclick="dailyProdectionForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">الانتاج اليومي</p>
+            </button>
+
+        <button onclick="dailyConsumptionsForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">الاستهلاك اليومي</p>
+            </button>
+
+        <button onclick="dailyExpenseForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">تسجيل مصروف</p>
+            </button>
+
+        <button onclick="incomeForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">تسجيل ايراد</p>
+            </button>
+
+        <button onclick="toggleHealthForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">تسجيل تقرير صحي</p>
             </button>
         </div>
 
-        <!-- زر الانتاج اليومي -->
-        <div class="flex-shrink-0">
-            <button onclick="dailyProdectionForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                الانتاج اليومي
-            </button>
+        {{-- قسم الرسومات البيانية --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 mt-10">
+            {{-- كل بطاقة رسم بياني --}}
+            {{-- تم تعديل الـ div الخارجية لكل بطاقة رسم بياني لتكون نقطة التوهج --}}
+            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
+                {{-- حاوية الرسم البياني --}}
+                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
+                    <canvas id="chart1" class="block w-full h-full"></canvas>
+                    {{-- تم إضافة div لعلامة التعجب هنا --}}
+                    <div id="chartAlert1" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
+                         <span class="text-6xl font-bold">!</span>
+                    </div>
+                </div>
+                <p class="font-semibold">التبن</p>
+            </div>
+            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
+                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
+                    <canvas id="chart2" class="block w-full h-full"></canvas>
+                     <div id="chartAlert2" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
+                         <span class="text-6xl font-bold">!</span>
+                    </div>
+                </div>
+                <p class="font-semibold">ذرة</p>
+            </div>
+            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
+                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
+                    <canvas id="chart3" class="block w-full h-full"></canvas>
+                     <div id="chartAlert3" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
+                         <span class="text-6xl font-bold">!</span>
+                    </div>
+                </div>
+                <p class="font-semibold">صويا</p>
+            </div>
+            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
+                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
+                    <canvas id="chart4" class="block w-full h-full"></canvas>
+                     <div id="chartAlert4" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
+                         <span class="text-6xl font-bold">!</span>
+                    </div>
+                </div>
+                <p class="font-semibold">قشر صويا</p>
+
+            </div>
+            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
+                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
+                    <canvas id="chart5" class="block w-full h-full"></canvas>
+                     <div id="chartAlert5" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
+                         <span class="text-6xl font-bold">!</span>
+                    </div>
+                </div>
+                <p class="font-semibold">ردة</p>
+
+            </div>
+            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
+                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
+                    <canvas id="chart6" class="block w-full h-full"></canvas>
+                     <div id="chartAlert6" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
+                         <span class="text-6xl font-bold">!</span>
+                    </div>
+                </div>
+                <p class="font-semibold">سيلاج</p>
+
+            </div>
         </div>
-
-        <!-- زر الاستهلاك اليومي -->
-        <div class="flex-shrink-0">
-            <button onclick="dailyConsumptionsForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                الاستهلاك اليومي
-            </button>
-        </div>
-
-        <!-- زر تسجيل مصروف -->
-        <div class="flex-shrink-0">
-            <button onclick="dailyExpenseForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                تسجيل مصروف
-            </button>
-        </div>
-
-        <!-- زر تسجيل ايراد -->
-        <div class="flex-shrink-0">
-            <button onclick="incomeForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                تسجيل ايراد
-            </button>
-        </div>
-
-        <!-- زر تسجيل تقرير صحي -->
-        <div class="flex-shrink-0">
-            <button onclick="toggleHealthForm()" class="w-[195px] bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                تسجيل تقرير صحي
-            </button>
-        </div>
-
-    </div>
-
-
-
 
     </div>
 
@@ -159,7 +203,9 @@
         'buttonText' => 'إضافة'
     ])
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // دوال المودال - لم يتم تعديلها بناءً على طلبك
         function toggleForm() {
             const modal = document.getElementById('add-form');
             modal.classList.toggle('hidden');
@@ -196,15 +242,16 @@
             ];
 
             modals.forEach(modal => {
-                const form = modal.el.querySelector('form');
-                const clickedInside = form.contains(e.target) || e.target.closest('button[onclick="' + modal.toggle.name + '()"]');
+                if (modal.el) {
+                    const form = modal.el.querySelector('form');
+                    const clickedInside = (form && form.contains(e.target)) || e.target.closest('button[onclick="' + modal.toggle.name + '()"]');
 
-                if (!modal.el.classList.contains('hidden') && !clickedInside) {
-                    modal.toggle(); // يقفلها بس لو كانت مفتوحة وتم الضغط خارجها
+                    if (!modal.el.classList.contains('hidden') && !clickedInside) {
+                        modal.toggle();
+                    }
                 }
             });
         });
-
 
         document.addEventListener('keydown', function (e) {
             if (e.key === "Escape") {
@@ -215,107 +262,156 @@
                     { el: document.getElementById('expense-form'), toggle: dailyExpenseForm },
                     { el: document.getElementById('income-form'), toggle: incomeForm },
                     { el: document.getElementById('health-form'), toggle: toggleHealthForm },
-
-                    ];
+                ];
 
                 modals.forEach(modal => {
-                    if (!modal.el.classList.contains('hidden')) {
-                        modal.toggle(); // يقفلها بس لو كانت مفتوحة
+                    if (modal.el && !modal.el.classList.contains('hidden')) {
+                        modal.toggle();
                     }
                 });
             }
         });
 
-        // بيانات حالة الجاموس
-        const statusData = {
-            labels: ['حلوب', 'عشار', 'تسمين', 'بطش'],
-            datasets: [{
-                data: [
-                    {{ $dairyCow ?? 0 }},
-                    {{ $pregnantCow ?? 0 }},
-                    {{ $fatteningCow ?? 0 }},
-                    {{ $calfCow ?? 0 }}
-                ],
-                backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#6366F1'],
-                borderWidth: 1
-            }]
-        };
+        // Chart.js Plugins for custom text inside doughnut charts
+        const doughnutTextPlugin = {
+            id: 'doughnutText',
+            beforeDraw: (chart, args, options) => {
+                if (chart.config.type === 'doughnut') {
+                    const { ctx, width, height } = chart;
+                    ctx.restore();
 
-        // بيانات توزيع الحظائر
-        const pensData = {
-            labels: ['رضاعة', 'فطام', 'تحت التلقيح', 'عشار', 'حلاب', 'انتظار ولادة', 'جفاف'],
-            datasets: [{
-                data: [
-                    {{ $cowPen1 ?? 0 }},
-                    {{ $cowPen2 ?? 0 }},
-                    {{ $cowPen3 ?? 0 }},
-                    {{ $cowPen4 ?? 0 }},
-                    {{ $cowPen5 ?? 0 }},
-                    {{ $cowPen6 ?? 0 }},
-                    {{ $cowPen7 ?? 0 }}
-                ],
-                backgroundColor: ['#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#64748B', '#10B981', '#EF4444'],
-                borderWidth: 1
-            }]
-        };
+                    // تحديد إذا كان يجب إظهار علامة التعجب بدلاً من النسبة
+                    const showExclamation = options.showExclamation;
+                    const text = showExclamation ? '!' : `${options.percentage}%`;
+                    const fontSize = (height / (showExclamation ? 2.5 : 5)).toFixed(2); // حجم أكبر لعلامة التعجب
+                    const color = showExclamation ? options.exclamationColor || '#ef4444' : options.color || '#333';
 
-        // إعدادات مشتركة للرسم البياني
-        const commonOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            aspectRatio: 1, // مربع
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    rtl: true,
-                    labels: {
-                        usePointStyle: true,
-                        font: {
-                            family: 'Tajawal, sans-serif',
-                            size: 14
-                        },
-                        padding: 20
-                    }
-                },
-                datalabels: {
-                    color: '#fff',
-                    font: {
-                        weight: 'bold',
-                        size: 14
-                    },
-                    formatter: (value, context) => {
-                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                        const percentage = ((value / total) * 100);
-                        if(value != 0){
-                          return value;
-                        }else{
-                            return '';
-                        }
-                    },
-                    anchor: 'csnter',
-                    align: 'csnter', // لتثبيت النصوص أقرب للحواف
-                    offset: 0,  // مسافة إضافية للموضع
-                    clamp: true
+
+                    ctx.font = `bold ${fontSize}px sans-serif`;
+                    ctx.textBaseline = "middle";
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = color;
+                    ctx.fillText(text, width / 2, height / 2);
+                    ctx.save();
                 }
-
             }
         };
 
-        // رسم مخطط حالة الجاموس
-        new Chart(document.getElementById('buffaloStatusChart'), {
-            type: 'pie',
-            data: statusData,
-            options: commonOptions,
-            plugins: [ChartDataLabels]
-        });
+        // Register the plugin globally
+        Chart.register(doughnutTextPlugin);
 
-        // رسم مخطط توزيع الحظائر
-        new Chart(document.getElementById('buffaloPensChart'), {
-            type: 'pie',
-            data: pensData,
-            options: commonOptions,
-            plugins: [ChartDataLabels]
-        });
+        // Function to create Doughnut Charts
+        function createDoughnutChart(id, percentage, chartTitle) {
+            const ctx = document.getElementById(id);
+            if (!ctx) {
+                console.warn(`Canvas element with ID '${id}' not found.`);
+                return;
+            }
 
+            // تدمير الرسم البياني القديم إذا كان موجودًا
+            if (Chart.getChart(id)) {
+                Chart.getChart(id).destroy();
+            }
+
+            let color;
+            let showAlertText = false; // لإظهار نص "المخزون ينفذ"
+            let showExclamationMark = false; // لإظهار علامة التعجب في وسط الرسم البياني
+            const parentCard = ctx.closest('.text-center'); // الحصول على البطاقة الأم
+            const chartAlertDiv = document.getElementById(`chartAlert${id.replace('chart', '')}`); // حاوية علامة التعجب
+            const alertTextDiv = document.getElementById(`alert${id.replace('chart', '')}`); // حاوية نص "المخزون ينفذ"
+
+            if (percentage < 15) {
+                color = '#ef4444'; // أحمر (Tailwind red-500)
+                showAlertText = true;
+                showExclamationMark = true;
+            } else if (percentage < 40) {
+                color = '#f97316'; // برتقالي (Tailwind orange-500)
+                showAlertText = false; // لا تعرض نص التنبيه للبرتقالي
+            } else {
+                color = '#22c55e'; // أخضر (Tailwind green-500)
+                showAlertText = false;
+            }
+
+            const chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: [color, '#e5e7eb'],
+                        borderColor: 'transparent',
+                        hoverOffset: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '80%',
+                    plugins: {
+                        tooltip: { enabled: false },
+                        legend: { display: false },
+                        doughnutText: {
+                            percentage: percentage, // تمرير النسبة المئوية
+                            showExclamation: showExclamationMark, // تمرير حالة إظهار علامة التعجب
+                            exclamationColor: '#ef4444', // لون علامة التعجب
+                            color: '#111827' // لون النص العادي
+                        }
+                    },
+                    animation: {
+                        animateRotate: false,
+                        animateScale: false
+                    },
+                    onHover: function(event, elements) {
+                        const canvas = event.chart.canvas;
+                        canvas.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+                    }
+                }
+            });
+
+            // التحكم في ظهور الوميض لعلامة التعجب والرسم البياني
+            if (showExclamationMark) {
+                // إظهار وإخفاء علامة التعجب بالوميض
+                if (chartAlertDiv) {
+                    chartAlertDiv.classList.remove('hidden');
+                    chartAlertDiv.classList.add('animate-pulse', 'opacity-100'); // لإظهارها وجعلها تومض
+                }
+                // إضافة الوميض للبطاقة الأم (الرسم البياني كله)
+                if (parentCard) {
+                    parentCard.classList.add('animate-pulse');
+                }
+            } else {
+                // إخفاء علامة التعجب وإزالة الوميض
+                if (chartAlertDiv) {
+                    chartAlertDiv.classList.add('hidden');
+                    chartAlertDiv.classList.remove('animate-pulse', 'opacity-100');
+                }
+                // إزالة الوميض من البطاقة الأم
+                if (parentCard) {
+                    parentCard.classList.remove('animate-pulse');
+                }
+            }
+
+            // التحكم في ظهور نص "المخزون ينفذ" أسفل الرسم البياني
+            if (alertTextDiv) {
+                if (showAlertText) {
+                    alertTextDiv.classList.remove('hidden');
+                    // animate-pulse موجودة بالفعل على alertTextDiv في HTML، لا داعي لإضافتها هنا مجدداً
+                    // لكن إذا كنت تريد إعادة تفعيل الـ animation (مثل إعادة تشغيلها)، يمكنك استخدام الحيل التالية:
+                    // alertTextDiv.classList.remove('animate-pulse');
+                    // void alertTextDiv.offsetWidth; // Force reflow
+                    // alertTextDiv.classList.add('animate-pulse');
+                } else {
+                    alertTextDiv.classList.add('hidden');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+           createDoughnutChart('chart1', {{ $hay_net ?? 0 }}, 'التبن'); //
+            createDoughnutChart('chart2', {{ $corn_net ?? 0 }}, 'ذرة');    //
+            createDoughnutChart('chart3', {{ $soybean_net ?? 0 }}, 'صويا');
+            createDoughnutChart('chart4', {{ $soybean_hulls_net ?? 0 }}, 'قشر صويا');
+            createDoughnutChart('chart5', {{ $bran_net ?? 0 }}, 'ردة');
+            createDoughnutChart('chart6', {{ $silage_net ?? 0 }}, 'سيلاج');
+        });
     </script>
 </x-app-layout>
