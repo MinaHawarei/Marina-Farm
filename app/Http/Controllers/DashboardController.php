@@ -44,7 +44,17 @@ class DashboardController extends Controller
         $bran_net = $bran_net /10000 * 100;
         $silage_net = $silage_net /10000 * 100;
 
-
+        //
+        $avg_daily_milk_production = 0; // استبدل بالقيمة الفعلية
+        $avg_daily_egg_production = 0; // استبدل بالقيمة الفعلية
+        $avg_daily_hay_consumption = 0; // استبدل بالقيمة الفعلية
+        $avg_daily_corn_consumption = 0; // استبدل بالقيمة الفعلية
+        $avg_daily_soybean_consumption = 0; // استبدل بالقيمة الفعلية
+        $avg_daily_soybean_hulls_consumption = 0; // استبدل بالقيمة الفعلية
+        $avg_daily_bran_consumption = 0; // استبدل بالقيمة الفعلية
+        $avg_daily_silage_consumption = 0; // استبدل بالقيمة الفعلية
+        $latest_operations = ''; // استبدل بالقيمة الفعلية
+        $notifications = ''; // استبدل بالقيمة الفعلية
 
 
         $animals = Animal::all();
@@ -56,6 +66,25 @@ class DashboardController extends Controller
             'bran_net',
             'silage_net',
             'animals',
+            // البيانات الجديدة: متوسط الإنتاج اليومي
+            'avg_daily_milk_production', // مثال لمتوسط إنتاج الحليب
+            'avg_daily_egg_production',  // مثال لمتوسط إنتاج البيض
+            // ... أي متوسطات إنتاج أخرى
+
+            // البيانات الجديدة: متوسط الاستهلاك اليومي (لكل نوع علف)
+            'avg_daily_hay_consumption',
+            'avg_daily_corn_consumption',
+            'avg_daily_soybean_consumption',
+            'avg_daily_soybean_hulls_consumption',
+            'avg_daily_bran_consumption',
+            'avg_daily_silage_consumption',
+
+            // البيانات الجديدة: آخر 5 عمليات
+            'latest_operations', // مصفوفة/مجموعة من الكائنات تحتوي على تفاصيل العملية (التاريخ، النوع، الوصف، المبلغ/الكمية)
+
+            // البيانات الجديدة: الإشعارات
+            'notifications', // مصفوفة/مجموعة من الكائنات تحتوي على تفاصيل الإشعار (العنوان، الوصف، التاريخ، الأهمية)
+
         ));
     }
 }

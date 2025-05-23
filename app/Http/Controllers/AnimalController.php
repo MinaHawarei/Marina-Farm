@@ -119,7 +119,6 @@ class AnimalController extends Controller
 
     public function milkRecords(Animal $animal)
     {
-
         return response()->json($animal->milkProductions()->orderBy('date', 'desc')->get());
     }
 
