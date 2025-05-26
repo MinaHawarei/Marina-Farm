@@ -19,8 +19,9 @@ class DailyConsumptionController extends Controller
         $query = DailyConsumption::query();
 
         // تحقق إذا تم إرسال تاريخ معين
-        if ($request->has('date') && $request->date) {
-            $query->whereDate('consumptions_date', $request->date);
+        if ($request->has('datefrom') && $request->has('dateto')) {
+            $query->whereBetween('consumptions_date', [$request->datefrom, $request->dateto]);
+
         }
 
         $daily_consumption = $query->orderBy('consumptions_date', 'desc')->get();

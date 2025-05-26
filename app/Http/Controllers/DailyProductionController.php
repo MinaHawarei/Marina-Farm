@@ -22,9 +22,11 @@ class DailyProductionController extends Controller
         $query = daily_production::query();
 
         // تحقق إذا تم إرسال تاريخ معين
-        if ($request->has('date') && $request->date) {
-            $query->whereDate('production_date', $request->date);
+        if ($request->has('datefrom') && $request->has('dateto')) {
+            $query->whereBetween('production_date', [$request->datefrom, $request->dateto]);
+
         }
+
 
         $daily_production = $query->orderBy('production_date', 'desc')->get();
 

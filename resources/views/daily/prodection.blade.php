@@ -19,8 +19,13 @@
         <form method="GET" action="{{ route('daily.production') }}" class="mb-6">
             <label for="date" class="block text-sm font-medium text-gray-700 mb-1">اختر التاريخ:</label>
             <div class="flex items-center gap-2">
-                <input type="date" id="date" name="date"
-                       value="{{ request('date') }}"
+                <h2>من : </h2>
+                <input type="date" id="date" name="datefrom"
+                       value="{{ request('datefrom') }}"
+                       class="border rounded p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <h2>إلى : </h2>
+                <input type="date" id="date" name="dateto"
+                       value="{{ request('dateto') }}"
                        class="border rounded p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button type="submit"
                         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
