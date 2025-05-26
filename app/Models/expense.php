@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Expense extends Model
 {
     /** @use HasFactory<\Database\Factories\ExpenseFactory> */
-    use HasFactory;
+    use HasFactory , LogsActivity;
     protected $fillable = [
         'category',
         'type',
@@ -24,5 +26,13 @@ class Expense extends Model
         'description',
         'created_by',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
 }

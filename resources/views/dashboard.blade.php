@@ -141,54 +141,38 @@
         </div>
 
 
-        {{-- قسم الإشعارات --}}
-        <h3 class="text-xl font-bold text-gray-800 mb-4 mt-8">الإشعارات</h3>
-        <div class="bg-white rounded-xl shadow-md p-6">
-            @if(empty($notifications))
-                <p class="text-gray-600 text-center">لا توجد إشعارات حاليًا.</p>
-            @else
-                <ul class="divide-y divide-gray-200">
-                    @foreach($notifications as $notification)
-                        <li class="py-3 flex items-start space-x-3 rtl:space-x-reverse">
-                            {{-- أيقونة الإشعار حسب الأهمية --}}
-                            <div class="flex-shrink-0">
-                                @if(isset($notification->importance) && $notification->importance === 'high')
-                                    <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                @else
-                                    <svg class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                @endif
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-gray-800 font-semibold">{{ $notification->title ?? 'إشعار' }}</p>
-                                <p class="text-gray-600 text-sm">{{ $notification->description ?? '' }}</p>
-                                <p class="text-gray-500 text-xs mt-1">{{ $notification->created_at->format('Y-m-d H:i') ?? '' }}</p>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
-        </div>
 
-        <h3 class="text-xl font-bold text-gray-800 mb-4 mt-8">آخر الانشطة</h3>
-        <div class="bg-white rounded-xl shadow-md p-6">
+
+        <!-- قسم آخر الأنشطة -->
+        <div class="w-full md:w-1/2 px-2">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 mt-8">آخر الانشطة</h3>
+            <div class="bg-white rounded-xl shadow-md p-6">
             @if(empty($latest_operations))
                 <p class="text-gray-600 text-center">لا توجد عمليات مسجلة حتى الآن.</p>
             @else
                 <ul class="divide-y divide-gray-200">
-                    @foreach($latest_operations as $operation)
-                        <li class="py-3 flex justify-between items-center">
-                            <div>
-                                <p class="text-gray-800 font-semibold">{{ $operation->type ?? 'غير محدد' }}</p>
-                                <p class="text-gray-600 text-sm">{{ $operation->description ?? '' }}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-gray-700">{{ $operation->amount ?? $operation->quantity ?? '' }} {{ $operation->unit ?? '' }}</p>
-                                <p class="text-gray-500 text-xs">{{ $operation->created_at->format('Y-m-d H:i') ?? '' }}</p>
-                            </div>
-                        </li>
-                    @endforeach
+                @foreach($latest_operations as $operation)
+                    <li class="py-3 flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-800 font-semibold">{{ $operation->type ?? 'غير محدد' }}</p>
+                        <!-- وصف العملية -->
+                        <p class="text-gray-600 text-sm mb-1">{{ $operation->description ?? '' }}</p>
+                        <!-- تفاصيل إضافية لو موجودة -->
+                        @if(!empty($operation->details))
+                        <div class="bg-gray-100 text-gray-700 text-xs p-2 rounded">
+                            {!! nl2br(e($operation->details)) !!}
+                        </div>
+                        @endif
+                    </div>
+                    <div class="text-right whitespace-nowrap pl-2">
+                        <p class="text-gray-700">{{ $operation->amount ?? $operation->quantity ?? '' }} {{ $operation->unit ?? '' }}</p>
+                        <p class="text-gray-500 text-xs"><span dir="ltr">{{ $operation->created_at ? '' . $operation->created_at : '' }}</span></p>
+                    </div>
+                    </li>
+                @endforeach
                 </ul>
             @endif
+            </div>
         </div>
     </div>
 

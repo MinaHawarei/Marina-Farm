@@ -5,12 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Animal;
 use App\Models\DailyConsumption;
+use App\Models\daily_production;
 use App\Models\expense;
+use Spatie\Activitylog\Models\Activity;
+
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $translations = [];
+        $translationFilePath = resource_path('lang/ar/translate.php'); // المسار الصحيح المفترض
+        if (file_exists($translationFilePath)) {
+            $translations = include $translationFilePath;
+        }
          //DailyConsumption
         $hay_Consumption = DailyConsumption::sum('hay');
         $corn_Consumption = DailyConsumption::sum('corn');
@@ -56,6 +64,110 @@ class DashboardController extends Controller
         $latest_operations = ''; // استبدل بالقيمة الفعلية
         $notifications = ''; // استبدل بالقيمة الفعلية
 
+
+        $latest_operations = Activity::latest()->take(5)->get();
+        $translations = include resource_path('lang/ar/translate.php');
+
+
+        $formatted_latest_operations = $latest_operations->map(function ($activity) use ($translations) {
+            $causer = $activity->causer;
+            $add_details = '';
+            // استخدام $translations مباشرة
+            $causerName = $causer ? $causer->name : ($translations['unknown_user'] ?? 'مستخدم غير معروف');
+            $causerId = $activity->causer_id;
+
+            $actionKey = $activity->description;
+            $subjectKey = $activity->subject_type ? class_basename($activity->subject_type) : null;
+
+            // استخدام $translations مباشرة
+            $action_ar = $translations[$actionKey] ?? "قام بـ {$actionKey}";
+            $subject_ar = $translations[$subjectKey] ?? ($subjectKey ?? 'عنصر غير محدد');
+            $add_details = "بكود : " . $activity->subject_id  ;
+
+            if($subjectKey == 'Animal') {
+                $animal = Animal::find($activity->subject_id);
+                $add_details = "بكود : " . $animal->animal_code;
+
+            } elseif ($subjectKey == 'DailyConsumption') {
+                $DailyConsumption = DailyConsumption::find($activity->subject_id);
+                $add_details = "عن يوم: " .$DailyConsumption ->consumptions_date ;
+            }elseif ($subjectKey == 'daily_production') {
+                $DailyProduction = daily_production::find($activity->subject_id);
+                $add_details = "عن يوم: " .$DailyProduction ->production_date ;
+            }
+            $details_array = [];
+            $item_id = $activity->subject_id;
+            $excludedKeys = [
+                'created_at',
+                'updated_at',
+                'deleted_at',
+                'password',
+                'causer_id',
+                'causer_type',
+                'user_id',
+                'password',
+                'created_by',
+                'notes',
+                'production_date',
+                'consumptions_date',
+                'date'
+
+
+            ];
+
+            if ($activity->properties->has('attributes')) {
+                foreach ($activity->properties['attributes'] as $key => $value) {
+                    if (in_array($key, $excludedKeys)) {
+                        continue; // تخطي هذا المفتاح
+                    }
+
+                    // استخدام $translations مباشرة
+                    $translatedKey = $translations[$key] ?? $key;
+                    $value = $translations[$value] ?? $value;
+
+                    $details_array[] = "{$translatedKey}: {$value}";
+
+                }
+            }
+
+
+            // بناء تفاصيل التغييرات للحالات "updated"
+            if ($actionKey === 'updated' && $activity->properties->has('old')) {
+                foreach ($activity->properties['old'] as $key => $oldValue) {
+                    $newValue = $activity->properties['attributes'][$key] ?? null;
+
+                    if (in_array($key, ['created_at', 'updated_at', 'deleted_at', 'password'])) {
+                        continue;
+                    }
+
+                    if ($oldValue != $newValue) {
+                        // استخدام $translations مباشرة
+                        $translatedKey = '';
+                        $oldValue = $translations[$oldValue] ?? $oldValue;
+
+                        $details_array[] = "حيث كان:  '{$oldValue}'";
+                    }
+                }
+            }
+
+            $fullDetails = implode('، ', array_filter($details_array));
+
+
+            $timeFormatted = $activity->created_at->format('m/d h:i A');
+
+            $debugProperties = json_encode($activity->properties->toArray(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            return (object)[
+                'type' => "قام {$causerName} ب{$action_ar} {$subject_ar} {$add_details}",
+                'details' => $fullDetails,
+                'created_at' => $timeFormatted,
+                'debug_info' => $debugProperties,
+            ];
+        });
+
+
+
+        $latest_operations = $formatted_latest_operations;
 
         $animals = Animal::all();
         return view('dashboard', compact(

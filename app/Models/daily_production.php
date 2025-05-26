@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class daily_production extends Model
 {
     /** @use HasFactory<\Database\Factories\DailyProductionFactory> */
-    use HasFactory;
+    use HasFactory , LogsActivity;
     protected $table = 'daily_productions';
 
 
@@ -16,6 +18,14 @@ class daily_production extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
 }

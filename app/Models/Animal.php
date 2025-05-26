@@ -3,13 +3,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Animal extends Model
 {
-    use HasFactory;
+    use HasFactory , LogsActivity;
     protected $table = 'animals';
 
-    // الحقول القابلة للتعبئة
     protected $fillable = [
         'animal_code',
         'type',
@@ -27,6 +28,13 @@ class Animal extends Model
         'updated_at' => 'datetime:Y-m-d H:i:s',
         'created_at' => 'datetime:Y-m-d H:i:s',
     ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     // العلاقة مع المستخدم (user)
     public function createdBy()

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
 
 class daily_sale extends Model
 {
     /** @use HasFactory<\Database\Factories\DailySaleFactory> */
-    use HasFactory;
+    use HasFactory , LogsActivity;
     protected $table = 'daily_sales';
 
     protected $fillable = [
@@ -35,4 +38,12 @@ class daily_sale extends Model
         'date' => 'date', // هنا الحل!
         'payment_due_date' => 'date', // لو payment_due_date كمان بيسبب نفس المشكلة
     ];
+     public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
 }
