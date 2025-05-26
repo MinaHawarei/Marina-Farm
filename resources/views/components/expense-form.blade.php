@@ -1,14 +1,13 @@
-{{-- AnimalFormComponent.blade.php --}}
+{{-- AnimalFormComponent.blade.php (المعدل لإنشاء مصروف جديد) --}}
 <div id="expense-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 {{ $isVisible ? '' : 'hidden' }} flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
         <h3 class="text-xl font-semibold text-gray-800 mb-6">{{ $title }}</h3>
-        <form action="{{ route('expense.store') }}" method="POST">
+        <form action="{{ route('expense.store') }}" method="POST" id="expense_create_form"> {{-- أضفت ID للفورم --}}
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{-- العمود الأول --}}
                 <div class="space-y-3">
 
-                    <!-- النوع الرئيسي -->
                     <div>
                         <label class="block text-gray-700 mb-1">فئة المصروفات<span class="text-red-500">*</span></label>
                         <select id="mainCategory" name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
@@ -28,8 +27,6 @@
                         </select>
                     </div>
 
-
-                    <!-- التوزيعات الفرعية -->
                     <div class="mt-4">
                         <label class="block text-gray-700 mb-1">نوع المصروفات<span class="text-red-500">*</span></label>
                         <select id="subCategory" name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
@@ -37,19 +34,10 @@
                         </select>
                     </div>
 
-
-
-                    <!-- الحقل النصي الخاص بـ "أخرى" -->
                     <div id="otherSubCategoryContainer" class="hidden mt-4">
                         <label class="block text-gray-700 mb-1">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
                         <input type="text" id="otherSubCategory" name="other_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="اكتب التوزيع الفرعي هنا">
                     </div>
-
-
-
-
-
-
 
                     <div>
                         <label class="block text-gray-700 mb-1">تفاصيل<span class="text-red-500">*</span></label>
@@ -58,16 +46,25 @@
 
                     <div>
                         <label class="block text-gray-700 mb-1">التاريخ<span class="text-red-500">*</span></label>
-                        <input type="date" name="date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        <input type="date" name="date" max="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
+
+                    {{-- حقل اسم المورد (Droplist) --}}
                     <div>
                         <label class="block text-gray-700 mb-1">اسم المورد<span class="text-red-500">*</span></label>
-                        <input type="text" name="supplier_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <select id="supplier_select" name="supplier_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
+                            <option value="">اختر المورد</option>
+                            @isset($suppliers) {{-- تأكد من أن الكنترولر يمرر $suppliers --}}
+                                @foreach($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}" data-name="{{ $supplier->name }}">{{ $supplier->name }} (كود: {{ $supplier->id }})</option>
+                                @endforeach
+                            @endisset
+                        </select>
                     </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">الرقم التعريفي للمورد<span class="text-red-500">*</span></label>
-                        <input type="number" name="supplier_id" min="1" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
+
+                    {{-- حقل اسم المورد المخفي ليتم إرساله مع النموذج --}}
+                    <input type="hidden" id="supplier_name_hidden_field" name="supplier_name">
+
                 </div>
                 {{-- العمود الثاني --}}
                 <div class="space-y-3">
@@ -111,7 +108,7 @@
     </div>
 </div>
 <script>
-    // البيانات الخاصة بالتوزيعات الفرعية
+    // البيانات الخاصة بالتوزيعات الفرعية (كما هي)
     const subCategoriesData = {
         "Feed Costs": [
             { value: "Hay", text: "تبن" },
@@ -136,7 +133,7 @@
             { value: "Electricity Bills", text: "فواتير الكهرباء" },
             { value: "Water Bills", text: "فواتير المياه" },
             { value: "Cleaning Supplies", text: "أدوات النظافة" },
-            { value: "Tools and Equipment", text: "العدد والأدوات" }
+            { value: "Tools and Equipment", "text": "العدد والأدوات" }
         ],
         "Machinery Purchase": [
             { value: "Agricultural Machinery", text: "ماكينات زراعية" },
@@ -197,16 +194,17 @@
     const otherSubCategoryContainer = document.getElementById('otherSubCategoryContainer');
     const otherSubCategory = document.getElementById('otherSubCategory');
 
-    // تغيير محتويات التوزيعات الفرعية بناءً على الاختيار
+    // عناصر حقول المورد
+    const supplierSelect = document.getElementById('supplier_select');
+    const supplierNameHiddenField = document.getElementById('supplier_name_hidden_field');
+
+    // عند تغيير الفئة الرئيسية
     mainCategory.addEventListener('change', function () {
         const selectedCategory = mainCategory.value;
-
-        // تفريغ الخيارات القديمة
         subCategory.innerHTML = '<option value="">اختر التوزيع الفرعي</option>';
-        otherSubCategoryContainer.classList.add('hidden'); // إخفاء الحقل النصي
-        otherSubCategory.value = ''; // تفريغ القيمة النصية
+        otherSubCategoryContainer.classList.add('hidden');
+        otherSubCategory.value = '';
 
-        // إضافة الخيارات الجديدة إذا كانت موجودة
         if (subCategoriesData[selectedCategory]) {
             subCategoriesData[selectedCategory].forEach(sub => {
                 const option = document.createElement('option');
@@ -220,13 +218,36 @@
     // مراقبة اختيار "أخرى" في التوزيعات الفرعية
     subCategory.addEventListener('change', function () {
         if (subCategory.value === "Other") {
-            otherSubCategoryContainer.classList.remove('hidden'); // إظهار الحقل النصي
+            otherSubCategoryContainer.classList.remove('hidden');
         } else {
-            otherSubCategoryContainer.classList.add('hidden'); // إخفاء الحقل النصي
-            otherSubCategory.value = ''; // تفريغ القيمة النصية
+            otherSubCategoryContainer.classList.add('hidden');
+            otherSubCategory.value = '';
         }
     });
-    document.querySelector('form').addEventListener('submit', function(e) {
+
+    // **الدالة المسؤولة عن تحديث حقل اسم المورد المخفي**
+    function updateSupplierNameHiddenField() {
+        const selectedOption = supplierSelect.options[supplierSelect.selectedIndex];
+        if (selectedOption && selectedOption.dataset.name) {
+            supplierNameHiddenField.value = selectedOption.dataset.name;
+        } else {
+            supplierNameHiddenField.value = ''; // مسح القيمة إذا لم يتم تحديد مورد
+        }
+        console.log('Supplier Name Hidden Field Value:', supplierNameHiddenField.value); // للتصحيح
+    }
+
+    // استمع لحدث التغيير على الـ droplist للموردين
+    supplierSelect.addEventListener('change', updateSupplierNameHiddenField);
+
+    // **مهم جداً: استدعاء الدالة عند تحميل الصفحة**
+    document.addEventListener('DOMContentLoaded', updateSupplierNameHiddenField);
+
+
+    // قبل إرسال الفورم، لو تم اختيار "أخرى"
+    document.getElementById('expense_create_form').addEventListener('submit', function(e) {
+        // تأكد من تحديث اسم المورد قبل الإرسال مباشرة
+        updateSupplierNameHiddenField(); // استدعاء الدالة مرة أخرى قبل الإرسال
+
         if (subCategory.value === "Other") {
             if (otherSubCategory.value.trim() !== '') {
                 subCategory.value = otherSubCategory.value.trim();

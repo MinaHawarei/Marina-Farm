@@ -7,6 +7,8 @@ use App\Models\Animal;
 use App\Models\DailyConsumption;
 use App\Models\daily_production;
 use App\Models\expense;
+use App\Models\buyers;
+use App\Models\supplier;
 use Spatie\Activitylog\Models\Activity;
 
 
@@ -110,6 +112,8 @@ class DashboardController extends Controller
                 'notes',
                 'production_date',
                 'consumptions_date',
+                'production_id',
+                'payment_due_date',
                 'date'
 
 
@@ -170,6 +174,9 @@ class DashboardController extends Controller
         $latest_operations = $formatted_latest_operations;
 
         $animals = Animal::all();
+        $buyers = buyers::all();
+        $suppliers = supplier::all();
+
         return view('dashboard', compact(
               'hay_net',
             'corn_net',
@@ -178,10 +185,11 @@ class DashboardController extends Controller
             'bran_net',
             'silage_net',
             'animals',
+            'buyers',
+            'suppliers',
             // البيانات الجديدة: متوسط الإنتاج اليومي
             'avg_daily_milk_production', // مثال لمتوسط إنتاج الحليب
             'avg_daily_egg_production',  // مثال لمتوسط إنتاج البيض
-            // ... أي متوسطات إنتاج أخرى
 
             // البيانات الجديدة: متوسط الاستهلاك اليومي (لكل نوع علف)
             'avg_daily_hay_consumption',

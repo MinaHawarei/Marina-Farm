@@ -1,6 +1,4 @@
-{{-- AnimalFormComponent.blade.php --}}
-
-
+{{-- income-form.blade.php (التعديل لضمان إرسال buyer_name) --}}
 
 <div id="income-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 {{ $isVisible ? '' : 'hidden' }} flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
@@ -10,7 +8,6 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{-- العمود الأول --}}
                 <div class="space-y-3">
-                    <!-- الفئة الرئيسية -->
                     <div>
                         <label class="block text-gray-700 mb-1">فئة الإيرادات<span class="text-red-500">*</span></label>
                         <select id="income_mainCategory" name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
@@ -24,7 +21,6 @@
                         </select>
                     </div>
 
-                    <!-- التوزيع الفرعي -->
                     <div class="mt-4">
                         <label class="block text-gray-700 mb-1">نوع الايراد<span class="text-red-500">*</span></label>
                         <select id="income_subCategory" name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
@@ -32,13 +28,11 @@
                         </select>
                     </div>
 
-                    <!-- حقل أخرى -->
                     <div id="income_otherSubCategoryContainer" class="hidden mt-4">
                         <label class="block text-gray-700 mb-1">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
                         <input type="text" id="income_otherSubCategory" name="other_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="اكتب التوزيع الفرعي هنا">
                     </div>
 
-                    <!-- باقي الحقول -->
                     <div>
                         <label class="block text-gray-700 mb-1">تفاصيل<span class="text-red-500">*</span></label>
                         <input type="text" name="description" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
@@ -49,14 +43,23 @@
                         <input type="date" name="date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
 
+                    {{-- حقل اسم العميل (Droplist) --}}
                     <div>
                         <label class="block text-gray-700 mb-1">اسم العميل<span class="text-red-500">*</span></label>
-                        <input type="text" name="buyer_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <select id="buyer_select" name="buyer_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
+                            <option value="">اختر العميل</option>
+                            @isset($buyers)
+                                @foreach($buyers as $buyer)
+                                    {{-- نستخدم data-name لتخزين اسم العميل كاملاً --}}
+                                    <option value="{{ $buyer->id }}" data-name="{{ $buyer->name }}">{{ $buyer->name }} (كود: {{ $buyer->id }})</option>
+                                @endforeach
+                            @endisset
+                        </select>
                     </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">الرقم التعريفي للعميل<span class="text-red-500">*</span></label>
-                        <input type="number" name="buyer_id" min="1" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
+
+                    {{-- حقل اسم العميل المخفي ليتم إرساله مع النموذج --}}
+                    <input type="hidden" id="buyer_name_hidden_field" name="buyer_name">
+
                 </div>
 
                 {{-- العمود الثاني --}}
@@ -144,10 +147,8 @@
     const income_otherSubCategoryContainer = document.getElementById('income_otherSubCategoryContainer');
     const income_otherSubCategory = document.getElementById('income_otherSubCategory');
 
-    // عند تغيير الفئة الرئيسية
     income_mainCategory.addEventListener('change', function () {
         const selectedCategory = income_mainCategory.value;
-
         income_subCategory.innerHTML = '<option value="">اختر التوزيع الفرعي</option>';
         income_otherSubCategoryContainer.classList.add('hidden');
         income_otherSubCategory.value = '';
@@ -162,7 +163,6 @@
         }
     });
 
-    // عند اختيار "أخرى" بالتوزيع الفرعي
     income_subCategory.addEventListener('change', function () {
         if (income_subCategory.value === "Other") {
             income_otherSubCategoryContainer.classList.remove('hidden');
@@ -172,8 +172,34 @@
         }
     });
 
+    const buyerSelect = document.getElementById('buyer_select');
+    const buyerNameHiddenField = document.getElementById('buyer_name_hidden_field');
+
+    // **الدالة المسؤولة عن تحديث الحقل المخفي**
+    function updateBuyerNameHiddenField() {
+        const selectedOption = buyerSelect.options[buyerSelect.selectedIndex];
+        // تأكد من أن selectedOption موجودة وأن dataset.name موجود
+        if (selectedOption && selectedOption.dataset.name) {
+            buyerNameHiddenField.value = selectedOption.dataset.name;
+        } else {
+            buyerNameHiddenField.value = ''; // مسح القيمة إذا لم يتم تحديد عميل
+        }
+        console.log('Buyer Name Hidden Field Value:', buyerNameHiddenField.value); // للتصحيح
+    }
+
+    // استمع لحدث التغيير على الـ droplist
+    buyerSelect.addEventListener('change', updateBuyerNameHiddenField);
+
+    // **مهم جداً: استدعاء الدالة عند تحميل الصفحة**
+    // هذا يضمن تعيين القيمة الأولية عند فتح الفورم، خاصة إذا كان هناك عميل محدد مسبقاً (في حالة التعديل مثلاً)
+    document.addEventListener('DOMContentLoaded', updateBuyerNameHiddenField);
+
+
     // قبل إرسال الفورم، لو تم اختيار "أخرى"
     document.getElementById('income_form').addEventListener('submit', function(e) {
+        // تأكد من تحديث اسم العميل قبل الإرسال مباشرة
+        updateBuyerNameHiddenField(); // استدعاء الدالة مرة أخرى قبل الإرسال
+
         if (income_subCategory.value === "Other") {
             if (income_otherSubCategory.value.trim() !== '') {
                 income_subCategory.value = income_otherSubCategory.value.trim();
