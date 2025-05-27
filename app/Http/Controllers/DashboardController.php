@@ -67,7 +67,13 @@ class DashboardController extends Controller
         $notifications = ''; // استبدل بالقيمة الفعلية
 
 
-        $latest_operations = Activity::latest()->take(5)->get();
+    $latest_operations = Activity::where(function ($query) {
+            $query->whereNull('subject_type')
+                ->orWhere('subject_type', '!=', 'App\\Models\\User');
+        })
+        ->latest()
+        ->take(10) // هنفلتر بعدين بناءً على وجود تفاصيل، فممكن نجيب أكتر من 5 مؤقتاً
+        ->get();
         $translations = include resource_path('lang/ar/translate.php');
 
 
@@ -114,6 +120,7 @@ class DashboardController extends Controller
                 'consumptions_date',
                 'production_id',
                 'payment_due_date',
+                'remember_token',
                 'date'
 
 
@@ -140,7 +147,7 @@ class DashboardController extends Controller
                 foreach ($activity->properties['old'] as $key => $oldValue) {
                     $newValue = $activity->properties['attributes'][$key] ?? null;
 
-                    if (in_array($key, ['created_at', 'updated_at', 'deleted_at', 'password'])) {
+                    if (in_array($key, ['created_at', 'updated_at', 'deleted_at', 'password','remember_token'])) {
                         continue;
                     }
 
@@ -160,7 +167,6 @@ class DashboardController extends Controller
             $timeFormatted = $activity->created_at->format('m/d h:i A');
 
             $debugProperties = json_encode($activity->properties->toArray(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
             return (object)[
                 'type' => "قام {$causerName} ب{$action_ar} {$subject_ar} {$add_details}",
                 'details' => $fullDetails,

@@ -44,7 +44,7 @@
         }
         :root {
             --primary-dark: #040629;
-            --primary-light: #070a2e;
+            --primary-light: #040629;
             --active-bg: rgba(255, 255, 255, 0.05);
             --active-text: #ffffff;
             --hover-color: #3b82f6;

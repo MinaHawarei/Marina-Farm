@@ -13,13 +13,6 @@
                 </div>
             </div>
 
-            <!-- عنوان الصفحة (في المنتصف) -->
-            <div class="hidden sm:flex sm:items-center sm:justify-center flex-1">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('الرئيسية') }}
-                </x-nav-link>
-            </div>
-
             <!-- اسم المستخدم (أقصى اليسار بعد التبديل) -->
             <div class="flex items-center me-4">
                 <x-dropdown align="right" width="48">
