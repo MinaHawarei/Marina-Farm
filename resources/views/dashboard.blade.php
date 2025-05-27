@@ -144,7 +144,7 @@
 
 
         <!-- قسم آخر الأنشطة -->
-        <div class="w-full md:w-1/2 px-2">
+        <div class="w-full md:w-full px-2">
             <h3 class="text-xl font-bold text-gray-800 mb-4 mt-8">آخر الانشطة</h3>
             <div class="bg-white rounded-xl shadow-md p-6">
             @if(empty($latest_operations))
