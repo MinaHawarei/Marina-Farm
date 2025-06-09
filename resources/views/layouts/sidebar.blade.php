@@ -18,13 +18,14 @@
         }
         @media (max-width: 767px) {
             .sidebar {
-                position: fixed;
-                right: -16rem; /* <-- بدلاً من left */
-                left: auto;     /* <-- إلغاء left */
-                top: 0;
-                bottom: 0;
-                z-index: 1000;
-                transition: right 0.3s ease;
+               position: fixed;
+        right: -16rem;
+        left: auto;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
+        transition: right 0.3s ease;
+        min-height: 100vh; /* إرجاع min-height: 100vh; هنا فقط للجوال */
             }
 
             .sidebar.open {
@@ -40,7 +41,7 @@
                 background: rgba(0,0,0,0.5);
                 z-index: 999;
                 display: none;
-            }
+                    }
         }
         :root {
             --primary-dark: #040629;
@@ -57,11 +58,14 @@
         .sidebar {
             background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-light) 100%);
             width: 16rem;
-            min-height: 100vh;
+            /* * إزالة min-height: 100vh; من هنا
+            * ليسمح للـ sidebar بالتمدد حسب المحتوى على الشاشات الكبيرة
+            */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
             will-change: transform;
             backface-visibility: hidden;
+            overflow-y: auto; /* إضافة: تسمح بالتمرير داخل الـ sidebar إذا أصبح محتواه أطول من الشاشة */
         }
 
         /* عناصر القائمة */
@@ -221,8 +225,6 @@
     </style>
 
     <!-- Sidebar -->
-
-
     <div class="sidebar">
         <!-- رابط الرئيسية -->
         <a href="{{ route('dashboard') }}" class="sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
