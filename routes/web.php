@@ -142,7 +142,8 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/{user}/edit', [BuyersController::class, 'edit'])->name('clients.edit');
         Route::put('/{user}', [BuyersController::class, 'update'])->name('clients.update');
         Route::delete('/{user}', [BuyersController::class, 'destroy'])->name('clients.destroy');
-
+        Route::get('/{buyers}/totalAmount', [BuyersController::class, 'totalAmount'])->name('clients.totalAmount');
+        Route::get('/{buyers}/totalRemaining', [BuyersController::class, 'totalRemaining'])->name('clients.totalRemaining');
     });
     // suppliers
     Route::prefix('suppliers')->group(function() {
@@ -151,6 +152,8 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/{user}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
         Route::put('/{user}', [SupplierController::class, 'update'])->name('suppliers.update');
         Route::delete('/{user}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+        Route::get('/{supplier}/totalAmount', [SupplierController::class, 'totalAmount'])->name('suppliers.totalAmount');
+        Route::get('/{supplier}/totalRemaining', [SupplierController::class, 'totalRemaining'])->name('suppliers.totalRemaining');
 
     });
     //buffalo

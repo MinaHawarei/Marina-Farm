@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\supplier;
 use App\Http\Requests\StoresupplierRequest;
 use App\Http\Requests\UpdatesupplierRequest;
+use Carbon\Carbon;
 
 class SupplierController extends Controller
 {
@@ -90,5 +91,31 @@ class SupplierController extends Controller
     public function destroy(supplier $supplier)
     {
         //
+    }
+    public function totalAmount(supplier $supplier)
+    {
+        $translations = include resource_path('lang/ar/translate.php');
+         $sales = $supplier->sales()->orderBy('date', 'desc')->get()->map(function ($sale) use ($translations) {
+            $sale->type = $translations[$sale->type] ?? $sale->type;
+            $sale->formatted_date = Carbon::parse($sale->date)->format('d-m-Y');
+            return $sale;
+        });
+
+        return response()->json($sales);
+    }
+    public function totalRemaining(supplier $supplier)
+    {
+        $translations = include resource_path('lang/ar/translate.php');
+        $sales = $supplier->sales()
+            ->where('remaining', '>', 0)
+            ->orderBy('date', 'desc')->get()
+            ->map(function ($sale) use ($translations) {
+            $sale->type = $translations[$sale->type] ?? $sale->type;
+            $sale->formatted_date = Carbon::parse($sale->date)->format('d-m-Y');
+            $sale->formatted_payment_due_date = Carbon::parse($sale->payment_due_date)->format('d-m-Y');
+            return $sale;
+        });
+
+        return response()->json($sales);
     }
 }

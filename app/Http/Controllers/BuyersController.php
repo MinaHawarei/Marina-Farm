@@ -7,6 +7,7 @@ use App\Models\daily_sale;
 
 use App\Http\Requests\StorebuyersRequest;
 use App\Http\Requests\UpdatebuyersRequest;
+use Carbon\Carbon;
 
 class BuyersController extends Controller
 {
@@ -92,5 +93,31 @@ class BuyersController extends Controller
     public function destroy(buyers $buyers)
     {
         //
+    }
+    public function totalAmount(buyers $buyers)
+    {
+        $translations = include resource_path('lang/ar/translate.php');
+         $sales = $buyers->sales()->orderBy('date', 'desc')->get()->map(function ($sale) use ($translations) {
+            $sale->type = $translations[$sale->type] ?? $sale->type; // ترجم إن وجد، وإلا رجّع الأصل
+            $sale->formatted_date = Carbon::parse($sale->date)->format('d-m-Y');
+            return $sale;
+        });
+
+        return response()->json($sales);
+    }
+    public function totalRemaining(buyers $buyers)
+    {
+        $translations = include resource_path('lang/ar/translate.php');
+        $sales = $buyers->sales()
+            ->where('remaining', '>', 0)
+            ->orderBy('date', 'desc')->get()
+            ->map(function ($sale) use ($translations) {
+            $sale->type = $translations[$sale->type] ?? $sale->type;
+            $sale->formatted_date = Carbon::parse($sale->date)->format('d-m-Y');
+            $sale->formatted_payment_due_date = Carbon::parse($sale->payment_due_date)->format('d-m-Y');
+            return $sale;
+        });
+
+        return response()->json($sales);
     }
 }

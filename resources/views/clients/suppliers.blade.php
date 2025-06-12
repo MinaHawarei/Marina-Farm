@@ -55,8 +55,13 @@
                         <td class="border px-2 py-1" contenteditable="true">{{ $client->email }}</td>
                         <td class="border px-2 py-1" contenteditable="true">{{ $client->address }}</td>
                         <td class="border px-2 py-1" contenteditable="true">{{ $client->purchase_type }}</td>
-                        <td class="border px-2 py-1">{{ $client->sales_sum_amount }}</td>
-                        <td class="border px-2 py-1">{{ $client->sales_sum_remaining }}</td>
+                        <td class="border px-2 py-1">
+                                {{ $client->sales_sum_amount ?? '0' }}
+                                <button onclick="showAmountDetails({{ $client->id }})" style="color: blue;">تفاصيل</button>
+                        </td>
+                        <td class="border px-2 py-1">{{ $client->sales_sum_remaining  ?? '0' }}
+                                <button onclick="showRemainingDetails({{ $client->id }})" style="color: blue;">تفاصيل</button>
+                        </td>
                         <td class="border px-2 py-1">
                             <button onclick="saveClient(this, {{ $client->id }})" class="bg-blue-600 text-white px-2 py-1 text-sm rounded">حفظ</button>
                         </td>
@@ -94,6 +99,50 @@
         <input type="hidden" name="purchase_type" id="form-type">
     </form>
 
+        <!-- مودال عرض تفاصيل اجمالي القيمة -->
+    <div id="AmountDetailsModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative">
+            <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            <h3 class="text-xl font-semibold mb-6 text-center">تفاصيل المشتريات</h3>
+            <table class="table-auto w-full border border-gray-300 text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2">الكود</th>
+                        <th class="px-4 py-2">المنتج</th>
+                        <th class="px-4 py-2">الكمية</th>
+                        <th class="px-4 py-2">سعر الوحدة</th>
+                        <th class="px-4 py-2">الاجمالي</th>
+                        <th class="px-4 py-2">التاريخ</th>
+                        <th class="px-4 py-2">ملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody id="AmountDetailsTable"></tbody>
+            </table>
+        </div>
+    </div>
+    <!-- مودال عرض تفاصيل اجمالي الباقي -->
+    <div id="RemainingDetailsModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative">
+            <button onclick="toggleModal2()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            <h3 class="text-xl font-semibold mb-6 text-center">تفاصيل المديونيات</h3>
+            <table class="table-auto w-full border border-gray-300 text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2">الكود</th>
+                        <th class="px-4 py-2">المنتج</th>
+                        <th class="px-4 py-2">الاجمالي</th>
+                        <th class="px-4 py-2">المدفوع</th>
+                        <th class="px-4 py-2">الباقي</th>
+                        <th class="px-4 py-2">التاريخ</th>
+                        <th class="px-4 py-2">تاريخ السداد</th>
+                        <th class="px-4 py-2">ملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody id="RemainingDetailsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
     <script>
         function saveClient(button, clientId) {
             const row = button.closest('tr');
@@ -130,5 +179,112 @@
 
             form.submit();
         }
+         function toggleModal() {
+            const modal = document.getElementById('AmountDetailsModal');
+            modal.classList.toggle('hidden');
+        }
+        function toggleModal2() {
+            const modal = document.getElementById('RemainingDetailsModal');
+            modal.classList.toggle('hidden');
+        }
+         function showAmountDetails(id) {
+            toggleModal();
+            const tableBody = document.getElementById('AmountDetailsTable');
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">جارٍ التحميل...</td></tr>';
+            fetch(`/suppliers/${id}/totalAmount`)
+                .then(res => res.json())
+                .then(data => {
+                    tableBody.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(record => {
+                            tableBody.innerHTML += `
+                                <tr class="border-t">
+                                    <td class="px-4 py-2">${record.id}</td>
+                                    <td class="px-4 py-2">${record.type}</td>
+                                    <td class="px-4 py-2">${record.quantity}</td>
+                                    <td class="px-4 py-2">${record.unit_price}</td>
+                                    <td class="px-4 py-2">${record.amount}</td>
+                                    <td class="px-4 py-2">${record.formatted_date}</td>
+                                    <td class="px-4 py-2">${record.notes ?? '-'}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500">لا توجد بيانات.</td></tr>';
+                    }
+                })
+                .catch(() => {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500">فشل في تحميل البيانات.</td></tr>';
+                });
+        }
+        function showRemainingDetails(id) {
+            toggleModal2();
+            const tableBody = document.getElementById('RemainingDetailsTable');
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">جارٍ التحميل...</td></tr>';
+            fetch(`/suppliers/${id}/totalRemaining`)
+                .then(res => res.json())
+                .then(data => {
+                    tableBody.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(record => {
+                            tableBody.innerHTML += `
+                                <tr class="border-t">
+                                    <td class="px-4 py-2">${record.id}</td>
+                                    <td class="px-4 py-2">${record.type}</td>
+                                    <td class="px-4 py-2">${record.amount}</td>
+                                    <td class="px-4 py-2">${record.paid}</td>
+                                    <td class="px-4 py-2">${record.remaining}</td>
+                                    <td class="px-4 py-2">${record.formatted_date}</td>
+                                    <td class="px-4 py-2">${record.formatted_payment_due_date}</td>
+                                    <td class="px-4 py-2">${record.notes ?? '-'}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500">لا توجد بيانات.</td></tr>';
+                    }
+                })
+                .catch(() => {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500">فشل في تحميل البيانات.</td></tr>';
+                });
+        }
+        function closeForm(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        const modalIds = ['AmountDetailsModal', 'RemainingDetailsModal'];
+
+        function closeAllModals() {
+            modalIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('hidden')) {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        // إغلاق عند الضغط خارج المودال
+        document.addEventListener('mousedown', function (e) {
+            modalIds.forEach(id => {
+                const modal = document.getElementById(id);
+                if (modal && !modal.classList.contains('hidden')) {
+                    const content = modal.querySelector('.bg-white, form');
+                    if (content && !content.contains(e.target)) {
+                        modal.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // إغلاق بزر ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === "Escape") {
+                closeAllModals();
+            }
+        });
+
     </script>
 </x-app-layout>
