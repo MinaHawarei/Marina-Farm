@@ -181,6 +181,8 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/sales', [ReportController::class, 'sales'])->name('reports.sales');
         Route::get('/sales/export', [ReportController::class, 'exportSalesReport'])->name('reports.sales.export');
         Route::get('/financial', [ReportController::class, 'financial'])->name('reports.financial');
+        Route::get('/sales/daily-details', [ReportController::class, 'getDailySalesDetailsByCategory'])->name('reports.sales.daily.details');
+
     });
 
 });

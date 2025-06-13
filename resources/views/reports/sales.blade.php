@@ -39,7 +39,6 @@
                         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                     عرض
                 </button>
-
             </div>
         </form>
 
@@ -50,20 +49,23 @@
             </a>
         </div>
 
-        {{-- قسم عرض الإجمالي الشهري للمبيعات حسب الفئة (Category) --}}
         <h2 class="text-xl font-bold mb-3 mt-6">إجمالي المبيعات الشهرية حسب الفئة ({{ $month_view }})</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             @foreach($totalSalesByCategory as $category => $totalAmount)
-                <div class="bg-gray-100 p-4 rounded shadow">
-                    {{-- استخدام categoryTranslations لعرض الاسم العربي للفئة --}}
-                    <p class="font-semibold">إجمالي {{ $categoryTranslations[$category] ?? $category }}:</p>
-                    <p>{{ $totalAmount }}</p>
+                <div class="bg-gray-100 p-4 rounded shadow flex flex-col justify-between">
+                    <div>
+                        <p class="font-semibold">إجمالي {{ $categoryTranslations[$category] ?? $category }}:</p>
+                        <p>{{ $totalAmount }}</p>
+                    </div>
+                    {{-- تم إزالة زر التفاصيل من هنا --}}
                 </div>
             @endforeach
             @if($totalSalesByCategory->isEmpty())
                 <p class="col-span-full text-gray-600">لا توجد مبيعات لهذا الشهر لعرضها.</p>
             @endif
         </div>
+
+        ---
 
         <table class="w-full border border-gray-400 text-center bg-white" id="sales-category-table">
             <thead class="bg-gray-200">
@@ -79,7 +81,16 @@
                         <td class="border px-2 py-1">{{ $item->sale_date }}</td>
                         {{-- استخدام categoryTranslations لعرض الاسم العربي للفئة --}}
                         <td class="border px-2 py-1">{{ $categoryTranslations[$item->category] ?? $item->category }}</td>
-                        <td class="border px-2 py-1">{{ $item->total_amount_daily_category ?? 0 }}</td>
+                        <td class="border px-2 py-1 text-center" style="position: relative;">
+                            {{ $item->total_amount_daily_category ?? 0 }}
+                            {{-- الزرار الجديد لفتح المودال في المبيعات اليومية --}}
+                            <button
+                                onclick="showDetails('{{ $item->sale_date }}', '{{ $item->category }}')"
+                                style="color: blue; position: absolute; left: 5px; top: 50%; transform: translateY(-50%);"
+                            >
+                                تفاصيل
+                            </button>
+                        </td>
                     </tr>
                 @endforeach
                 @if($salesItemsGroupedByDayAndCategory->isEmpty())
@@ -90,6 +101,8 @@
             </tbody>
         </table>
 
+        ---
+
         {{-- قسم الرسم البياني الجديد (مقارنة إجمالي المبيعات الشهرية حسب الفئة) --}}
         <h2 class="text-xl font-bold mb-3 mt-8">مقارنة إجمالي المبيعات الشهرية حسب الفئة</h2>
         <div class="bg-white p-4 rounded shadow">
@@ -98,6 +111,28 @@
 
     </div>
 
+    <div id="DetailsModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative">
+            <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            <h3 class="text-xl font-semibold mb-6 text-center">تفاصيل مبيعات الفئة: <span id="modal-category-name"></span> بتاريخ: <span id="modal-sale-date"></span></h3>
+            <table class="table-auto w-full border border-gray-300 text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-right">الكود</th>
+                        <th class="px-4 py-2 text-right">المنتج</th>
+                        <th class="px-4 py-2 text-right">كود المنتج</th>
+                        <th class="px-4 py-2 text-right">الكمية</th>
+                        <th class="px-4 py-2 text-right">سعر الوحدة</th>
+                        <th class="px-4 py-2 text-right">الاجمالي</th>
+                        <th class="px-4 py-2 text-right">ملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody id="DetailsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var ctx = document.getElementById('monthlySalesCategoryChart').getContext('2d');
@@ -105,7 +140,7 @@
             var chartLabels = @json($chartLabels);
             var chartData = @json($chartData);
             var allCategoriesForChart = @json($allCategoriesForChart);
-            var categoryTranslations = @json($categoryTranslations); // استقبال الترجمة
+            var categoryTranslations = @json($categoryTranslations);
 
             var colors = [
                 'rgba(255, 99, 132, 1)',
@@ -130,9 +165,8 @@
                 'rgba(231, 233, 237, 0.2)'
             ];
 
-            // بناء الـ datasets ديناميكياً لكل category
             var datasets = allCategoriesForChart.map(function(category, index) {
-                var displayLabel = categoryTranslations[category] || category; // استخدام الترجمة
+                var displayLabel = categoryTranslations[category] || category;
 
                 return {
                     label: 'إجمالي ' + displayLabel,
@@ -181,6 +215,99 @@
                     rtl: true
                 }
             });
+        });
+
+        function toggleModal() {
+            const modal = document.getElementById('DetailsModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // تم تعديل الدالة showDetails لاستقبال تاريخ البيع والفئة
+        function showDetails(saleDate, category) {
+            toggleModal();
+            const tableBody = document.getElementById('DetailsTable');
+            const modalCategoryName = document.getElementById('modal-category-name');
+            const modalSaleDate = document.getElementById('modal-sale-date');
+            const categoryTranslations = @json($categoryTranslations); // أعد تحميل الترجمات في نطاق الدالة
+
+            // تحديث عنوان المودال باسم الفئة والتاريخ المترجم
+            modalCategoryName.textContent = categoryTranslations[category] || category;
+            modalSaleDate.textContent = saleDate;
+
+
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">جارٍ التحميل...</td></tr>'; // 7 أعمدة
+
+            // تعديل مسار الـ fetch ليستخدم تاريخ البيع والفئة
+            // تأكد أن هذا المسار موجود في ملف routes/web.php ويؤدي إلى دالة في الكونترولر تجلب تفاصيل المبيعات.
+            fetch(`/reports/sales/daily-details?sale_date=${encodeURIComponent(saleDate)}&category=${encodeURIComponent(category)}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    tableBody.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(record => {
+                            tableBody.innerHTML += `
+                                <tr class="border-t">
+                                    <td class="px-4 py-2">${record.id}</td>
+                                    <td class="px-4 py-2">${record.type}</td>
+                                    <td class="px-4 py-2">${record.product_id}</td>
+                                    <td class="px-4 py-2">${record.quantity}</td>
+                                    <td class="px-4 py-2">${record.unit_price}</td>
+                                    <td class="px-4 py-2">${record.amount}</td>
+                                    <td class="px-4 py-2">${record.notes ?? '-'}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500">لا توجد بيانات.</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching details:', error);
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-red-500">فشل في تحميل البيانات.</td></tr>';
+                });
+        }
+
+        function closeForm(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        const modalIds = ['DetailsModal'];
+
+        function closeAllModals() {
+            modalIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('hidden')) {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        // إغلاق عند الضغط خارج المودال
+        document.addEventListener('mousedown', function (e) {
+            modalIds.forEach(id => {
+                const modal = document.getElementById(id);
+                if (modal && !modal.classList.contains('hidden')) {
+                    const content = modal.querySelector('.bg-white');
+                    if (content && !content.contains(e.target)) {
+                        modal.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // إغلاق بزر ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === "Escape") {
+                closeAllModals();
+            }
         });
     </script>
 </x-app-layout>

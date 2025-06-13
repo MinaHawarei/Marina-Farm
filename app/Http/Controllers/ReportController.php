@@ -673,5 +673,34 @@ class ReportController extends Controller
             public function shouldAutoSize(): bool { return true; }
         }, $fileName);
     }
+     public function getDailySalesDetailsByCategory(Request $request)
+    {
+        $saleDate = $request->query('sale_date'); // مثلاً "2023-01-15"
+        $category = $request->query('category');
+        if (!$saleDate || !$category) {
+            return response()->json(['error' => 'Sale date and category are required.'], 400);
+        }
 
+        try {
+
+            $salesDetails = daily_sale::
+                whereDate('date', $saleDate)
+                ->where('category', $category)
+                ->select(
+                    'id',
+                    'type',
+                    'product_id',
+                    'quantity',
+                    'unit_price',
+                    'amount'
+                )
+                ->get();
+
+            return response()->json($salesDetails);
+        } catch (\Exception $e) {
+            \Log::error("Error fetching daily sales details: " . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch sales details.'], 500);
+        }
+
+    }
 }
