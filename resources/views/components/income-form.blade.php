@@ -27,6 +27,35 @@
                             <option value="">اختر التوزيع الفرعي</option>
                         </select>
                     </div>
+                    {{-- **بداية إضافة حقول اختيار الحيوانات** --}}
+                    <div id="animal_buffalo_select_container" class="mt-4 hidden">
+                        <label class="block text-gray-700 mb-1">اسم الجاموس<span class="text-red-500">*</span></label>
+                        <select id="animal_buffalo_select" name="animal_code" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
+                            <option value="">اختر الجاموس</option>
+                            @isset($buffaloes) {{-- $buffaloes تم إرسالها من الكنترولر --}}
+                                @foreach($buffaloes as $animal)
+                                    <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}">{{ $animal->animal_code }}</option>
+                                @endforeach
+                            @endisset
+                        </select>
+                    </div>
+
+                    <div id="animal_cow_select_container" class="mt-4 hidden">
+                        <label class="block text-gray-700 mb-1">اسم البقرة<span class="text-red-500">*</span></label>
+                        <select id="animal_cow_select" name="animal_code" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
+                            <option value="">اختر البقرة</option>
+                            @isset($cows) {{-- $cows تم إرسالها من الكنترولر --}}
+                                @foreach($cows as $animal)
+                                    <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}">{{ $animal->animal_code }}</option>
+                                @endforeach
+                            @endisset
+                        </select>
+                    </div>
+
+                    {{-- حقل مخفي لحفظ اسم الحيوان، سيتم ملؤه بواسطة JavaScript --}}
+                    <input type="hidden" id="animal_name_hidden_field" name="animal_code">
+                    {{-- **نهاية إضافة حقول اختيار الحيوانات** --}}
+
 
                     <div id="income_otherSubCategoryContainer" class="hidden mt-4">
                         <label class="block text-gray-700 mb-1">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
@@ -108,7 +137,6 @@
 </div>
 
 <script>
-
     const income_subCategoriesData = {
         "Product Sales": [
             { value: "Buffalo Milk", text: "لبن جاموس" },
@@ -147,11 +175,34 @@
     const income_otherSubCategoryContainer = document.getElementById('income_otherSubCategoryContainer');
     const income_otherSubCategory = document.getElementById('income_otherSubCategory');
 
+    // **بداية إضافة عناصر الحيوانات الجديدة**
+    const animalBuffaloSelectContainer = document.getElementById('animal_buffalo_select_container');
+    const animalBuffaloSelect = document.getElementById('animal_buffalo_select');
+    const animalCowSelectContainer = document.getElementById('animal_cow_select_container');
+    const animalCowSelect = document.getElementById('animal_cow_select');
+    const animalNameHiddenField = document.getElementById('animal_name_hidden_field');
+    // **نهاية إضافة عناصر الحيوانات الجديدة**
+
+    // دالة جديدة لإخفاء جميع حقول الحيوانات ومسح قيمها وإزالة خاصية required
+    function hideAndClearAllAnimalFields() {
+        animalBuffaloSelectContainer.classList.add('hidden');
+        animalCowSelectContainer.classList.add('hidden');
+        animalBuffaloSelect.removeAttribute('required');
+        animalCowSelect.removeAttribute('required');
+        animalBuffaloSelect.value = ''; // مسح القيمة المختارة
+        animalCowSelect.value = '';     // مسح القيمة المختارة
+        animalNameHiddenField.value = ''; // مسح اسم الحيوان المخفي
+    }
+
     income_mainCategory.addEventListener('change', function () {
         const selectedCategory = income_mainCategory.value;
         income_subCategory.innerHTML = '<option value="">اختر التوزيع الفرعي</option>';
         income_otherSubCategoryContainer.classList.add('hidden');
         income_otherSubCategory.value = '';
+        income_otherSubCategory.removeAttribute('required'); // إزالة required إذا لم تكن "أخرى"
+
+        // أخفِ حقول الحيوانات عند تغيير الفئة الرئيسية
+        hideAndClearAllAnimalFields();
 
         if (income_subCategoriesData[selectedCategory]) {
             income_subCategoriesData[selectedCategory].forEach(sub => {
@@ -164,25 +215,63 @@
     });
 
     income_subCategory.addEventListener('change', function () {
-        if (income_subCategory.value === "Other") {
+        const selectedSubCategory = income_subCategory.value;
+
+        // أولاً: أخفِ جميع حقول الحيوانات والـ "أخرى" ومسح قيمها
+        income_otherSubCategoryContainer.classList.add('hidden');
+        income_otherSubCategory.value = '';
+        income_otherSubCategory.removeAttribute('required');
+
+        hideAndClearAllAnimalFields(); // استدعاء الدالة الجديدة لإخفاء الحيوانات
+
+        // ثم أظهر الحقل المناسب بناءً على الاختيار
+        if (selectedSubCategory === "Other") {
             income_otherSubCategoryContainer.classList.remove('hidden');
-        } else {
-            income_otherSubCategoryContainer.classList.add('hidden');
-            income_otherSubCategory.value = '';
+            income_otherSubCategory.setAttribute('required', 'true');
+        } else if (selectedSubCategory === "Buffalo Sales") {
+            animalBuffaloSelectContainer.classList.remove('hidden');
+            animalBuffaloSelect.setAttribute('required', 'true');
+        } else if (selectedSubCategory === "Cow Sales") {
+            animalCowSelectContainer.classList.remove('hidden');
+            animalCowSelect.setAttribute('required', 'true');
         }
     });
 
+    // الدالة المسؤولة عن تحديث الحقل المخفي لاسم الحيوان
+    function updateAnimalNameHiddenField() {
+        let selectedOption = null;
+        if (!animalBuffaloSelectContainer.classList.contains('hidden')) {
+            // إذا كانت قائمة الجاموس ظاهرة، استخدمها
+            selectedOption = animalBuffaloSelect.options[animalBuffaloSelect.selectedIndex];
+        } else if (!animalCowSelectContainer.classList.contains('hidden')) {
+            // إذا كانت قائمة الأبقار ظاهرة، استخدمها
+            selectedOption = animalCowSelect.options[animalCowSelect.selectedIndex];
+        }
+
+        if (selectedOption && selectedOption.dataset.name) {
+            animalNameHiddenField.value = selectedOption.dataset.name;
+        } else {
+            animalNameHiddenField.value = ''; // مسح القيمة إذا لم يتم تحديد حيوان
+        }
+        console.log('Animal Name Hidden Field Value:', animalNameHiddenField.value); // للتصحيح
+    }
+
+    // استمع لحدث التغيير على قوائم الحيوانات المنسدلة لتحديث الحقل المخفي
+    animalBuffaloSelect.addEventListener('change', updateAnimalNameHiddenField);
+    animalCowSelect.addEventListener('change', updateAnimalNameHiddenField);
+
+
+    // الكود الخاص بتحديث اسم العميل (الكود الأصلي الخاص بك)
     const buyerSelect = document.getElementById('buyer_select');
     const buyerNameHiddenField = document.getElementById('buyer_name_hidden_field');
 
-    // **الدالة المسؤولة عن تحديث الحقل المخفي**
+    // **الدالة المسؤولة عن تحديث الحقل المخفي لاسم العميل**
     function updateBuyerNameHiddenField() {
         const selectedOption = buyerSelect.options[buyerSelect.selectedIndex];
-        // تأكد من أن selectedOption موجودة وأن dataset.name موجود
         if (selectedOption && selectedOption.dataset.name) {
             buyerNameHiddenField.value = selectedOption.dataset.name;
         } else {
-            buyerNameHiddenField.value = ''; // مسح القيمة إذا لم يتم تحديد عميل
+            buyerNameHiddenField.value = '';
         }
         console.log('Buyer Name Hidden Field Value:', buyerNameHiddenField.value); // للتصحيح
     }
@@ -191,19 +280,50 @@
     buyerSelect.addEventListener('change', updateBuyerNameHiddenField);
 
     // **مهم جداً: استدعاء الدالة عند تحميل الصفحة**
-    // هذا يضمن تعيين القيمة الأولية عند فتح الفورم، خاصة إذا كان هناك عميل محدد مسبقاً (في حالة التعديل مثلاً)
     document.addEventListener('DOMContentLoaded', updateBuyerNameHiddenField);
 
 
     // قبل إرسال الفورم، لو تم اختيار "أخرى"
     document.getElementById('income_form').addEventListener('submit', function(e) {
         // تأكد من تحديث اسم العميل قبل الإرسال مباشرة
-        updateBuyerNameHiddenField(); // استدعاء الدالة مرة أخرى قبل الإرسال
+        updateBuyerNameHiddenField();
 
+        // **تحديث اسم الحيوان قبل الإرسال مباشرة**
+        updateAnimalNameHiddenField();
+
+        // منطق حقل "أخرى"
         if (income_subCategory.value === "Other") {
-            if (income_otherSubCategory.value.trim() !== '') {
+            if (income_otherSubCategory.value.trim() === '') {
+                e.preventDefault(); // منع الإرسال
+                alert('يرجى إدخال التوزيع الفرعي الآخر.');
+                income_otherSubCategory.focus();
+                return false;
+            } else {
                 income_subCategory.value = income_otherSubCategory.value.trim();
             }
         }
+
+        // **الشرط الجديد: التحقق من اختيار الحيوان إذا كانت الفئة "Buffalo Sales" أو "Cow Sales"**
+        const selectedSubCategory = income_subCategory.value;
+        if (selectedSubCategory === "Buffalo Sales") {
+            if (animalBuffaloSelect.value === '') {
+                e.preventDefault(); // منع الإرسال
+                alert('يرجى اختيار اسم الجاموس.');
+                animalBuffaloSelect.focus();
+                return false;
+            }
+        } else if (selectedSubCategory === "Cow Sales") {
+            if (animalCowSelect.value === '') {
+                e.preventDefault(); // منع الإرسال
+                alert('يرجى اختيار اسم البقرة.');
+                animalCowSelect.focus();
+                return false;
+            }
+        }
+    });
+
+    // مهم جداً: عند تحميل الصفحة، تأكد من إخفاء حقول الحيوانات بشكل افتراضي
+    document.addEventListener('DOMContentLoaded', function() {
+        hideAndClearAllAnimalFields();
     });
 </script>

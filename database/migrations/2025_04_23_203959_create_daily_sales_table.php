@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('buyer_name');
             $table->unsignedBigInteger('buyer_id')->nullable();
             $table->foreign('buyer_id')->references('id')->on('buyers');
+            $table->string('animal_code')->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('created_by'); // مرجع للمستخدم الذي أضاف البيع
             $table->foreign('created_by')->references('id')->on('users');

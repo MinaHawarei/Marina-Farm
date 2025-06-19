@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\daily_sale;
 use App\Models\expense;
 use App\Models\User;
+use App\Models\Animal;
+use App\Models\buyers;
+use App\Models\supplier;
 use Illuminate\Support\Carbon;
 
 
@@ -201,8 +204,12 @@ class TreasuryController extends Controller
         }
 
         $income = $income->get();
+        $allbuffaloes = Animal::where('type', 'Buffalo')->whereNotIn('status', ['Death'])->get(['id', 'animal_code']);
+        $allcows = Animal::where('type', 'Cow')->whereNotIn('status', ['Death'])->get(['id', 'animal_code']);
+        $buyers = buyers::all();
 
-        return view('treasury.income', compact('income'));
+
+        return view('treasury.income', compact('income' , 'allbuffaloes', 'allcows' , 'buyers'));
     }
 
     public function expense(Request $request)
@@ -214,8 +221,9 @@ class TreasuryController extends Controller
         }
 
         $income = $income->get();
+        $suppliers = supplier::all();
 
-        return view('treasury.expense', compact('income'));
+        return view('treasury.expense', compact('income', 'suppliers'));
     }
     public function receivables(Request $request)
     {

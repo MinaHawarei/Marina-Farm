@@ -33,6 +33,7 @@ class Storedaily_saleRequest extends FormRequest
             'payment_due_date' => 'nullable|date',
             'buyer_name' => 'required|string|max:255',
             'buyer_id' => 'nullable|exists:buyers,id',
+            'animal_code' => 'nullable|string',
             'description' => 'nullable|string',
         ];
     }

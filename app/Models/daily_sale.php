@@ -27,6 +27,7 @@ class daily_sale extends Model
         'payment_due_date',
         'buyer_name',
         'buyer_id',
+        'animal_code',
         'description',
         'created_by'
     ];

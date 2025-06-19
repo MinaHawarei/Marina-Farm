@@ -119,41 +119,44 @@
                         // إظهار النموذج
                         document.getElementById('edit-form').classList.remove('hidden');
 
+                        setTimeout(() => {
                         // تعبئة الحقول
-                        document.querySelector('select[name="category"]').value = data.category;
-                        document.querySelector('input[name="description"]').value = data.description;
-                        modal.querySelector('input[name="date"]').value = data.date ?? '';
-                        modal.querySelector('input[name="payment_due_date"]').value = data.payment_due_date ?? '';
+                        document.querySelector('select[name="category"]').value = data.category || '';
+                        document.querySelector('input[name="description"]').value = data.description || '';
+                        document.querySelector('input[name="date"]').value = (new Date(data.date)).toISOString().split('T')[0];
+                        document.querySelector('input[name="payment_due_date"]').value = (new Date(data.payment_due_date)).toISOString().split('T')[0];
                         document.querySelector('input[name="buyer_name"]').value = data.buyer_name || '';
-                        document.querySelector('input[name="quantity"]').value = data.quantity;
-                        document.querySelector('input[name="unit_price"]').value = data.unit_price;
-                        document.querySelector('input[name="amount"]').value = data.amount;
-                        document.querySelector('input[name="paid"]').value = data.paid;
-                        document.querySelector('input[name="remaining"]').value = data.remaining;
+                        document.querySelector('input[name="quantity"]').value = data.quantity || '';
+                        document.querySelector('input[name="unit_price"]').value = data.unit_price || '';
+                        document.querySelector('input[name="amount"]').value = data.amount || '';
+                        document.querySelector('input[name="paid"]').value = data.paid || '';
+                        document.querySelector('input[name="remaining"]').value = data.remaining || '';
                         document.querySelector('input[name="buyer_id"]').value = data.buyer_id || '';
 
                         // أولاً نختار الفئة
-                        document.getElementById('income_mainCategory').value = data.category;
+                        document.getElementById('income_mainCategory').value = data.category || '';
                         // ثم نطلق الحدث لتحديث التوزيع الفرعي
                         document.getElementById('income_mainCategory').dispatchEvent(new Event('change'));
 
                         // تأخير بسيط لتضمن تحميل القيم قبل اختيار النوع
                         setTimeout(() => {
-                            document.getElementById('income_subCategory').value = data.type;
+                            document.getElementById('income_subCategory').value = data.type || '';
 
                             // إذا كان النوع "أخرى"، املأ الحقل الخاص به
                             if (data.type === 'Other') {
                                 document.getElementById('income_otherSubCategory').value = data.other_type || '';
                                 document.getElementById('income_otherSubCategoryContainer').classList.remove('hidden');
                             }
-                        }, 200);
+                        }, 100);
 
                         // تعديل الفورم ليرسل البيانات إلى الرابط الصحيح
                         document.querySelector('#edit-form form').action = `/income/${id}`;
+                        }, 150);
                     })
                     .catch(error => {
                         alert(error.message);
                     });
+
             }
 
 

@@ -253,8 +253,8 @@
                             tableBody.innerHTML += `
                                 <tr class="border-t">
                                     <td class="px-4 py-2">${record.id}</td>
-                                    <td class="px-4 py-2">${record.type}</td>
-                                    <td class="px-4 py-2">${record.product_id}</td>
+                                    <td class="px-4 py-2">${record.type_translated}</td>
+                                    <td class="px-4 py-2">${record.animal_code}</td>
                                     <td class="px-4 py-2">${record.quantity}</td>
                                     <td class="px-4 py-2">${record.unit_price}</td>
                                     <td class="px-4 py-2">${record.amount}</td>

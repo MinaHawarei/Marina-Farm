@@ -182,6 +182,10 @@ class DashboardController extends Controller
         $animals = Animal::all();
         $buyers = buyers::all();
         $suppliers = supplier::all();
+        $buffaloes = Animal::where('type', 'Buffalo')->whereNotIn('status', ['Paid', 'Death'])->get(['id', 'animal_code']);
+        $allbuffaloes = Animal::where('type', 'Buffalo')->whereNotIn('status', ['Death'])->get(['id', 'animal_code']);
+        $cows = Animal::where('type', 'Cow')->whereNotIn('status', ['Paid', 'Death'])->get(['id', 'animal_code']);
+        $allcows = Animal::where('type', 'Cow')->whereNotIn('status', ['Death'])->get(['id', 'animal_code']);
 
         return view('dashboard', compact(
               'hay_net',
@@ -191,6 +195,11 @@ class DashboardController extends Controller
             'bran_net',
             'silage_net',
             'animals',
+            'buffaloes',
+            'allbuffaloes',
+            'cows',
+            'allcows',
+
             'buyers',
             'suppliers',
             // البيانات الجديدة: متوسط الإنتاج اليومي

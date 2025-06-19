@@ -675,6 +675,7 @@ class ReportController extends Controller
     }
      public function getDailySalesDetailsByCategory(Request $request)
     {
+
         $saleDate = $request->query('sale_date'); // مثلاً "2023-01-15"
         $category = $request->query('category');
         if (!$saleDate || !$category) {
@@ -682,19 +683,23 @@ class ReportController extends Controller
         }
 
         try {
-
+            $translations = include resource_path('lang/ar/translate.php');
             $salesDetails = daily_sale::
                 whereDate('date', $saleDate)
                 ->where('category', $category)
                 ->select(
                     'id',
                     'type',
-                    'product_id',
+                    'animal_code',
                     'quantity',
                     'unit_price',
                     'amount'
                 )
-                ->get();
+                ->get()
+                ->map(function ($item) use ($translations) {
+                $item->type_translated = $translations[$item->type] ?? $item->type;
+                return $item;
+            });
 
             return response()->json($salesDetails);
         } catch (\Exception $e) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\daily_sale;
 use App\Models\Product;
+use App\Models\Animal;
 
 use App\Models\Transaction;
 use App\Http\Requests\Storedaily_saleRequest;
@@ -14,6 +15,7 @@ class DailySaleController extends Controller
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         //
@@ -46,6 +48,7 @@ class DailySaleController extends Controller
             'payment_due_date' => 'nullable|date',
             'buyer_name' => 'required|string|max:255',
             'buyer_id' => 'nullable|exists:buyers,id',
+            'animal_code' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
 
@@ -95,6 +98,18 @@ class DailySaleController extends Controller
 
         ]));
 
+        if (!empty($validatedData['animal_code'])) {
+            $animal = Animal::where('animal_code', $validatedData['animal_code'])->first();
+            if ($animal) {
+                $animal->status = 'Paid';
+                $animal->save();
+            } else {
+                // لو مفيش حيوان بالكود ده، ممكن ترجع برسالة خطأ مثلاً
+                return redirect()->back()->with('error', 'لم يتم العثور على الحيوان بهذا الكود.');
+            }
+        }
+
+
 
 
         Transaction::create([
@@ -108,10 +123,9 @@ class DailySaleController extends Controller
         ]);
 
 
+
         return redirect()->back()->with('success', 'تم اضافة الايراد بنجاح!')
         ?: redirect()->back()->with('error', 'حدث خطأ أثناء اضافة الايراد!');
-
-
 
     }
 
@@ -130,7 +144,6 @@ class DailySaleController extends Controller
     public function edit(daily_sale $daily_sale)
     {
         return response()->json($daily_sale);
-
     }
 
 
