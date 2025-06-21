@@ -218,5 +218,10 @@ return [
 
     'insemination_type_if_pregnant' => 'نوع التلقيح',
     'not_inseminated' => 'غير ملقحة',
+    'daily_sale' => 'مبيعات',
+    'buyers' => 'العملاء',
+    'purchase_type' => 'نوع المشتريات',
+    'buyer_name' => 'اسم العميل',
+    'buyer_id' => 'كود العميل',
 
 ];

@@ -115,6 +115,8 @@ Route::middleware(['auth', SyncSessionUser::class , 'verified'])->group(function
         Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+        Route::get('/logs', [UserController::class, 'logs'])->name('user.logs');
+
     });
     // employee
     Route::prefix('employees')->group(function() {

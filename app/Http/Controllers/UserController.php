@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use App\Models\User;
+use App\Models\Animal;
+use App\Models\DailyConsumption;
+use App\Models\daily_production;
+use App\Models\expense;
+use App\Models\buyers;
+use App\Models\supplier;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Spatie\Activitylog\Models\Activity;
 
 
 
@@ -111,5 +118,142 @@ class UserController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function logs(Request $request)
+    {
+        // نبدأ استعلام Activity بدون تنفيذ
+        $query = Activity::query();
+
+        // استبعاد عمليات على User فقط (لو مازلت محتاج الشرط ده)
+        $query->where(function ($q) {
+            $q->whereNull('subject_type')
+                ->orWhere('subject_type', '!=', 'App\\Models\\User');
+        });
+
+        // لو المستخدم اختار فلترة حسب causer_id
+        if ($request->filled('causer_id')) {
+            $query->where('causer_id', $request->causer_id);
+        }
+
+        // فلترة بالتاريخ (start_date / end_date)
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        // جلب النتائج
+        $latest_operations = $query->latest()->get();
+
+
+        $translations = include resource_path('lang/ar/translate.php');
+
+        $formatted_latest_operations = $latest_operations->map(function ($activity) use ($translations) {
+            $causer = $activity->causer;
+            $add_details = '';
+            // استخدام $translations مباشرة
+            $causerName = $causer ? $causer->name : ($translations['unknown_user'] ?? 'مستخدم غير معروف');
+            $causerId = $activity->causer_id;
+
+            $actionKey = $activity->description;
+            $subjectKey = $activity->subject_type ? class_basename($activity->subject_type) : null;
+
+            // استخدام $translations مباشرة
+            $action_ar = $translations[$actionKey] ?? "قام بـ {$actionKey}";
+            $subject_ar = $translations[$subjectKey] ?? ($subjectKey ?? 'عنصر غير محدد');
+            $add_details = "بكود : " . $activity->subject_id  ;
+
+            if($subjectKey == 'Animal') {
+                $animal = Animal::find($activity->subject_id);
+                $add_details = "بكود : " . $animal->animal_code;
+
+            } elseif ($subjectKey == 'DailyConsumption') {
+                $DailyConsumption = DailyConsumption::find($activity->subject_id);
+                $add_details = "عن يوم: " .$DailyConsumption ->consumptions_date ;
+            }elseif ($subjectKey == 'daily_production') {
+                $DailyProduction = daily_production::find($activity->subject_id);
+                $add_details = "عن يوم: " .$DailyProduction ->production_date ;
+            }
+            $details_array = [];
+            $item_id = $activity->subject_id;
+            $excludedKeys = [
+                'created_at',
+                'updated_at',
+                'deleted_at',
+                'password',
+                'causer_id',
+                'causer_type',
+                'user_id',
+                'password',
+                'created_by',
+                'notes',
+                'production_date',
+                'consumptions_date',
+                'production_id',
+                'payment_due_date',
+                'remember_token',
+                'date'
+
+
+            ];
+
+            if ($activity->properties->has('attributes')) {
+                foreach ($activity->properties['attributes'] as $key => $value) {
+                    if (in_array($key, $excludedKeys)) {
+                        continue; // تخطي هذا المفتاح
+                    }
+
+                    // استخدام $translations مباشرة
+                    $translatedKey = $translations[$key] ?? $key;
+                    $value = $translations[$value] ?? $value;
+
+                    $details_array[] = "{$translatedKey}: {$value}";
+
+                }
+            }
+
+
+            // بناء تفاصيل التغييرات للحالات "updated"
+            if ($actionKey === 'updated' && $activity->properties->has('old')) {
+                foreach ($activity->properties['old'] as $key => $oldValue) {
+                    $newValue = $activity->properties['attributes'][$key] ?? null;
+
+                    if (in_array($key, ['created_at', 'updated_at', 'deleted_at', 'password','remember_token'])) {
+                        continue;
+                    }
+
+                    if ($oldValue != $newValue) {
+                        // استخدام $translations مباشرة
+                        $translatedKey = '';
+                        $oldValue = $translations[$oldValue] ?? $oldValue;
+
+                        $details_array[] = "حيث كان:  '{$oldValue}'";
+                    }
+                }
+            }
+
+            $fullDetails = implode('، ', array_filter($details_array));
+
+
+            $timeFormatted = $activity->created_at->format('m/d h:i A');
+
+            $debugProperties = json_encode($activity->properties->toArray(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            return (object)[
+                'type' => "قام {$causerName} ب{$action_ar} {$subject_ar} {$add_details}",
+                'details' => $fullDetails,
+                'created_at' => $timeFormatted,
+                'debug_info' => $debugProperties,
+            ];
+        });
+
+
+
+        $latest_operations = $formatted_latest_operations;
+        $users = User::with('roles')->get();
+        $logs = $formatted_latest_operations;
+        return view('user.logs', compact('latest_operations', 'users'));
     }
 }

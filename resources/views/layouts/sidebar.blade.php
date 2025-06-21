@@ -621,6 +621,12 @@
                         <span class="mr-2">ادارة المستخدمين</span>
                     </div>
                 </a>
+                <a href="{{ route('user.logs') }}" class="sidebar-dropdown-item {{ request()->routeIs('user.logs') ? 'active' : '' }}">
+                    <div class="flex items-center">
+                        <i class="fas fa-clipboard-list ml-2"></i>
+                        <span class="mr-2">سجل الأنشطة</span>
+                    </div>
+                </a>
 
             </div>
         </div>
