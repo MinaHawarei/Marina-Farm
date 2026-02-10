@@ -164,13 +164,11 @@ class DashboardController extends Controller
             $fullDetails = implode('، ', array_filter($details_array));
 
 
-            $timeFormatted = $activity->created_at->format('m/d h:i A');
-
             $debugProperties = json_encode($activity->properties->toArray(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             return (object)[
                 'type' => "قام {$causerName} ب{$action_ar} {$subject_ar} {$add_details}",
                 'details' => $fullDetails,
-                'created_at' => $timeFormatted,
+                'created_at' => $activity->created_at,
                 'debug_info' => $debugProperties,
             ];
         });

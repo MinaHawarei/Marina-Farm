@@ -1,671 +1,137 @@
+{{-- Sidebar Navigation --}}
+{{-- Dashboard Link --}}
+<x-sidebar-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="fas fa-tachometer-alt">
+    الرئيسية
+</x-sidebar-link>
 
-    <!-- روابط الخطوط -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+{{-- Buffalo Section --}}
+<x-sidebar-group title="الجاموس" icon="fas fa-cow" :active="request()->routeIs('buffalo.*')" :count="$sidebarBuffaloCount ?? 0">
+    <x-sidebar-sublink :href="route('buffalo.index')" :active="request()->routeIs('buffalo.index')" icon="fas fa-list" :count="$sidebarBuffaloCount ?? 0">
+        الرئيسية
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('buffalo.pregnant')" :active="request()->routeIs('buffalo.pregnant')" icon="fas fa-baby" :count="$pregnantBuffaloCount ?? 0">
+        عشار
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('buffalo.dairy')" :active="request()->routeIs('buffalo.dairy')" icon="fas fa-wine-bottle" :count="$dairyBuffaloCount ?? 0">
+        حلاب
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('buffalo.fattening')" :active="request()->routeIs('buffalo.fattening')" icon="fas fa-weight" :count="$fatteningBuffaloCount ?? 0">
+        تسمين
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('buffalo.calf')" :active="request()->routeIs('buffalo.calf')" icon="fas fa-paw" :count="$calfBuffaloCount ?? 0">
+        مواليد
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{{-- Cow Section --}}
+<x-sidebar-group title="الابقار" icon="fas fa-cow" :active="request()->routeIs('cow.*')" :count="$cowCount ?? 0">
+    <x-sidebar-sublink :href="route('cow.index')" :active="request()->routeIs('cow.index')" icon="fas fa-list" :count="$cowCount ?? 0">
+        الرئيسية
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('cow.pregnant')" :active="request()->routeIs('cow.pregnant')" icon="fas fa-baby" :count="$pregnantCow ?? 0">
+        عشار
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('cow.dairy')" :active="request()->routeIs('cow.dairy')" icon="fas fa-wine-bottle" :count="$dairyCow ?? 0">
+        حلاب
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('cow.fattening')" :active="request()->routeIs('cow.fattening')" icon="fas fa-weight" :count="$fatteningCow ?? 0">
+        تسمين
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('cow.calf')" :active="request()->routeIs('cow.calf')" icon="fas fa-paw" :count="$calfCow ?? 0">
+        مواليد
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-    <!-- Alpine JS -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+{{-- Daily Section --}}
+<x-sidebar-group title="اليومية" icon="fas fa-calendar-day" :active="request()->routeIs('daily.*')">
+    <x-sidebar-sublink :href="route('daily.index')" :active="request()->routeIs('daily.index')" icon="fas fa-home">
+        الرئيسية
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('daily.production')" :active="request()->routeIs('daily.production')" icon="fas fa-industry">
+        الانتاج اليومي
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('daily.consumption')" :active="request()->routeIs('daily.consumption')" icon="fas fa-utensils">
+        الاستهلاك اليومي
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-    <style>
-        /* تنسيقات عامة */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-        }
-        @media (max-width: 767px) {
-            .sidebar {
-               position: fixed;
-        right: -16rem;
-        left: auto;
-        top: 0;
-        bottom: 0;
-        z-index: 1000;
-        transition: right 0.3s ease;
-        min-height: 100vh; /* إرجاع min-height: 100vh; هنا فقط للجوال */
-            }
+{{-- Treasury Section --}}
+<x-sidebar-group title="الخزينة" icon="fas fa-piggy-bank" :active="request()->routeIs('treasury.*')">
+    <x-sidebar-sublink :href="route('treasury.index')" :active="request()->routeIs('treasury.index')" icon="fas fa-home">
+        الرئيسية
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('treasury.income')" :active="request()->routeIs('treasury.income')" icon="fas fa-money-bill-wave">
+        ايرادات
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('treasury.expense')" :active="request()->routeIs('treasury.expense')" icon="fas fa-receipt">
+        مصروفات
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('treasury.liabilities')" :active="request()->routeIs('treasury.liabilities')" icon="fas fa-hand-holding-usd">
+        مديونات
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('treasury.receivables')" :active="request()->routeIs('treasury.receivables')" icon="fas fa-hand-holding-heart">
+        تحصيلات
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('treasury.daily')" :active="request()->routeIs('treasury.daily')" icon="fas fa-calendar-day">
+        يومية
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-            .sidebar.open {
-                right: 0;
-            }
+{{-- Stock Section --}}
+<x-sidebar-group title="المخزون" icon="fas fa-boxes" :active="request()->routeIs('stock.*')">
+    <x-sidebar-sublink :href="route('stock.producs')" :active="request()->routeIs('stock.producs')" icon="fas fa-box-open">
+        منتجات
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('stock.feeds')" :active="request()->routeIs('stock.feeds')" icon="fas fa-haykal">
+        اعلاف
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('stock.other')" :active="request()->routeIs('stock.other')" icon="fas fa-ellipsis-h">
+        اخري
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-            .sidebar-overlay {
-                position: fixed;
-                top: 0;
-                right: 0;
-                left: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.5);
-                z-index: 999;
-                display: none;
-                    }
-        }
-        :root {
-            --primary-dark: #040629;
-            --primary-light: #040629;
-            --active-bg: rgba(255, 255, 255, 0.05);
-            --active-text: #ffffff;
-            --hover-color: #3b82f6;
-            --badge-bg: #3b82f6;
-            --text-light: #cccccc;
-            --text-white: #ffffff;
-        }
+{{-- Tools Section --}}
+<x-sidebar-group title="الصيانة و المعدات" icon="fas fa-tools" :active="request()->routeIs('tools.*')">
+    <x-sidebar-sublink :href="route('tools.index')" :active="request()->routeIs('tools.index')" icon="fas fa-list">
+        المعدات
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('tools.schedule')" :active="request()->routeIs('tools.schedule')" icon="fas fa-calendar-check">
+        جدول الصيانة
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-        /* تنسيقات الـ Sidebar */
-        .sidebar {
-            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-light) 100%);
-            width: 16rem;
-            /* * إزالة min-height: 100vh; من هنا
-            * ليسمح للـ sidebar بالتمدد حسب المحتوى على الشاشات الكبيرة
-            */
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-            will-change: transform;
-            backface-visibility: hidden;
-            overflow-y: auto; /* إضافة: تسمح بالتمرير داخل الـ sidebar إذا أصبح محتواه أطول من الشاشة */
-        }
+{{-- Clients Section --}}
+<x-sidebar-group title="العملاء و الموردين" icon="fas fa-users" :active="request()->routeIs('clients.*')">
+    <x-sidebar-sublink :href="route('clients.index')" :active="request()->routeIs('clients.index')" icon="fas fa-user-tie">
+        العملاء
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('clients.suppliers')" :active="request()->routeIs('clients.suppliers')" icon="fas fa-truck">
+        الموردين
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-        /* عناصر القائمة */
-        .sidebar-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            margin: 0.25rem 0;
-            color: var(--text-light);
-            font-weight: 600;
-            border-right: 4px solid transparent;
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            text-decoration: none;
-        }
+{{-- Reports Section --}}
+<x-sidebar-group title="التقارير و التحليلات" icon="fas fa-chart-bar" :active="request()->routeIs('reports.*')">
+    <x-sidebar-sublink :href="route('reports.production')" :active="request()->routeIs('reports.production')" icon="fas fa-chart-line">
+        تقارير الانتاج
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('reports.sales')" :active="request()->routeIs('reports.sales')" icon="fas fa-chart-pie">
+        تقارير المبيعات
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('reports.financial')" :active="request()->routeIs('reports.financial')" icon="fas fa-file-alt">
+        تقارير مالية
+    </x-sidebar-sublink>
+</x-sidebar-group>
 
-        .sidebar-item:hover {
-            color: var(--text-white);
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .sidebar-item.active {
-            background-color: var(--active-bg);
-            color: var(--active-text);
-            border-radius: 0 15px 15px 0;
-            border-right-color: var(--hover-color);
-        }
-        .sidebar-dropdown-item.active {
-            background-color: var(--active-bg);
-            color: var(--active-text);
-            border-radius: 0 15px 15px 0;
-            border-right-color: var(--hover-color);
-        }
-
-        .sidebar-dropdown-item.active:hover {
-            background-color: var(--active-bg);
-            color: var(--active-text);
-        }
-
-        /* الأيقونات */
-        .sidebar-item i {
-            transition: transform 0.2s ease;
-            font-size: 0.9rem;
-        }
-
-        .sidebar-item:hover i {
-            transform: scale(1.1);
-        }
-
-        /* العداد (Badge) */
-        .sidebar-badge {
-            background-color: var(--badge-bg);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: bold;
-            border-radius: 9999px;
-            height: 1.25rem;
-            width: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .sidebar-item:hover .sidebar-badge {
-            transform: scale(1.1);
-            background-color: #2563eb;
-        }
-        .sidebar-dropdown-item:hover {
-            color: var(--text-white);
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .sidebar-dropdown-item:hover i {
-            transform: scale(1.1);
-        }
-
-        .sidebar-dropdown-item:hover .sidebar-badge {
-            transform: scale(1.1);
-            background-color: #2563eb;
-        }
-
-        .sidebar-dropdown-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--hover-color);
-            transition: width 0.3s ease;
-        }
-
-        .sidebar-dropdown-item:hover::after {
-            width: 100%;
-        }
-
-        /* القوائم المنسدلة */
-        .sidebar-dropdown {
-            transition: all 0.3s ease-out;
-            overflow: hidden;
-            color: white;
-            background-color: rgba(4, 6, 41, 0.9);
-        }
-
-        .sidebar-dropdown-item {
-            padding: 0.75rem 3.0rem 0.75rem 3rem;
-            transition: all 0.2s ease;
-            /* أضف هذه الخاصية */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* تأثيرات متقدمة */
-        .sidebar-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--hover-color);
-            transition: width 0.3s ease;
-        }
-
-        .sidebar-item:hover::after {
-            width: 100%;
-        }
-
-        /* Animation for dropdown */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .sidebar-dropdown {
-            animation: slideDown 0.3s ease-out forwards;
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            .sidebar-item.active {
-                background-color: #1e293b;
-                color: #f8fafc;
-            }
-        }
-    </style>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- رابط الرئيسية -->
-        <a href="{{ route('dashboard') }}" class="sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <div class="flex items-center">
-                <i class="fas fa-tachometer-alt ml-2"></i>
-                <span class="mr-2">الرئيسية</span>
-            </div>
-        </a>
-
-        <!-- قسم الجاموس مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('buffalo.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-cow ml-2"></i>
-                    <span class="mr-2">الجاموس</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="sidebar-badge ml-2 mr-2 ">
-                        {{ $sidebarBuffaloCount ?? 0 }}
-                    </span>
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('buffalo.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('buffalo.index') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-list ml-2"></i>
-                        <span class="mr-2">الرئيسية</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $sidebarBuffaloCount ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('buffalo.pregnant') }}" class="sidebar-dropdown-item {{ request()->routeIs('buffalo.pregnant') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-baby ml-2"></i>
-                        <span class="mr-2">عشار</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $pregnantBuffaloCount ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('buffalo.dairy') }}" class="sidebar-dropdown-item {{ request()->routeIs('buffalo.dairy') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-wine-bottle ml-2"></i>
-                        <span class="mr-2">حلاب</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $dairyBuffaloCount ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('buffalo.fattening') }}" class="sidebar-dropdown-item {{ request()->routeIs('buffalo.fattening') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-weight ml-2"></i>
-                        <span class="mr-2">تسمين</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $fatteningBuffaloCount ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('buffalo.calf') }}" class="sidebar-dropdown-item {{ request()->routeIs('buffalo.calf') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-paw ml-2"></i>
-                        <span class="mr-2">مواليد</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $calfBuffaloCount ?? 0 }}
-                    </span>
-                </a>
-            </div>
-        </div>
-
-        <!-- قسم الابقار مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('cow.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-cow ml-2"></i>
-                    <span class="mr-2">الابقار</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="sidebar-badge ml-2 mr-2">
-                        {{ $cowCount ?? 0 }}
-                    </span>
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('cow.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('cow.index') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-list ml-2"></i>
-                        <span class="mr-2">الرئيسية</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $cowCount ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('cow.pregnant') }}" class="sidebar-dropdown-item {{ request()->routeIs('cow.pregnant') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-baby ml-2"></i>
-                        <span class="mr-2">عشار</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $pregnantCow ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('cow.dairy') }}" class="sidebar-dropdown-item {{ request()->routeIs('cow.dairy') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-wine-bottle ml-2"></i>
-                        <span class="mr-2">حلاب</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $dairyCow ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('cow.fattening') }}" class="sidebar-dropdown-item {{ request()->routeIs('cow.fattening') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-weight ml-2"></i>
-                        <span class="mr-2">تسمين</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $fatteningCow ?? 0 }}
-                    </span>
-                </a>
-                <a href="{{ route('cow.calf') }}" class="sidebar-dropdown-item {{ request()->routeIs('cow.calf') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-paw ml-2"></i>
-                        <span class="mr-2">مواليد</span>
-                    </div>
-                    <span class="sidebar-badge">
-                        {{ $calfCow ?? 0 }}
-                    </span>
-                </a>
-            </div>
-        </div>
-
-        <!-- قسم اليومية مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('daily.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-calendar-day ml-2"></i>
-                    <span class="mr-2">اليومية</span>
-                </div>
-                <div class="flex items-center">
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('daily.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('daily.index') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-home ml-2"></i>
-                        <span class="mr-2">الرئيسية</span>
-                    </div>
-                </a>
-                <a href="{{ route('daily.production') }}" class="sidebar-dropdown-item {{ request()->routeIs('daily.production') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-industry ml-2"></i>
-                        <span class="mr-2">الانتاج اليومي</span>
-                    </div>
-                </a>
-                <a href="{{ route('daily.consumption') }}" class="sidebar-dropdown-item {{ request()->routeIs('daily.consumption') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-utensils ml-2"></i>
-                        <span class="mr-2">الاستهلاك اليومي</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <!-- قسم الخزينة مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('treasury.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-piggy-bank ml-2"></i>
-                    <span class="mr-2">الخزينة</span>
-                </div>
-                <div class="flex items-center">
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('treasury.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('treasury.index') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-home ml-2"></i>
-                        <span class="mr-2">الرئيسية</span>
-                    </div>
-                </a>
-                <a href="{{ route('treasury.income') }}" class="sidebar-dropdown-item {{ request()->routeIs('treasury.income') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-money-bill-wave ml-2"></i>
-                        <span class="mr-2">ايرادات</span>
-                    </div>
-                </a>
-                <a href="{{ route('treasury.expense') }}" class="sidebar-dropdown-item {{ request()->routeIs('treasury.expense') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-receipt ml-2"></i>
-                        <span class="mr-2">مصروفات</span>
-                    </div>
-                </a>
-                <a href="{{ route('treasury.liabilities') }}" class="sidebar-dropdown-item {{ request()->routeIs('treasury.liabilities') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-hand-holding-usd ml-2"></i>
-                        <span class="mr-2">مديونات</span>
-                    </div>
-                </a>
-                <a href="{{ route('treasury.receivables') }}" class="sidebar-dropdown-item {{ request()->routeIs('treasury.receivables') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-hand-holding-heart ml-2"></i>
-                        <span class="mr-2">تحصيلات</span>
-                    </div>
-                </a>
-                <a href="{{ route('treasury.daily') }}" class="sidebar-dropdown-item {{ request()->routeIs('treasury.daily') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-calendar-day ml-2"></i>
-                        <span class="mr-2">يومية</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-
-        <!-- قسم المخزون مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('stock.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-boxes ml-2"></i>
-                    <span class="mr-2">المخزون</span>
-                </div>
-                <div class="flex items-center">
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('stock.producs') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.producs') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-box-open ml-2"></i>
-                        <span class="mr-2">منتجات</span>
-                    </div>
-                </a>
-                <a href="{{ route('stock.feeds') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.feeds') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-haykal ml-2"></i>
-                        <span class="mr-2">اعلاف</span>
-                    </div>
-                </a>
-                <a href="{{ route('stock.other') }}" class="sidebar-dropdown-item {{ request()->routeIs('stock.other') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-ellipsis-h ml-2"></i>
-                        <span class="mr-2">اخري</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-          <!-- قسم الصيانة و المعدات مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('tools.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-tools ml-2"></i>
-                    <span class="mr-2">الصيانة و المعدات</span>
-                </div>
-                <div class="flex items-center">
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('tools.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('tools.index') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-list ml-2"></i>
-                        <span class="mr-2">المعدات</span>
-                    </div>
-                </a>
-                <a href="{{ route('tools.schedule') }}" class="sidebar-dropdown-item {{ request()->routeIs('tools.schedule') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-calendar-check ml-2"></i>
-                        <span class="mr-2">جدول الصيانة</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <!-- قسم العملاء و الموردين مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('clients.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-users ml-2"></i>
-                    <span class="mr-2">العملاء و الموردين</span>
-                </div>
-                <div class="flex items-center">
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('clients.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('clients.index') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                         <i class="fas fa-user-tie ml-2"></i>
-                        <span class="mr-2">العملاء</span>
-                    </div>
-                </a>
-                <a href="{{ route('clients.suppliers') }}" class="sidebar-dropdown-item {{ request()->routeIs('clients.suppliers') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-truck ml-2"></i>
-                        <span class="mr-2">الموردين</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <!-- قسم التقارير و التحليلات مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('reports.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-chart-bar ml-2"></i>
-                    <span class="mr-2">التقارير و التحليلات</span>
-                </div>
-                <div class="flex items-center">
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('reports.production') }}" class="sidebar-dropdown-item {{ request()->routeIs('reports.production') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-chart-line ml-2"></i>
-                        <span class="mr-2">تقارير الانتاج</span>
-                    </div>
-                </a>
-                <a href="{{ route('reports.sales') }}" class="sidebar-dropdown-item {{ request()->routeIs('reports.sales') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-chart-pie ml-2"></i>
-                        <span class="mr-2">تقارير المبيعات</span>
-                    </div>
-                </a>
-                <a href="{{ route('reports.financial') }}" class="sidebar-dropdown-item {{ request()->routeIs('reports.financial') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-file-alt ml-2"></i>
-                        <span class="mr-2">تقارير مالية</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <!-- قسم الموارد البشرية مع القائمة المنسدلة -->
-        <div x-data="{ isOpen: {{ request()->routeIs('user.*') ? 'true' : 'false' }} }" class="relative">
-            <!-- زر القسم الرئيسي -->
-            <button @click="isOpen = !isOpen" class="sidebar-item w-full text-left">
-                <div class="flex items-center">
-                    <i class="fas fa-users-cog ml-2"></i>
-                    <span class="mr-2">الموارد البشرية</span>
-                </div>
-                <div class="flex items-center">
-                    <i x-show="!isOpen" class="fas fa-chevron-down text-xs"></i>
-                    <i x-show="isOpen" class="fas fa-chevron-up text-xs"></i>
-                </div>
-            </button>
-
-            <!-- القائمة المنسدلة -->
-            <div x-show="isOpen" x-collapse class="sidebar-dropdown">
-                <a href="{{ route('user.employees') }}" class="sidebar-dropdown-item {{ request()->routeIs('user.employees') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-user-friends ml-2"></i>
-                        <span class="mr-2">الموظفون</span>
-                    </div>
-                </a>
-                <a href="{{ route('user.index') }}" class="sidebar-dropdown-item {{ request()->routeIs('user.index') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-user-cog ml-2"></i>
-                        <span class="mr-2">ادارة المستخدمين</span>
-                    </div>
-                </a>
-                <a href="{{ route('user.logs') }}" class="sidebar-dropdown-item {{ request()->routeIs('user.logs') ? 'active' : '' }}">
-                    <div class="flex items-center">
-                        <i class="fas fa-clipboard-list ml-2"></i>
-                        <span class="mr-2">سجل الأنشطة</span>
-                    </div>
-                </a>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Script for micro-interactions -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Click effect
-            document.querySelectorAll('.sidebar-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    this.style.transform = 'scale(0.98)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
-
-            // Smooth scroll for sidebar
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.style.transform = 'translateX(0)';
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButton = document.getElementById('mobile-menu-button');
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.createElement('div');
-
-            overlay.className = 'sidebar-overlay';
-            document.body.appendChild(overlay);
-
-            menuButton.addEventListener('click', function() {
-                sidebar.classList.toggle('open');
-                overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
-            });
-
-            overlay.addEventListener('click', function() {
-                sidebar.classList.remove('open');
-                overlay.style.display = 'none';
-            });
-        });
-    </script>
+{{-- HR Section --}}
+<x-sidebar-group title="الموارد البشرية" icon="fas fa-users-cog" :active="request()->routeIs('user.*')">
+    <x-sidebar-sublink :href="route('user.employees')" :active="request()->routeIs('user.employees')" icon="fas fa-user-friends">
+        الموظفون
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('user.index')" :active="request()->routeIs('user.index')" icon="fas fa-user-cog">
+        ادارة المستخدمين
+    </x-sidebar-sublink>
+    <x-sidebar-sublink :href="route('user.logs')" :active="request()->routeIs('user.logs')" icon="fas fa-clipboard-list">
+        سجل الأنشطة
+    </x-sidebar-sublink>
+</x-sidebar-group>

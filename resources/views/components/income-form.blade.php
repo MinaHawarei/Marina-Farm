@@ -1,138 +1,180 @@
 {{-- income-form.blade.php (التعديل لضمان إرسال buyer_name) --}}
 
-<div id="income-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 {{ $isVisible ? '' : 'hidden' }} flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
-        <h3 class="text-xl font-semibold text-gray-800 mb-6">{{ $title }}</h3>
-        <form action="{{ route('income.store') }}" method="POST" id="income_form">
-            @csrf
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- العمود الأول --}}
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-gray-700 mb-1">فئة الإيرادات<span class="text-red-500">*</span></label>
-                        <select id="income_mainCategory" name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
-                            <option value="">اختر فئة الإيراد</option>
-                            <option value="Product Sales">بيع منتجات</option>
-                            <option value="Animal Sales">بيع بهائم</option>
-                            <option value="Equipment Sales">بيع معدات أو أثاث</option>
-                            <option value="Rent Income">إيجار</option>
-                            <option value="Collections">تحصيل ديون</option>
-                            <option value="Other">أخرى</option>
-                        </select>
+<div id="income-form" class="fixed inset-0 z-50 {{ $isVisible ? '' : 'hidden' }} overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900/75 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
+        <!-- Modal Panel -->
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-right shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl border border-gray-100">
+            
+            <!-- Header -->
+            <div class="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900 font-tajawal flex items-center gap-2" id="modal-title">
+                    <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                        <i class="fas fa-hand-holding-usd text-green-600"></i>
                     </div>
-
-                    <div class="mt-4">
-                        <label class="block text-gray-700 mb-1">نوع الايراد<span class="text-red-500">*</span></label>
-                        <select id="income_subCategory" name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
-                            <option value="">اختر التوزيع الفرعي</option>
-                        </select>
-                    </div>
-                    {{-- **بداية إضافة حقول اختيار الحيوانات** --}}
-                    <div id="animal_buffalo_select_container" class="mt-4 hidden">
-                        <label class="block text-gray-700 mb-1">اسم الجاموس<span class="text-red-500">*</span></label>
-                        <select id="animal_buffalo_select" name="animal_code" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
-                            <option value="">اختر الجاموس</option>
-                            @isset($buffaloes) {{-- $buffaloes تم إرسالها من الكنترولر --}}
-                                @foreach($buffaloes as $animal)
-                                    <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}">{{ $animal->animal_code }}</option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-
-                    <div id="animal_cow_select_container" class="mt-4 hidden">
-                        <label class="block text-gray-700 mb-1">اسم البقرة<span class="text-red-500">*</span></label>
-                        <select id="animal_cow_select" name="animal_code" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
-                            <option value="">اختر البقرة</option>
-                            @isset($cows) {{-- $cows تم إرسالها من الكنترولر --}}
-                                @foreach($cows as $animal)
-                                    <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}">{{ $animal->animal_code }}</option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-
-                    {{-- حقل مخفي لحفظ اسم الحيوان، سيتم ملؤه بواسطة JavaScript --}}
-                    <input type="hidden" id="animal_name_hidden_field" name="animal_code">
-                    {{-- **نهاية إضافة حقول اختيار الحيوانات** --}}
-
-
-                    <div id="income_otherSubCategoryContainer" class="hidden mt-4">
-                        <label class="block text-gray-700 mb-1">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
-                        <input type="text" id="income_otherSubCategory" name="other_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="اكتب التوزيع الفرعي هنا">
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">تفاصيل<span class="text-red-500">*</span></label>
-                        <input type="text" name="description" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">التاريخ<span class="text-red-500">*</span></label>
-                        <input type="date" name="date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-
-                    {{-- حقل اسم العميل (Droplist) --}}
-                    <div>
-                        <label class="block text-gray-700 mb-1">اسم العميل<span class="text-red-500">*</span></label>
-                        <select id="buyer_select" name="buyer_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
-                            <option value="">اختر العميل</option>
-                            @isset($buyers)
-                                @foreach($buyers as $buyer)
-                                    {{-- نستخدم data-name لتخزين اسم العميل كاملاً --}}
-                                    <option value="{{ $buyer->id }}" data-name="{{ $buyer->name }}">{{ $buyer->name }} (كود: {{ $buyer->id }})</option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-
-                    {{-- حقل اسم العميل المخفي ليتم إرساله مع النموذج --}}
-                    <input type="hidden" id="buyer_name_hidden_field" name="buyer_name">
-
-                </div>
-
-                {{-- العمود الثاني --}}
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-gray-700 mb-1">الكمية<span class="text-red-500">*</span></label>
-                        <input type="number" name="quantity" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">سعر الوحدة<span class="text-red-500">*</span></label>
-                        <input type="number" name="unit_price" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">القيمة<span class="text-red-500">*</span></label>
-                        <input type="number" name="amount" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">المدفوع<span class="text-red-500">*</span></label>
-                        <input type="number" name="paid" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">الباقي<span class="text-red-500">*</span></label>
-                        <input type="number" name="remaining" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">تاريخ تحصيل الباقي <span class="text-red-500">*</span></label>
-                        <input type="date" name="payment_due_date" min="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-
-                </div>
-            </div>
-
-            {{-- أزرار --}}
-            <div class="mt-8 flex justify-end gap-3">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    إضافة
-                </button>
-                <button type="button" onclick="incomeForm()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                    إلغاء
+                    {{ $title }}
+                </h3>
+                <button type="button" onclick="incomeForm()" class="text-gray-400 hover:text-gray-500 transition-colors focus:outline-none">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-        </form>
+
+            <!-- Form -->
+            <form action="{{ route('income.store') }}" method="POST" id="income_form" class="p-6">
+                @csrf
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Column 1 --}}
+                    <div class="space-y-5">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">فئة الإيرادات<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="income_mainCategory" name="category" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none" required>
+                                    <option value="">اختر فئة الإيراد</option>
+                                    <option value="Product Sales">بيع منتجات</option>
+                                    <option value="Animal Sales">بيع بهائم</option>
+                                    <option value="Equipment Sales">بيع معدات أو أثاث</option>
+                                    <option value="Rent Income">إيجار</option>
+                                    <option value="Collections">تحصيل ديون</option>
+                                    <option value="Other">أخرى</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">نوع الايراد<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="income_subCategory" name="type" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none">
+                                    <option value="">اختر التوزيع الفرعي</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Buffer Select --}}
+                        <div id="animal_buffalo_select_container" class="mt-4 hidden relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">اسم الجاموس<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="animal_buffalo_select" name="animal_code" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none">
+                                    <option value="">اختر الجاموس</option>
+                                    @isset($buffaloes)
+                                        @foreach($buffaloes as $animal)
+                                            <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}">{{ $animal->animal_code }}</option>
+                                        @endforeach
+                                    @endisset
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Cow Select --}}
+                        <div id="animal_cow_select_container" class="mt-4 hidden relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">اسم البقرة<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="animal_cow_select" name="animal_code" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none">
+                                    <option value="">اختر البقرة</option>
+                                    @isset($cows)
+                                        @foreach($cows as $animal)
+                                            <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}">{{ $animal->animal_code }}</option>
+                                        @endforeach
+                                    @endisset
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Hidden field for animal name --}}
+                        <input type="hidden" id="animal_name_hidden_field" name="animal_code">
+
+                        <div id="income_otherSubCategoryContainer" class="hidden mt-4 relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
+                            <input type="text" id="income_otherSubCategory" name="other_type" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" placeholder="اكتب التوزيع الفرعي هنا">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">تفاصيل<span class="text-red-500">*</span></label>
+                            <input type="text" name="description" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">التاريخ<span class="text-red-500">*</span></label>
+                            <input type="date" name="date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">اسم العميل<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="buyer_select" name="buyer_id" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none" required>
+                                    <option value="">اختر العميل</option>
+                                    @isset($buyers)
+                                        @foreach($buyers as $buyer)
+                                            <option value="{{ $buyer->id }}" data-name="{{ $buyer->name }}">{{ $buyer->name }} (كود: {{ $buyer->id }})</option>
+                                        @endforeach
+                                    @endisset
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Hidden field for buyer name --}}
+                        <input type="hidden" id="buyer_name_hidden_field" name="buyer_name">
+
+                    </div>
+
+                    {{-- Column 2 --}}
+                    <div class="space-y-5">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">الكمية<span class="text-red-500">*</span></label>
+                            <input type="number" name="quantity" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">سعر الوحدة<span class="text-red-500">*</span></label>
+                            <input type="number" name="unit_price" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">القيمة<span class="text-red-500">*</span></label>
+                            <input type="number" name="amount" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">المدفوع<span class="text-red-500">*</span></label>
+                            <input type="number" name="paid" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">الباقي<span class="text-red-500">*</span></label>
+                            <input type="number" name="remaining" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">تاريخ تحصيل الباقي <span class="text-red-500">*</span></label>
+                            <input type="date" name="payment_due_date" min="{{ date('Y-m-d') }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-8 pt-4 border-t border-gray-100 flex justify-end gap-3">
+                    <button type="button" onclick="incomeForm()" class="px-6 py-2.5 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-medium font-tajawal">إلغاء</button>
+                    
+                    <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all duration-200 font-medium font-tajawal flex items-center gap-2 transform active:scale-95">
+                        <i class="fas fa-save"></i>
+                        إضافة
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

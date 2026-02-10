@@ -1,75 +1,64 @@
-<nav x-data="{ open: false }" class="bg-dark border-b border-gray-800" dir="rtl" style="background-color: #040629; color: white;">
-    <!-- Primary Navigation Menu -->
+{{-- NAVBAR: Fixed at Top --}}
+<nav class="app-navbar" dir="rtl">
+    <div class="h-full mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-full">
 
-    <div class=" mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-             <button id="mobile-menu-button" class="md:hidden p-2 text-white">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-            <!-- اللوجو (أقصى اليمين بعد التبديل) -->
-            <div class="shrink-0 flex items-center ms-4">
-                <div class="p-6 text-center">
-                    <h1 class="text-2xl font-bold" style="color: white;">مزارع ساره</h1>
-                </div>
+            {{-- Left Side: Toggle Buttons + Logo --}}
+            <div class="flex items-center gap-2">
+                {{-- Mobile Menu Button (visible on mobile only) --}}
+                <button @click="toggleMobileMenu()"
+                        class="mobile-menu-btn p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+                        aria-label="فتح القائمة">
+                    <i class="fas" :class="mobileMenuOpen ? 'fa-times' : 'fa-bars'" class="text-xl"></i>
+                </button>
+
+                {{-- Logo --}}
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group ms-2">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500/20 flex items-center justify-center border border-brand-500/30 group-hover:bg-brand-500/30 transition-colors">
+                        <i class="fas fa-cow text-brand-400 text-lg"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-white font-tajawal tracking-wide hidden sm:block">مزارع ساره</h1>
+                </a>
             </div>
 
-            <!-- اسم المستخدم (أقصى اليسار بعد التبديل) -->
-            <div class="flex items-center me-4">
-                <x-dropdown align="right" width="48">
+            {{-- Right Side: User Menu --}}
+            <div class="flex items-center">
+                <x-dropdown align="left" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md"
-                        style="background-color: #040629; color: white; transition: color 0.3s ease;">
-                        <div>{{ Auth::user()->name }}</div>
-                        <div class="mr-1">
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </button>
-
+                        <button class="inline-flex items-center gap-2 px-3 py-2 text-sm leading-4 font-medium rounded-full text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white font-bold shadow-lg shadow-brand-500/20">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+                            <div class="hidden md:block font-tajawal">{{ Auth::user()->name }}</div>
+                            <i class="fas fa-chevron-down text-xs opacity-75 hidden md:block"></i>
+                        </button>
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')" >
+                        {{-- Account Header --}}
+                        <div class="px-4 py-3 border-b border-gray-100 bg-gray-50/50">
+                            <p class="text-sm font-semibold text-gray-900 font-tajawal">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                        </div>
+
+                        <x-dropdown-link :href="route('profile.edit')" class="flex items-center gap-3 hover:bg-gray-50 font-tajawal">
+                            <i class="fas fa-user-circle text-gray-400 w-5 text-center"></i>
                             {{ __('الملف الشخصي') }}
                         </x-dropdown-link>
+
+                        <div class="border-t border-gray-100"></div>
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                            <x-dropdown-link :href="route('logout')"
+                                             onclick="event.preventDefault(); this.closest('form').submit();"
+                                             class="flex items-center gap-3 text-red-600 hover:bg-red-50 hover:text-red-700 font-tajawal">
+                                <i class="fas fa-sign-out-alt w-5 text-center"></i>
                                 {{ __('تسجيل الخروج') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
                 </x-dropdown>
-            </div>
-        </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('الرئيسية') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('الملف الشخصي') }}
-                </x-responsive-nav-link>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                        {{ __('تسجيل الخروج') }}
-                    </x-responsive-nav-link>
-                </form>
             </div>
         </div>
     </div>

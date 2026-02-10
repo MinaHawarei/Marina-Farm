@@ -1,149 +1,191 @@
 
-{{-- edit-form.blade.php (الجزء المعدّل من الـ HTML) --}}
+<div id="edit-form" class="fixed inset-0 z-50 {{ $isVisible ? '' : 'hidden' }} overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900/75 backdrop-blur-sm transition-opacity"></div>
 
-<div id="edit-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 {{ $isVisible ? '' : 'hidden' }} flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
-        <h3 class="text-xl font-semibold text-gray-800 mb-6">تعديل ايراد</h3>
-        @if(isset($item))
-        <form action="{{ route('income.update' , $item->id) }}" method="POST" id="edit_income_form"> {{-- غيّرت الـ ID هنا لكي لا يتعارض مع الـ ID الخاص بـ div --}}
-            @csrf
-            @method('PUT')
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- العمود الأول --}}
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-gray-700 mb-1">فئة الإيرادات<span class="text-red-500">*</span></label>
-                        <select id="income_mainCategory_edit" name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
-                            <option value="">اختر فئة الإيراد</option>
-                            <option value="Product Sales" {{ $item->category == 'Product Sales' ? 'selected' : '' }}>بيع منتجات</option>
-                            <option value="Animal Sales" {{ $item->category == 'Animal Sales' ? 'selected' : '' }}>بيع بهائم</option>
-                            <option value="Equipment Sales" {{ $item->category == 'Equipment Sales' ? 'selected' : '' }}>بيع معدات أو أثاث</option>
-                            <option value="Rent Income" {{ $item->category == 'Rent Income' ? 'selected' : '' }}>إيجار</option>
-                            <option value="Collections" {{ $item->category == 'Collections' ? 'selected' : '' }}>تحصيل ديون</option>
-                            <option value="Other" {{ $item->category == 'Other' ? 'selected' : '' }}>أخرى</option>
-                        </select>
+    <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
+        <!-- Modal Panel -->
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-right shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl border border-gray-100">
+            
+            <!-- Header -->
+            <div class="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900 font-tajawal flex items-center gap-2" id="modal-title">
+                    <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                        <i class="fas fa-edit text-green-600"></i>
                     </div>
-
-                    <div class="mt-4">
-                        <label class="block text-gray-700 mb-1">نوع الايراد<span class="text-red-500">*</span></label>
-                        <select id="income_subCategory_edit" name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
-                            <option value="">اختر التوزيع الفرعي</option>
-                            {{-- الخيارات سيتم ملؤها بواسطة JS بناءً على الفئة الرئيسية وقيمة $item->type --}}
-                        </select>
-                    </div>
-
-                    {{-- **بداية إضافة حقول اختيار الحيوانات (مع قيم التعديل)** --}}
-                    <div id="animal_buffalo_select_container_edit" class="mt-4 hidden">
-                        <label class="block text-gray-700 mb-1">كود الجاموس<span class="text-red-500">*</span></label>
-                        <select id="animal_buffalo_select_edit" name="animal_code" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
-                            <option value="">اختر الجاموس</option>
-                            @isset($allbuffaloes)
-                                @foreach($allbuffaloes as $animal)
-                                    <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}" {{ isset($item->animal_code) && $item->animal_code == $animal->animal_code ? 'selected' : '' }}>
-                                        {{ $animal->animal_code }}
-                                    </option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-
-                    <div id="animal_cow_select_container_edit" class="mt-4 hidden">
-                        <label class="block text-gray-700 mb-1">كود البقرة<span class="text-red-500">*</span></label>
-                        <select id="animal_cow_select_edit" name="animal_code" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
-                            <option value="">اختر البقرة</option>
-                            @isset($allcows)
-                                @foreach($allcows as $animal)
-                                    <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}" {{ isset($item->animal_code) && $item->animal_code == $animal->animal_code ? 'selected' : '' }}>
-                                        {{ $animal->animal_code }}
-                                    </option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-
-                    {{-- حقل مخفي لحفظ اسم/كود الحيوان، سيتم ملؤه بواسطة JavaScript --}}
-                    <input type="hidden" id="animal_code_hidden_field_edit" name="animal_code_hidden" value="{{ $item->animal_code ?? '' }}">
-                    {{-- **نهاية إضافة حقول اختيار الحيوانات** --}}
-
-                    <div id="income_otherSubCategoryContainer_edit" class="mt-4 {{ $item->category == 'Other' && !in_array($item->type, array_column(array_merge(...array_values($income_subCategoriesData)), 'value')) ? '' : 'hidden' }}">
-                        <label class="block text-gray-700 mb-1">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
-                        <input type="text" id="income_otherSubCategory_edit" name="other_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="اكتب التوزيع الفرعي هنا" value="{{ $item->type }}">
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">تفاصيل<span class="text-red-500">*</span></label>
-                        <input type="text" name="description" class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="{{ $item->description }}" required>
-                    </div>
-
-                     <div>
-                        <label class="block text-gray-700 mb-1">التاريخ<span class="text-red-500">*</span></label>
-                        <input type="date" name="date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                               value="{{ \Carbon\Carbon::parse($item->date)->format('Y-m-d') }}" required>
-                    </div>
-
-                    {{-- **تعديل حقول العميل لاستخدام Dropdown كما في فورم الإضافة** --}}
-                    <div>
-                        <label class="block text-gray-700 mb-1">اسم العميل<span class="text-red-500">*</span></label>
-                        <select id="buyer_select_edit" name="buyer_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
-                            <option value="">اختر العميل</option>
-                            @isset($buyers)
-                                @foreach($buyers as $buyer)
-                                    <option value="{{ $buyer->id }}" data-name="{{ $buyer->name }}" {{ $item->buyer_id == $buyer->id ? 'selected' : '' }}>
-                                        {{ $buyer->name }} (كود: {{ $buyer->id }})
-                                    </option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-                    <input type="hidden" id="buyer_name_hidden_field_edit" name="buyer_name" value="{{ $item->buyer_name ?? '' }}">
-                    {{-- **نهاية تعديل حقول العميل** --}}
-
-                </div>
-
-                {{-- العمود الثاني --}}
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-gray-700 mb-1">الكمية<span class="text-red-500">*</span></label>
-                        <input type="number" name="quantity" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="{{ $item->quantity }}" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">سعر الوحدة<span class="text-red-500">*</span></label>
-                        <input type="number" name="unit_price" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="{{ $item->unit_price }}" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">القيمة<span class="text-red-500">*</span></label>
-                        <input type="number" name="amount" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="{{ $item->amount }}" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">المدفوع<span class="text-red-500">*</span></label>
-                        <input type="number" name="paid" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="{{ $item->paid }}" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">الباقي<span class="text-red-500">*</span></label>
-                        <input type="number" name="remaining" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="{{ $item->remaining }}" required>
-                    </div>
-
-                     <div>
-                        <label class="block text-gray-700 mb-1">تاريخ تحصيل الباقي <span class="text-red-500">*</span></label>
-                        <input type="date" name="payment_due_date" min="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                               value="{{ isset($item->payment_due_date) ? \Carbon\Carbon::parse($item->payment_due_date)->format('Y-m-d') : '' }}">
-                    </div>
-                </div>
-            </div>
-
-            {{-- أزرار --}}
-            <div class="mt-8 flex justify-end gap-3">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    حفظ البيانات
+                    تعديل ايراد
+                </h3>
+                <button type="button" onclick="closeForm('edit-form')" class="text-gray-400 hover:text-gray-500 transition-colors focus:outline-none">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
-                <button type="button" onclick="closeForm('edit-form')" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">إلغاء</button>
             </div>
-        </form>
-        @else
-            <form action="#" method="POST">
-        @endif
+
+            @if(isset($item))
+            <form action="{{ route('income.update' , $item->id) }}" method="POST" id="edit_income_form" class="p-6"> {{-- غيّرت الـ ID هنا لكي لا يتعارض مع الـ ID الخاص بـ div --}}
+                @csrf
+                @method('PUT')
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- العمود الأول --}}
+                    <div class="space-y-5">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">فئة الإيرادات<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="income_mainCategory_edit" name="category" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none" required>
+                                    <option value="">اختر فئة الإيراد</option>
+                                    <option value="Product Sales" {{ $item->category == 'Product Sales' ? 'selected' : '' }}>بيع منتجات</option>
+                                    <option value="Animal Sales" {{ $item->category == 'Animal Sales' ? 'selected' : '' }}>بيع بهائم</option>
+                                    <option value="Equipment Sales" {{ $item->category == 'Equipment Sales' ? 'selected' : '' }}>بيع معدات أو أثاث</option>
+                                    <option value="Rent Income" {{ $item->category == 'Rent Income' ? 'selected' : '' }}>إيجار</option>
+                                    <option value="Collections" {{ $item->category == 'Collections' ? 'selected' : '' }}>تحصيل ديون</option>
+                                    <option value="Other" {{ $item->category == 'Other' ? 'selected' : '' }}>أخرى</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">نوع الايراد<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="income_subCategory_edit" name="type" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none" required>
+                                    <option value="">اختر التوزيع الفرعي</option>
+                                    {{-- الخيارات سيتم ملؤها بواسطة JS بناءً على الفئة الرئيسية وقيمة $item->type --}}
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- **بداية إضافة حقول اختيار الحيوانات (مع قيم التعديل)** --}}
+                        <div id="animal_buffalo_select_container_edit" class="relative mt-4 hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">كود الجاموس<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="animal_buffalo_select_edit" name="animal_code" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none">
+                                    <option value="">اختر الجاموس</option>
+                                    @isset($allbuffaloes)
+                                        @foreach($allbuffaloes as $animal)
+                                            <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}" {{ isset($item->animal_code) && $item->animal_code == $animal->animal_code ? 'selected' : '' }}>
+                                                {{ $animal->animal_code }}
+                                            </option>
+                                        @endforeach
+                                    @endisset
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="animal_cow_select_container_edit" class="relative mt-4 hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">كود البقرة<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="animal_cow_select_edit" name="animal_code" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none">
+                                    <option value="">اختر البقرة</option>
+                                    @isset($allcows)
+                                        @foreach($allcows as $animal)
+                                            <option value="{{ $animal->animal_code }}" data-name="{{ $animal->animal_code }}" {{ isset($item->animal_code) && $item->animal_code == $animal->animal_code ? 'selected' : '' }}>
+                                                {{ $animal->animal_code }}
+                                            </option>
+                                        @endforeach
+                                    @endisset
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- حقل مخفي لحفظ اسم/كود الحيوان، سيتم ملؤه بواسطة JavaScript --}}
+                        <input type="hidden" id="animal_code_hidden_field_edit" name="animal_code_hidden" value="{{ $item->animal_code ?? '' }}">
+                        {{-- **نهاية إضافة حقول اختيار الحيوانات** --}}
+
+                        <div id="income_otherSubCategoryContainer_edit" class="relative mt-4 {{ $item->category == 'Other' && !in_array($item->type, array_column(array_merge(...array_values($income_subCategoriesData)), 'value')) ? '' : 'hidden' }}">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
+                            <input type="text" id="income_otherSubCategory_edit" name="other_type" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" placeholder="اكتب التوزيع الفرعي هنا" value="{{ $item->type }}">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">تفاصيل<span class="text-red-500">*</span></label>
+                            <input type="text" name="description" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" value="{{ $item->description }}" required>
+                        </div>
+
+                         <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">التاريخ<span class="text-red-500">*</span></label>
+                            <input type="date" name="date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none"
+                                   value="{{ \Carbon\Carbon::parse($item->date)->format('Y-m-d') }}" required>
+                        </div>
+
+                        {{-- **تعديل حقول العميل لاستخدام Dropdown كما في فورم الإضافة** --}}
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">اسم العميل<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="buyer_select_edit" name="buyer_id" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none" required>
+                                    <option value="">اختر العميل</option>
+                                    @isset($buyers)
+                                        @foreach($buyers as $buyer)
+                                            <option value="{{ $buyer->id }}" data-name="{{ $buyer->name }}" {{ $item->buyer_id == $buyer->id ? 'selected' : '' }}>
+                                                {{ $buyer->name }} (كود: {{ $buyer->id }})
+                                            </option>
+                                        @endforeach
+                                    @endisset
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="buyer_name_hidden_field_edit" name="buyer_name" value="{{ $item->buyer_name ?? '' }}">
+                        {{-- **نهاية تعديل حقول العميل** --}}
+
+                    </div>
+
+                    {{-- العمود الثاني --}}
+                    <div class="space-y-5">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">الكمية<span class="text-red-500">*</span></label>
+                            <input type="number" name="quantity" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" value="{{ $item->quantity }}" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">سعر الوحدة<span class="text-red-500">*</span></label>
+                            <input type="number" name="unit_price" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" value="{{ $item->unit_price }}" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">القيمة<span class="text-red-500">*</span></label>
+                            <input type="number" name="amount" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" value="{{ $item->amount }}" required>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">المدفوع<span class="text-red-500">*</span></label>
+                            <input type="number" name="paid" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" value="{{ $item->paid }}" required>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">الباقي<span class="text-red-500">*</span></label>
+                            <input type="number" name="remaining" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" value="{{ $item->remaining }}" required>
+                        </div>
+
+                         <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">تاريخ تحصيل الباقي <span class="text-red-500">*</span></label>
+                            <input type="date" name="payment_due_date" min="{{ date('Y-m-d') }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none"
+                                   value="{{ isset($item->payment_due_date) ? \Carbon\Carbon::parse($item->payment_due_date)->format('Y-m-d') : '' }}">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- أزرار --}}
+                <div class="mt-8 pt-4 border-t border-gray-100 flex justify-end gap-3">
+                    <button type="button" onclick="closeForm('edit-form')" class="px-6 py-2.5 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-medium font-tajawal">إلغاء</button>
+                    
+                    <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all duration-200 font-medium font-tajawal flex items-center gap-2 transform active:scale-95">
+                        <i class="fas fa-save"></i>
+                        حفظ البيانات
+                    </button>
+                </div>
+            </form>
+            @endif
+        </div>
     </div>
 </div>
 

@@ -5,173 +5,182 @@
         </h2>
     </x-slot>
 
-    <div class="py-6 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
-        {{-- رسائل التنبيه --}}
-        @if(session('success'))
-            <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
-                <div class="flex justify-between items-center">
-                    <p>{{ session('success') }}</p>
-                    <button onclick="this.parentElement.parentElement.remove()" class="text-green-700">&times;</button>
-                </div>
-            </div>
-        @endif
+    <div class="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 min-h-screen">
+        {{-- Header Section --}}
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900 font-tajawal">لوحة التحكم</h1>
+            <p class="text-gray-500 mt-1 font-tajawal">مرحبًا بك في نظام إدارة مزارع سارة</p>
+        </div>
 
-        @if($errors->any())
-            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
-                <div class="flex justify-between items-center">
-                    <ul class="list-disc pl-5 space-y-1">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
+        {{-- Alerts Section --}}
+        <div class="space-y-4 mb-8">
+            @if(session('success'))
+                <div x-data="{ show: true }" x-show="show" class="flex items-center justify-between p-4 bg-green-50 border-r-4 border-green-500 rounded-lg shadow-sm">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 ml-3 text-xl"></i>
+                        <p class="text-green-800 font-medium">{{ session('success') }}</p>
+                    </div>
+                    <button @click="show = false" class="text-green-600 hover:text-green-800 transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div x-data="{ show: true }" x-show="show" class="flex items-start justify-between p-4 bg-red-50 border-r-4 border-red-500 rounded-lg shadow-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-exclamation-circle text-red-500 ml-3 mt-1 text-xl"></i>
+                        <ul class="list-disc list-inside text-red-800 space-y-1">
+                            @foreach($errors->all() as $error)
+                                <li class="font-medium">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <button @click="show = false" class="text-red-600 hover:text-red-800 transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            @endif
+        </div>
+
+        {{-- Quick Actions Grid --}}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
+            <button onclick="toggleForm()" class="group relative bg-white overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center border border-gray-100 hover:border-brand-100">
+                <div class="absolute inset-0 bg-brand-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10 w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-plus text-xl text-blue-600"></i>
+                </div>
+                <p class="relative z-10 font-bold text-gray-700 group-hover:text-blue-700 transition-colors font-tajawal">حيوان جديد</p>
+            </button>
+
+            <button onclick="dailyProdectionForm()" class="group relative bg-white overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center border border-gray-100 hover:border-brand-100">
+                <div class="absolute inset-0 bg-brand-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10 w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-industry text-xl text-indigo-600"></i>
+                </div>
+                <p class="relative z-10 font-bold text-gray-700 group-hover:text-indigo-700 transition-colors font-tajawal">الانتاج اليومي</p>
+            </button>
+
+            <button onclick="dailyConsumptionsForm()" class="group relative bg-white overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center border border-gray-100 hover:border-brand-100">
+                 <div class="absolute inset-0 bg-brand-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10 w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-utensils text-xl text-orange-600"></i>
+                </div>
+                <p class="relative z-10 font-bold text-gray-700 group-hover:text-orange-700 transition-colors font-tajawal">الاستهلاك اليومي</p>
+            </button>
+
+            <button onclick="dailyExpenseForm()" class="group relative bg-white overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center border border-gray-100 hover:border-brand-100">
+                 <div class="absolute inset-0 bg-brand-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10 w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-receipt text-xl text-red-600"></i>
+                </div>
+                <p class="relative z-10 font-bold text-gray-700 group-hover:text-red-700 transition-colors font-tajawal">تسجيل مصروف</p>
+            </button>
+
+            <button onclick="incomeForm()" class="group relative bg-white overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center border border-gray-100 hover:border-brand-100">
+                 <div class="absolute inset-0 bg-brand-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10 w-12 h-12 rounded-full bg-green-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-money-bill-wave text-xl text-green-600"></i>
+                </div>
+                <p class="relative z-10 font-bold text-gray-700 group-hover:text-green-700 transition-colors font-tajawal">تسجيل ايراد</p>
+            </button>
+
+            <button onclick="toggleHealthForm()" class="group relative bg-white overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center justify-center border border-gray-100 hover:border-brand-100">
+                 <div class="absolute inset-0 bg-brand-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10 w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-heartbeat text-xl text-purple-600"></i>
+                </div>
+                <p class="relative z-10 font-bold text-gray-700 group-hover:text-purple-700 transition-colors font-tajawal">تقرير صحي</p>
+            </button>
+        </div>
+
+        {{-- Statistics & Charts Section --}}
+        <div class="mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-6 px-1 flex items-center">
+                <i class="fas fa-chart-pie ml-2 text-brand-600"></i>
+                موقف المخزون الحالي
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                @php
+                    $charts = [
+                        ['id' => 'chart1', 'title' => 'التبن', 'key' => 'chartAlert1'],
+                        ['id' => 'chart2', 'title' => 'ذرة', 'key' => 'chartAlert2'],
+                        ['id' => 'chart3', 'title' => 'صويا', 'key' => 'chartAlert3'],
+                        ['id' => 'chart4', 'title' => 'قشر صويا', 'key' => 'chartAlert4'],
+                        ['id' => 'chart5', 'title' => 'ردة', 'key' => 'chartAlert5'],
+                        ['id' => 'chart6', 'title' => 'سيلاج', 'key' => 'chartAlert6'],
+                    ];
+                @endphp
+
+                @foreach($charts as $chart)
+                    <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-5 border border-gray-100">
+                        <div class="relative aspect-square w-full flex items-center justify-center mb-3">
+                            <canvas id="{{ $chart['id'] }}" class="w-full h-full"></canvas>
+                             <div id="{{ $chart['key'] }}" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200 pointer-events-none">
+                                 <span class="text-5xl font-bold drop-shadow-sm">!</span>
+                            </div>
+                        </div>
+                        <p class="text-center font-bold text-gray-700">{{ $chart['title'] }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+
+
+
+        <!-- Recent Activities Section -->
+        <div class="w-full mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-6 px-1 flex items-center font-tajawal">
+                <i class="fas fa-history ml-2 text-brand-600"></i>
+                آخر الأنشطة
+            </h3>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                @if(empty($latest_operations))
+                    <div class="p-8 text-center">
+                        <div class="bg-gray-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-inbox text-gray-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-500 font-tajawal">لا توجد عمليات مسجلة حتى الآن.</p>
+                    </div>
+                @else
+                    <ul class="divide-y divide-gray-100">
+                        @foreach($latest_operations as $operation)
+                            <li class="p-4 hover:bg-gray-50 transition-colors duration-200">
+                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 ml-4 mt-1">
+                                            <div class="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center border border-brand-100">
+                                                <i class="fas fa-clipboard-check text-brand-600"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-900 font-bold font-tajawal text-base">{{ $operation->type ?? 'عملية غير محددة' }}</p>
+                                            <p class="text-gray-500 text-sm mt-0.5 font-tajawal">{{ $operation->description ?? '' }}</p>
+                                            
+                                            @if(!empty($operation->details))
+                                                <div class="mt-2 bg-gray-50 text-gray-600 text-xs p-2.5 rounded-lg border border-gray-100 font-mono inline-block">
+                                                    {!! nl2br(e($operation->details)) !!}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto pr-14 sm:pr-0">
+                                        <div class="flex items-center bg-gray-100 rounded-full px-3 py-1 mb-1 sm:mb-2">
+                                            <span class="text-gray-800 font-bold text-sm">{{ $operation->amount ?? $operation->quantity ?? '-' }}</span>
+                                            <span class="text-gray-500 text-xs mr-1">{{ $operation->unit ?? '' }}</span>
+                                        </div>
+                                        <div class="text-gray-400 text-xs flex items-center" dir="ltr">
+                                            <i class="far fa-clock ml-1"></i>
+                                            <span>{{ $operation->created_at ? $operation->created_at->diffForHumans() : '' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                         @endforeach
                     </ul>
-                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-700">&times;</button>
-                </div>
-            </div>
-        @endif
-
-      {{-- قسم الأزرار --}}
-      <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-
-        <button onclick="toggleForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">حيوان جديد</p>
-            </button>
-
-        <button onclick="dailyProdectionForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">الانتاج اليومي</p>
-            </button>
-
-        <button onclick="dailyConsumptionsForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">الاستهلاك اليومي</p>
-            </button>
-
-        <button onclick="dailyExpenseForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">تسجيل مصروف</p>
-            </button>
-
-        <button onclick="incomeForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">تسجيل ايراد</p>
-            </button>
-
-        <button onclick="toggleHealthForm()" class="group text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition duration-200 hover:shadow-lg hover:bg-gray-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 transition duration-200 group-hover:text-blue-700" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                <p class="font-semibold text-gray-800 mt-2 text-sm md:text-base">تسجيل تقرير صحي</p>
-            </button>
-        </div>
-
-        {{-- قسم الرسومات البيانية --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 mt-10">
-            {{-- كل بطاقة رسم بياني --}}
-            {{-- تم تعديل الـ div الخارجية لكل بطاقة رسم بياني لتكون نقطة التوهج --}}
-            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
-                {{-- حاوية الرسم البياني --}}
-                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
-                    <canvas id="chart1" class="block w-full h-full"></canvas>
-                    {{-- تم إضافة div لعلامة التعجب هنا --}}
-                    <div id="chartAlert1" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
-                         <span class="text-6xl font-bold">!</span>
-                    </div>
-                </div>
-                <p class="font-semibold">التبن</p>
-            </div>
-            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
-                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
-                    <canvas id="chart2" class="block w-full h-full"></canvas>
-                     <div id="chartAlert2" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
-                         <span class="text-6xl font-bold">!</span>
-                    </div>
-                </div>
-                <p class="font-semibold">ذرة</p>
-            </div>
-            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
-                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
-                    <canvas id="chart3" class="block w-full h-full"></canvas>
-                     <div id="chartAlert3" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
-                         <span class="text-6xl font-bold">!</span>
-                    </div>
-                </div>
-                <p class="font-semibold">صويا</p>
-            </div>
-            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
-                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
-                    <canvas id="chart4" class="block w-full h-full"></canvas>
-                     <div id="chartAlert4" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
-                         <span class="text-6xl font-bold">!</span>
-                    </div>
-                </div>
-                <p class="font-semibold">قشر صويا</p>
-
-            </div>
-            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
-                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
-                    <canvas id="chart5" class="block w-full h-full"></canvas>
-                     <div id="chartAlert5" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
-                         <span class="text-6xl font-bold">!</span>
-                    </div>
-                </div>
-                <p class="font-semibold">ردة</p>
-
-            </div>
-            <div class="text-center bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-between transition-all duration-200">
-                <div class="w-full aspect-square mx-auto relative mb-2 flex items-center justify-center">
-                    <canvas id="chart6" class="block w-full h-full"></canvas>
-                     <div id="chartAlert6" class="absolute inset-0 flex items-center justify-center text-red-500 hidden opacity-0 transition-opacity duration-200">
-                         <span class="text-6xl font-bold">!</span>
-                    </div>
-                </div>
-                <p class="font-semibold">سيلاج</p>
-
-            </div>
-        </div>
-
-
-
-
-        <!-- قسم آخر الأنشطة -->
-        <div class="w-full md:w-full px-2">
-            <h3 class="text-xl font-bold text-gray-800 mb-4 mt-8">آخر الانشطة</h3>
-            <div class="bg-white rounded-xl shadow-md p-6">
-            @if(empty($latest_operations))
-                <p class="text-gray-600 text-center">لا توجد عمليات مسجلة حتى الآن.</p>
-            @else
-                <ul class="divide-y divide-gray-200">
-                @foreach($latest_operations as $operation)
-                    <li class="py-3 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-800 font-semibold">{{ $operation->type ?? 'غير محدد' }}</p>
-                        <!-- وصف العملية -->
-                        <p class="text-gray-600 text-sm mb-1">{{ $operation->description ?? '' }}</p>
-                        <!-- تفاصيل إضافية لو موجودة -->
-                        @if(!empty($operation->details))
-                        <div class="bg-gray-100 text-gray-700 text-xs p-2 rounded">
-                            {!! nl2br(e($operation->details)) !!}
-                        </div>
-                        @endif
-                    </div>
-                    <div class="text-right whitespace-nowrap pl-2">
-                        <p class="text-gray-700">{{ $operation->amount ?? $operation->quantity ?? '' }} {{ $operation->unit ?? '' }}</p>
-                        <p class="text-gray-500 text-xs"><span dir="ltr">{{ $operation->created_at ? '' . $operation->created_at : '' }}</span></p>
-                    </div>
-                    </li>
-                @endforeach
-                </ul>
-            @endif
+                @endif
             </div>
         </div>
     </div>

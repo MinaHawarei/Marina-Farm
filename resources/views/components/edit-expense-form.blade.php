@@ -1,122 +1,140 @@
 
-<div id="edit-form" class="fixed inset-0 z-50 bg-black bg-opacity-50 {{ $isVisible ? '' : 'hidden' }} flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white max-w-4xl mx-auto rounded-lg shadow-lg p-6 relative w-3/4">
-        <h3 class="text-xl font-semibold text-gray-800 mb-6">تعديل ايراد</h3>
-        @if(isset($item))
-        <form action="{{ route('income.edit' , $item->id) }}" method="POST" id="edit-form">
-            @csrf
-            @method('PUT')
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- العمود الأول --}}
-                <div class="space-y-3">
+<div id="edit-form" class="fixed inset-0 z-50 {{ $isVisible ? '' : 'hidden' }} overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900/75 backdrop-blur-sm transition-opacity"></div>
 
-                    <!-- النوع الرئيسي -->
-                    <div>
-                        <label class="block text-gray-700 mb-1">فئة المصروفات<span class="text-red-500">*</span></label>
-                        <select id="mainCategory" name="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center" required>
-                            <option value="">اختر نوع المصروفات</option>
-                            <option value="Feed Costs">مصاريف التغذية</option>
-                            <option value="Veterinary Expenses">مصاريف الرعاية البيطرية</option>
-                            <option value="Labor Wages">مصاريف العمالة</option>
-                            <option value="Operational Costs">مصاريف التشغيل</option>
-                            <option value="Machinery Purchase">شراء الآلات</option>
-                            <option value="Equipment Maintenance">صيانة المعدات والبنية التحتية</option>
-                            <option value="Agricultural Supplies">مصاريف الزراعة</option>
-                            <option value="Transportation Costs">مصاريف النقل</option>
-                            <option value="Buying Animals">شراء حيوانات جديدة</option>
-                            <option value="Administrative Expenses">المصاريف الإدارية</option>
-                            <option value="Emergency Costs">تكاليف طارئة</option>
-                            <option value="Other">أخرى</option>
-                        </select>
+    <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
+        <!-- Modal Panel -->
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-right shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl border border-gray-100">
+            
+            <!-- Header -->
+            <div class="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900 font-tajawal flex items-center gap-2" id="modal-title">
+                    <div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                        <i class="fas fa-edit text-orange-600"></i>
                     </div>
-
-
-                    <!-- التوزيعات الفرعية -->
-                    <div class="mt-4">
-                        <label class="block text-gray-700 mb-1">نوع المصروفات<span class="text-red-500">*</span></label>
-                        <select id="subCategory" name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center">
-                            <option value="">اختر المصروف</option>
-                        </select>
-                    </div>
-
-
-
-                    <!-- الحقل النصي الخاص بـ "أخرى" -->
-                    <div id="otherSubCategoryContainer" class="hidden mt-4">
-                        <label class="block text-gray-700 mb-1">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
-                        <input type="text" id="otherSubCategory" name="other_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="اكتب التوزيع الفرعي هنا">
-                    </div>
-
-
-
-
-
-
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">تفاصيل<span class="text-red-500">*</span></label>
-                        <input type="text" name="description" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">التاريخ<span class="text-red-500">*</span></label>
-                        <input type="date" name="date" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">اسم المورد<span class="text-red-500">*</span></label>
-                        <input type="text" name="supplier_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">الرقم التعريفي للمورد<span class="text-red-500">*</span></label>
-                        <input type="number" name="supplier_id" min="1" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-                </div>
-                {{-- العمود الثاني --}}
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-gray-700 mb-1">الكمية<span class="text-red-500">*</span></label>
-                        <input type="number" name="quantity" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">سعر الوحدة<span class="text-red-500">*</span></label>
-                        <input type="number" name="unit_price" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">القيمة<span class="text-red-500">*</span></label>
-                        <input type="number" name="amount" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 mb-1">المدفوع<span class="text-red-500">*</span></label>
-                        <input type="number" name="paid" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">الباقي<span class="text-red-500">*</span></label>
-                        <input type="number" name="remaining" min="0" step="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-1">تاريخ تحصيل الباقي <span class="text-red-500">*</span></label>
-                        <input type="date" name="payment_due_date" min="{{ date('Y-m-d') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    </div>
-
-
-                </div>
-
-            </div>
-
-            {{-- أزرار --}}
-            <div class="mt-8 flex justify-end gap-3">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    حفظ البيانات
+                    تعديل مصروف
+                </h3>
+                <button type="button" onclick="closeForm('edit-form')" class="text-gray-400 hover:text-gray-500 transition-colors focus:outline-none">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
-                <button type="button" onclick="closeForm('edit.form')" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">إلغاء</button>
-
             </div>
-        </form>
-        @else
-            <form action="#" method="POST">
-        @endif
 
+            @if(isset($item))
+            <form action="{{ route('income.edit' , $item->id) }}" method="POST" id="edit_expense_form" class="p-6">
+                @csrf
+                @method('PUT')
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Column 1 --}}
+                    <div class="space-y-5">
+
+                        <!-- النوع الرئيسي -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">فئة المصروفات<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="mainCategory" name="category" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none" required>
+                                    <option value="">اختر نوع المصروفات</option>
+                                    <option value="Feed Costs" {{ $item->category == 'Feed Costs' ? 'selected' : '' }}>مصاريف التغذية</option>
+                                    <option value="Veterinary Expenses" {{ $item->category == 'Veterinary Expenses' ? 'selected' : '' }}>مصاريف الرعاية البيطرية</option>
+                                    <option value="Labor Wages" {{ $item->category == 'Labor Wages' ? 'selected' : '' }}>مصاريف العمالة</option>
+                                    <option value="Operational Costs" {{ $item->category == 'Operational Costs' ? 'selected' : '' }}>مصاريف التشغيل</option>
+                                    <option value="Machinery Purchase" {{ $item->category == 'Machinery Purchase' ? 'selected' : '' }}>شراء الآلات</option>
+                                    <option value="Equipment Maintenance" {{ $item->category == 'Equipment Maintenance' ? 'selected' : '' }}>صيانة المعدات والبنية التحتية</option>
+                                    <option value="Agricultural Supplies" {{ $item->category == 'Agricultural Supplies' ? 'selected' : '' }}>مصاريف الزراعة</option>
+                                    <option value="Transportation Costs" {{ $item->category == 'Transportation Costs' ? 'selected' : '' }}>مصاريف النقل</option>
+                                    <option value="Buying Animals" {{ $item->category == 'Buying Animals' ? 'selected' : '' }}>شراء حيوانات جديدة</option>
+                                    <option value="Administrative Expenses" {{ $item->category == 'Administrative Expenses' ? 'selected' : '' }}>المصاريف الإدارية</option>
+                                    <option value="Emergency Costs" {{ $item->category == 'Emergency Costs' ? 'selected' : '' }}>تكاليف طارئة</option>
+                                    <option value="Other" {{ $item->category == 'Other' ? 'selected' : '' }}>أخرى</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- التوزيعات الفرعية -->
+                        <div class="relative mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">نوع المصروفات<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="subCategory" name="type" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none appearance-none">
+                                    <option value="">اختر المصروف</option>
+                                    {{-- JS populates this, but we might want to pre-populate if possible, or let JS handle it on load if we add script for it. For now, assuming JS handles it or user re-selects --}}
+                                    <option value="{{ $item->type }}" selected>{{ $item->type }}</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- الحقل النصي الخاص بـ "أخرى" -->
+                        <div id="otherSubCategoryContainer" class="hidden mt-4 relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">التوزيع الفرعي الآخر<span class="text-red-500">*</span></label>
+                            <input type="text" id="otherSubCategory" name="other_type" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" placeholder="اكتب التوزيع الفرعي هنا">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">تفاصيل<span class="text-red-500">*</span></label>
+                            <input type="text" name="description" value="{{ $item->description }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">التاريخ<span class="text-red-500">*</span></label>
+                            <input type="date" name="date" value="{{ $item->date }}" max="{{ date('Y-m-d') }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">اسم المورد<span class="text-red-500">*</span></label>
+                            <input type="text" name="supplier_name" value="{{ $item->supplier_name }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none">
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">الرقم التعريفي للمورد<span class="text-red-500">*</span></label>
+                            <input type="number" name="supplier_id" value="{{ $item->supplier_id }}" min="1" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none">
+                        </div>
+                    </div>
+                   
+                    {{-- Column 2 --}}
+                    <div class="space-y-5">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">الكمية<span class="text-red-500">*</span></label>
+                            <input type="number" name="quantity" value="{{ $item->quantity }}" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">سعر الوحدة<span class="text-red-500">*</span></label>
+                            <input type="number" name="unit_price" value="{{ $item->unit_price }}" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">القيمة<span class="text-red-500">*</span></label>
+                            <input type="number" name="amount" value="{{ $item->amount }}" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">المدفوع<span class="text-red-500">*</span></label>
+                            <input type="number" name="paid" value="{{ $item->paid }}" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">الباقي<span class="text-red-500">*</span></label>
+                            <input type="number" name="remaining" value="{{ $item->remaining }}" min="0" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none" required>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5 font-tajawal">تاريخ تحصيل الباقي <span class="text-red-500">*</span></label>
+                            <input type="date" name="payment_due_date" value="{{ $item->payment_due_date }}" min="{{ date('Y-m-d') }}" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-8 pt-4 border-t border-gray-100 flex justify-end gap-3">
+                    <button type="button" onclick="closeForm('edit-form')" class="px-6 py-2.5 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-medium font-tajawal">إلغاء</button>
+                    
+                    <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all duration-200 font-medium font-tajawal flex items-center gap-2 transform active:scale-95">
+                        <i class="fas fa-save"></i>
+                        حفظ البيانات
+                    </button>
+                </div>
+            </form>
+            @endif
+        </div>
     </div>
 </div>
 

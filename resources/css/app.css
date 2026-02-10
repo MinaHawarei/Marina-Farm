@@ -1,3 +1,441 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ==========================================
+   FACEBOOK-LIKE APP SHELL LAYOUT
+   ========================================== */
+
+/* CSS Variables */
+:root {
+    --navbar-height: 4rem;
+    --sidebar-width: 16rem;
+    --sidebar-collapsed-width: 4.5rem;
+    --primary-dark: #040629;
+    --primary-light: #0a0e45;
+    --brand-500: #3b82f6;
+    --brand-600: #2563eb;
+    --transition-speed: 0.3s;
+}
+
+/* ==========================================
+   BASE: Prevent Body Scroll
+   ========================================== */
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    /* CRITICAL: Body never scrolls */
+    margin: 0;
+    padding: 0;
+}
+
+/* ==========================================
+   APP SHELL: Full Viewport Container
+   ========================================== */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    /* Dynamic viewport for mobile */
+    overflow: hidden;
+}
+
+/* ==========================================
+   NAVBAR: Fixed at Top
+   ========================================== */
+.app-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--navbar-height);
+    background: linear-gradient(to left, var(--primary-dark), var(--primary-light));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 50;
+    flex-shrink: 0;
+}
+
+/* ==========================================
+   BODY CONTAINER: Below Navbar
+   ========================================== */
+.app-body {
+    display: flex;
+    margin-top: var(--navbar-height);
+    /* Push below fixed navbar */
+    height: calc(100vh - var(--navbar-height));
+    height: calc(100dvh - var(--navbar-height));
+    overflow: hidden;
+}
+
+/* ==========================================
+   SIDEBAR: Fixed Position, Independent Scroll
+   ========================================== */
+.app-sidebar {
+    position: fixed;
+    top: var(--navbar-height);
+    right: 0;
+    /* RTL: sidebar on right */
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    transition: width var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* Sidebar Content: Scrollable */
+.app-sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
+}
+
+/* Sidebar Scrollbar Styling */
+.app-sidebar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.app-sidebar-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.app-sidebar-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.app-sidebar-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================
+   SIDEBAR COLLAPSED STATE
+   ========================================== */
+.app-sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+.app-sidebar.collapsed .sidebar-text,
+.app-sidebar.collapsed .sidebar-badge,
+.app-sidebar.collapsed .sidebar-chevron,
+.app-sidebar.collapsed .sidebar-group-content {
+    display: none;
+}
+
+.app-sidebar.collapsed .sidebar-item,
+.app-sidebar.collapsed .sidebar-group-header {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.app-sidebar.collapsed .sidebar-item-icon {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+/* Tooltip on Collapsed Items */
+.app-sidebar.collapsed .sidebar-item,
+.app-sidebar.collapsed .sidebar-group-header {
+    position: relative;
+}
+
+.app-sidebar.collapsed .sidebar-item::after,
+.app-sidebar.collapsed .sidebar-group-header::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + 0.75rem);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--primary-dark);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.app-sidebar.collapsed .sidebar-item:hover::after,
+.app-sidebar.collapsed .sidebar-group-header:hover::after {
+    opacity: 1;
+}
+
+/* ==========================================
+   MAIN CONTENT: The ONLY Scrolling Area
+   ========================================== */
+.app-main {
+    flex: 1;
+    margin-right: var(--sidebar-width);
+    /* RTL: offset for sidebar */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    transition: margin-right var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When sidebar is collapsed */
+.app-main.sidebar-collapsed {
+    margin-right: var(--sidebar-collapsed-width);
+}
+
+/* Scrollable Content Container */
+.app-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem;
+    background-color: #f3f4f6;
+}
+
+/* ==========================================
+   FOOTER: Inside Main Content Flow
+   ========================================== */
+.app-footer {
+    flex-shrink: 0;
+    background-color: var(--primary-dark);
+    color: white;
+    padding: 1rem 1.5rem;
+}
+
+/* ==========================================
+   SIDEBAR TOGGLE BUTTON
+   ========================================== */
+.sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.sidebar-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.sidebar-toggle:focus {
+    outline: 2px solid var(--brand-500);
+    outline-offset: 2px;
+}
+
+.sidebar-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-toggle.rotated i {
+    transform: rotate(180deg);
+}
+
+/* ==========================================
+   SIDEBAR ITEMS
+   ========================================== */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+    border-right: 4px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sidebar-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-right-color: rgba(59, 130, 246, 0.5);
+}
+
+.sidebar-item.active {
+    background: var(--primary-light);
+    color: white;
+    border-right-color: var(--brand-500);
+}
+
+.sidebar-item-icon {
+    width: 1.5rem;
+    text-align: center;
+    margin-left: 0.75rem;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-item:hover .sidebar-item-icon {
+    transform: scale(1.1);
+}
+
+/* Sidebar Group Header */
+.sidebar-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    color: #9ca3af;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: right;
+}
+
+.sidebar-group-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.sidebar-group-header.open {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+/* Sidebar Group Content */
+.sidebar-group-content {
+    background: rgba(4, 6, 41, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+/* Sidebar Sublink */
+.sidebar-sublink {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 3rem 0.625rem 2rem;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+    border-right: 2px solid transparent;
+    text-decoration: none;
+}
+
+.sidebar-sublink:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-sublink.active {
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.1);
+    border-right-color: var(--brand-500);
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE: Drawer Sidebar
+   ========================================== */
+@media (max-width: 1024px) {
+
+    /* Hide desktop sidebar */
+    .app-sidebar {
+        transform: translateX(100%);
+        /* RTL: slide out to right */
+        width: var(--sidebar-width);
+        z-index: 60;
+    }
+
+    .app-sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Remove sidebar offset from main */
+    .app-main {
+        margin-right: 0 !important;
+    }
+
+    /* Mobile Overlay */
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        top: var(--navbar-height);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 55;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Prevent body scroll when drawer open */
+    body.drawer-open {
+        overflow: hidden;
+    }
+
+    /* Show mobile menu button */
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+
+    /* Hide desktop toggle */
+    .desktop-sidebar-toggle {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1025px) {
+
+    /* Hide mobile button on desktop */
+    .mobile-menu-btn {
+        display: none !important;
+    }
+
+    /* Show desktop toggle */
+    .desktop-sidebar-toggle {
+        display: flex !important;
+    }
+}
+
+/* ==========================================
+   FOCUS STATES FOR ACCESSIBILITY
+   ========================================== */
+.sidebar-item:focus,
+.sidebar-group-header:focus,
+.sidebar-sublink:focus {
+    outline: 2px solid var(--brand-500);
+    outline-offset: -2px;
+}
+
+/* ==========================================
+   PRINT STYLES
+   ========================================== */
+@media print {
+
+    .app-sidebar,
+    .app-navbar,
+    .app-footer,
+    .sidebar-toggle {
+        display: none !important;
+    }
+
+    .app-main {
+        margin: 0 !important;
+    }
+
+    .app-content {
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+}
