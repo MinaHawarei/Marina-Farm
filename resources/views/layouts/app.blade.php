@@ -72,10 +72,12 @@
             <div class="app-main" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
                 {{-- Scrollable Content --}}
                 <main class="app-content">
-                    {{ $slot }}
+                    <div class="app-content-body">
+                        {{ $slot }}
+                    </div>
 
                     {{-- Footer: Scrolls with page content --}}
-                    <footer class="app-footer mt-6 -mx-6 -mb-6" dir="ltr">
+                    <footer class="app-footer" dir="ltr">
                         <div class="flex flex-col md:flex-row items-center justify-between text-sm gap-2">
                             <a href="https://facebook.com/ZetaExa" target="_blank" rel="noopener noreferrer">
                                 <img src="{{ asset('img/ZetaExa.png') }}" alt="Zeta Exa Logo" class="h-6">

@@ -64,13 +64,13 @@
                             <input type="date" value="{{ $employee->hiring_date }}" class="w-full px-2 py-1 border rounded" />
                         </td>
                         <td class="border px-2 py-1">
-                            <select class="w-full px-2 py-1 border rounded">
+                            <select class="w-full px-2 py-1 border rounded text-center">
                                 <option value="نشط" {{ $employee->status == 'نشط' ? 'selected' : '' }}>نشط</option>
                                 <option value="غير نشط" {{ $employee->status == 'غير نشط' ? 'selected' : '' }}>غير نشط</option>
                             </select>
                         </td>
                         <td class="border px-2 py-1">
-                            <select class="w-full px-2 py-1 border rounded">
+                            <select class="w-full px-2 py-1 border rounded text-center">
                                 <option value="اعذب" {{ $employee->marital_status == 'اعذب' ? 'selected' : '' }}>اعذب</option>
                                 <option value="متزوج" {{ $employee->marital_status == 'متزوج' ? 'selected' : '' }}>متزوج</option>
                             </select>

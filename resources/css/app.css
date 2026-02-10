@@ -198,6 +198,12 @@ body {
     overflow-x: hidden;
     padding: 1.5rem;
     background-color: #f3f4f6;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-content-body {
+    flex: 1 0 auto;
 }
 
 /* ==========================================
@@ -208,6 +214,10 @@ body {
     background-color: var(--primary-dark);
     color: white;
     padding: 1rem 1.5rem;
+    margin-top: 1.5rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    margin-bottom: -1.5rem;
 }
 
 /* ==========================================
